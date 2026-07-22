@@ -433,7 +433,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@letty_fps",
         name: "Letty",
-        image: "avaliacoes/letty.png",
+        image: "letty.png",
         avatar: "L",
         color: "#ec4899",
         time: "Hoje às 15:10",
@@ -447,7 +447,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@jilo_vtm",
         name: "Jiló",
-        image: "avaliacoes/jilo.png",
+        image: "jilo.png",
         avatar: "J",
         color: "#10b981",
         time: "Hoje às 14:50",
@@ -461,7 +461,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@beatriz_hedley",
         name: "Beatriz Hedley",
-        image: "avaliacoes/2783572707045eabedca159ae9a71bea.jpg",
+        image: "2783572707045eabedca159ae9a71bea.jpg",
         avatar: "B",
         color: "#8b5cf6",
         time: "Hoje às 14:15",
@@ -475,7 +475,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@guilherme_vt",
         name: "Guilherme",
-        image: "avaliacoes/11f24251d69720525b0f1f9fec7b51d9.webp",
+        image: "11f24251d69720525b0f1f9fec7b51d9.webp",
         avatar: "G",
         color: "#ef4444",
         time: "Hoje às 13:40",
@@ -489,7 +489,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@biel_fps",
         name: "Biel",
-        image: "avaliacoes/142a741495fd930de4b6fdbb01a06fd3.jpg",
+        image: "142a741495fd930de4b6fdbb01a06fd3.jpg",
         avatar: "B",
         color: "#f59e0b",
         time: "Ontem às 18:05",
@@ -503,7 +503,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@lucas_gta",
         name: "Lucas",
-        image: "avaliacoes/1918314de7ff1e4b36abeeaf16a1e8d8.webp",
+        image: "1918314de7ff1e4b36abeeaf16a1e8d8.webp",
         avatar: "L",
         color: "#3b82f6",
         time: "Há 2 dias",
@@ -517,7 +517,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@matheus_cs",
         name: "Matheus",
-        image: "avaliacoes/580c5cdd179539a37064fd5a2e7ea041.jpg",
+        image: "580c5cdd179539a37064fd5a2e7ea041.jpg",
         avatar: "M",
         color: "#6366f1",
         time: "Há 2 dias",
@@ -531,7 +531,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@renan_rx",
         name: "Renan",
-        image: "avaliacoes/5b02ff72ce3d4e178582581a41c3f1b1.jpg",
+        image: "5b02ff72ce3d4e178582581a41c3f1b1.jpg",
         avatar: "R",
         color: "#14b8a6",
         time: "Há 3 dias",
@@ -545,7 +545,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@vitor_fivem",
         name: "Vitor",
-        image: "avaliacoes/6aca5bbf21bdd1e8bb8951154f80e81e.webp",
+        image: "6aca5bbf21bdd1e8bb8951154f80e81e.webp",
         avatar: "V",
         color: "#f43f5e",
         time: "Há 3 dias",
@@ -559,7 +559,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@felipe_r6",
         name: "Felipe",
-        image: "avaliacoes/6c6a0502be87d8c3cfff245a76001d19.jpg",
+        image: "6c6a0502be87d8c3cfff245a76001d19.jpg",
         avatar: "F",
         color: "#06b6d4",
         time: "Há 4 dias",
@@ -573,7 +573,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@livia_gamer",
         name: "Lívia",
-        image: "avaliacoes/71a621a30ce0e9a7c4a57edeab5fa8b0.jpg",
+        image: "71a621a30ce0e9a7c4a57edeab5fa8b0.jpg",
         avatar: "L",
         color: "#d946ef",
         time: "Há 4 dias",
@@ -587,7 +587,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@gabriel_val",
         name: "Gabriel",
-        image: "avaliacoes/75959003066bbdca81a0eee679c94ff5.jpg",
+        image: "75959003066bbdca81a0eee679c94ff5.jpg",
         avatar: "G",
         color: "#84cc16",
         time: "Há 5 dias",
@@ -601,7 +601,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@thiago_fort",
         name: "Thiago",
-        image: "avaliacoes/87d349ff15810412670950147ad2e6ac.jpg",
+        image: "87d349ff15810412670950147ad2e6ac.jpg",
         avatar: "T",
         color: "#eab308",
         time: "Há 5 dias",
@@ -615,7 +615,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@edu_pc",
         name: "Eduardo",
-        image: "avaliacoes/93829b8643109eb936b3d0085d4752a2.webp",
+        image: "93829b8643109eb936b3d0085d4752a2.webp",
         avatar: "E",
         color: "#38bdf8",
         time: "Há 6 dias",
@@ -629,7 +629,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@amanda_vtm",
         name: "Amanda",
-        image: "avaliacoes/9ebc152739179086cc9b995cdf475ae8.webp",
+        image: "9ebc152739179086cc9b995cdf475ae8.webp",
         avatar: "A",
         color: "#f472b6",
         time: "Há 6 dias",
@@ -643,7 +643,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@rodrigo_gtarp",
         name: "Rodrigo",
-        image: "avaliacoes/a16346fdd1f29856bd5ccccf35a89bb7.webp",
+        image: "a16346fdd1f29856bd5ccccf35a89bb7.webp",
         avatar: "R",
         color: "#a855f7",
         time: "Há 1 semana",
@@ -657,7 +657,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@caio_fps",
         name: "Caio",
-        image: "avaliacoes/bdad15c205b6e986b70d4e73a710aaa8.jpg",
+        image: "bdad15c205b6e986b70d4e73a710aaa8.jpg",
         avatar: "C",
         color: "#22c55e",
         time: "Há 1 semana",
@@ -671,7 +671,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@juju_plays",
         name: "Juliana",
-        image: "avaliacoes/c60172a1d0c48d9f2b1137b992df06cc.jpg",
+        image: "c60172a1d0c48d9f2b1137b992df06cc.jpg",
         avatar: "J",
         color: "#fb7185",
         time: "Há 1 semana",
@@ -685,7 +685,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@bruno_wz",
         name: "Bruno",
-        image: "avaliacoes/f15cb734021b27e9f419eca1d3680a0b.jpg",
+        image: "f15cb734021b27e9f419eca1d3680a0b.jpg",
         avatar: "B",
         color: "#f97316",
         time: "Há 1 semana",
@@ -699,7 +699,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@rafa_gamer",
         name: "Rafaela",
-        image: "avaliacoes/f2604cecf37d6b516a4e780c11bf4c40.jpg",
+        image: "f2604cecf37d6b516a4e780c11bf4c40.jpg",
         avatar: "R",
         color: "#38bdf8",
         time: "Há 2 semanas",
@@ -713,7 +713,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@diego_fivem",
         name: "Diego",
-        image: "avaliacoes/f2b5b95a7b6941187d95f83f4e42cd5e.jpg",
+        image: "f2b5b95a7b6941187d95f83f4e42cd5e.jpg",
         avatar: "D",
         color: "#059669",
         time: "Há 2 semanas",
@@ -727,7 +727,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@marcio_tech",
         name: "Márcio",
-        image: "avaliacoes/fb8b48bb48c2938a7a98b584ee775953.webp",
+        image: "fb8b48bb48c2938a7a98b584ee775953.webp",
         avatar: "M",
         color: "#4f46e5",
         time: "Há 2 semanas",
@@ -741,7 +741,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@lari_cs",
         name: "Larissa",
-        image: "avaliacoes/letty.png",
+        image: "letty.png",
         avatar: "L",
         color: "#e11d48",
         time: "Há 2 semanas",
@@ -755,7 +755,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@igor_rp",
         name: "Igor",
-        image: "avaliacoes/11f24251d69720525b0f1f9fec7b51d9.webp",
+        image: "11f24251d69720525b0f1f9fec7b51d9.webp",
         avatar: "I",
         color: "#0284c7",
         time: "Há 3 semanas",
@@ -769,7 +769,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@rick_valorant",
         name: "Henrique",
-        image: "avaliacoes/jilo.png",
+        image: "jilo.png",
         avatar: "H",
         color: "#dc2626",
         time: "Há 3 semanas",
