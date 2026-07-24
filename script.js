@@ -143,26 +143,8 @@ faqQuestions.forEach(question => {
 // =========================================================================
 // 3. MODAL DE COMPRA / DISCORD CONTROLE
 // =========================================================================
-const modal = document.getElementById('buy-modal');
-const modalClose = document.querySelector('.modal-close');
-const buyButtons = document.querySelectorAll('.buy-trigger');
-
-buyButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        modal.classList.add('active');
-    });
-});
-
-modalClose.addEventListener('click', () => {
-    modal.classList.remove('active');
-});
-
-window.addEventListener('click', (e) => {
-    if (e.target === modal) {
-        modal.classList.remove('active');
-    }
-});
+// 3. SCROLL REVEAL ANIMATIONS
+// =========================================================================
 
 // =========================================================================
 // 4. ANIMAÇÃO DE SCROLL REVEAL (INTERSECTION OBSERVER)
