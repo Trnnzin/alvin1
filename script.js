@@ -1252,7 +1252,7 @@ function showAuthFormModal() {
     });
 }
 
-function showClientDashboardModal(user) {
+async function showClientDashboardModal(user) {
     let modal = document.getElementById('redline-dash-modal');
     if (modal) modal.remove();
 
@@ -1261,35 +1261,138 @@ function showClientDashboardModal(user) {
     modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(5,5,7,0.85);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
 
     modal.innerHTML = `
-        <div style="background:#0c0c0e;border:1px solid #22c55e;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(34,197,94,0.25);position:relative;font-family:Inter,sans-serif;color:#fff;">
+        <div style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.25);position:relative;font-family:Inter,sans-serif;color:#fff;max-height:90vh;overflow-y:auto;">
             <button id="close-dash-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
-            <div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">👤 ÁREA DO CLIENTE REDLINE</div>
-            <h3 style="font-size:22px;font-weight:800;margin:0 0 16px 0;">Bem-vindo(a), <span style="color:#22c55e;">${user.username}</span>!</h3>
+            <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">👤 ÁREA DO CLIENTE REDLINE</div>
+            <h3 style="font-size:22px;font-weight:800;margin:0 0 16px 0;">Olá, <span style="color:#ef4444;">${user.username}</span>!</h3>
             
-            <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:16px;">
-                <div style="font-size:12px;color:#a1a1aa;margin-bottom:6px;">STATUS DA CONTA: <strong style="color:#22c55e;">🟢 ATIVA & VERIFICADA</strong></div>
-                <div style="font-size:12px;color:#a1a1aa;">DISCORD VINCULADO: <strong style="color:#fff;">${user.discord_id || 'Não vinculado'}</strong></div>
+            <div id="dash-status-box" style="background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:16px;text-align:center;">
+                <div style="font-size:12px;color:#a1a1aa;">Carregando status do seu plano...</div>
             </div>
 
-            <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
-                <b>🚀 SEUS EXECUTÁVEIS AUTENTICADOS:</b><br>
-                Utilize o botão abaixo para baixar o executável protegido do painel. Ao abrir no seu PC, insira seu usuário (<code>${user.username}</code>) para liberar o acesso.
-            </div>
+            <div id="dash-content-area"></div>
 
-            <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #dc2626, #991b1b);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
-            <button id="user-logout-btn" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#f87171;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;">Sair da Minha Conta</button>
+            <button id="user-logout-btn" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#f87171;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;margin-top:10px;">Sair da Minha Conta</button>
         </div>
     `;
 
     document.body.appendChild(modal);
     document.getElementById('close-dash-modal').addEventListener('click', () => modal.remove());
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
-
     document.getElementById('user-logout-btn').addEventListener('click', () => {
         localStorage.removeItem('redline_user_session');
         modal.remove();
         alert('Você saiu da sua conta.');
     });
+
+    const statusBox = document.getElementById('dash-status-box');
+    const contentArea = document.getElementById('dash-content-area');
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/user/dashboard?username=${encodeURIComponent(user.username)}`);
+        const data = await res.json();
+        const dash = data.dashboard || {};
+
+        if (dash.is_approved) {
+            statusBox.style.border = '1px solid #22c55e';
+            statusBox.innerHTML = `
+                <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#22c55e;">🟢 PLANO ATIVO & LIBERADO</strong></div>
+                <div style="font-size:11px;color:#71717a;">Sua conta possui acesso autorizado ao Otimizador REDLINE.</div>
+            `;
+            contentArea.innerHTML = `
+                <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
+                    <b>🚀 EXECUTÁVEL LIBERADO:</b><br>
+                    Baixe o executável abaixo. Ao abrir no seu PC, utilize seu usuário (<code>${user.username}</code>) para liberar todas as otimizaciones!
+                </div>
+                <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
+            `;
+        } else if (dash.is_pending) {
+            statusBox.style.border = '1px solid #eab308';
+            statusBox.innerHTML = `
+                <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#eab308;">⏳ COMPROVANTE EM ANÁLISE PELA STAFF</strong></div>
+                <div style="font-size:11px;color:#71717a;">Seu Pix foi enviado e a equipe da Redline está validando sua compra no Discord.</div>
+            `;
+            contentArea.innerHTML = `
+                <div style="background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.25);padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;text-align:center;">
+                    <b>📌 Aguardando Aprovação no Discord</b><br>
+                    Assim que a Staff validar seu comprovante Pix no canal de vendas do Discord, o botão verde de download será liberado aqui automaticamente!
+                </div>
+                <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:12px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Falar com a Staff no Discord</a>
+            `;
+        } else {
+            statusBox.style.border = '1px solid #ef4444';
+            statusBox.innerHTML = `
+                <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#ef4444;">⚠️ NENHUM PLANO ATIVO ENCONTRADO</strong></div>
+                <div style="font-size:11px;color:#71717a;">Para liberar o download, envie seu comprovante de pagamento Pix e a ficha do seu PC abaixo.</div>
+            `;
+            contentArea.innerHTML = `
+                <form id="submit-receipt-form" style="background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:10px;">
+                    <div style="font-size:12px;font-weight:800;color:#fff;margin-bottom:10px;">📤 ENVIAR COMPROVANTE PIX & FICHA DO PC</div>
+                    
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:11px;color:#a1a1aa;display:block;margin-bottom:4px;">SELECIONE SEU PLANO:</label>
+                        <select id="rec-plan" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:6px;font-size:12px;">
+                            <option value="Advanced">Plano Advanced — R$ 25,00</option>
+                            <option value="Advanced Plus">Plano Advanced Plus (Com IA) — R$ 50,00</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:11px;color:#a1a1aa;display:block;margin-bottom:4px;">CÓDIGO OU COMPROVANTE PIX:</label>
+                        <input id="rec-info" type="text" required placeholder="Cole o código da transação Pix ou link da foto" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:6px;font-size:12px;box-sizing:border-box;">
+                    </div>
+
+                    <div style="display:flex;gap:8px;margin-bottom:10px;">
+                        <input id="rec-cpu" type="text" placeholder="CPU (Ex: i5 10400F)" style="flex:1;padding:8px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:6px;font-size:11px;">
+                        <input id="rec-gpu" type="text" placeholder="GPU (Ex: RTX 2060)" style="flex:1;padding:8px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:6px;font-size:11px;">
+                    </div>
+
+                    <div style="display:flex;gap:8px;margin-bottom:12px;">
+                        <input id="rec-ram" type="text" placeholder="RAM (Ex: 16GB)" style="flex:1;padding:8px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:6px;font-size:11px;">
+                        <input id="rec-game" type="text" placeholder="Jogo Alvo (Ex: FiveM)" style="flex:1;padding:8px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:6px;font-size:11px;">
+                    </div>
+
+                    <button type="submit" style="width:100%;padding:12px;background:linear-gradient(135deg, #dc2626, #991b1b);border:none;color:#fff;font-weight:800;border-radius:8px;cursor:pointer;font-size:13px;box-shadow:0 0 15px rgba(220,38,38,0.4);">🚀 ENVIAR COMPROVANTE PARA ANÁLISE DA STAFF</button>
+                </form>
+            `;
+
+            document.getElementById('submit-receipt-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const plan_name = document.getElementById('rec-plan').value;
+                const receipt_info = document.getElementById('rec-info').value;
+                const cpu = document.getElementById('rec-cpu').value;
+                const gpu = document.getElementById('rec-gpu').value;
+                const ram = document.getElementById('rec-ram').value;
+                const game = document.getElementById('rec-game').value;
+
+                try {
+                    const postRes = await fetch(`${API_BASE_URL}/api/submit-receipt`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username: user.username,
+                            discord_id: user.discord_id || '',
+                            plan_name,
+                            receipt_info,
+                            cpu, gpu, ram, game
+                        })
+                    });
+                    const postData = await postRes.json();
+
+                    if (postData.ok) {
+                        alert('✅ Comprovante enviado com sucesso! A Staff foi notificada no Discord.');
+                        showClientDashboardModal(user);
+                    } else {
+                        alert('❌ Erro: ' + (postData.error || 'Falha ao enviar comprovante.'));
+                    }
+                } catch (err) {
+                    alert('⚠️ Erro ao comunicar com o servidor.');
+                }
+            });
+        }
+    } catch (e) {
+        statusBox.innerHTML = `<div style="color:#f87171;font-size:12px;">⚠️ Erro ao consultar o servidor da API.</div>`;
+    }
 }
 
 // Inicializa a Área do Cliente ao carregar o DOM ou imediatamente se já carregado
