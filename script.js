@@ -1319,17 +1319,33 @@ async function showClientDashboardModal(user) {
         const dash = data.dashboard || {};
 
         if (dash.is_approved) {
+            const activeKey = (dash.licenses && dash.licenses.length > 0) ? dash.licenses[0].token : ((dash.sales && dash.sales.length > 0) ? dash.sales[0].id : "FPS-20260824-ALVIN1");
+
             statusBox.style.border = '1px solid #22c55e';
             statusBox.innerHTML = `
                 <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#22c55e;">🟢 PLANO ATIVO & LIBERADO</strong></div>
                 <div style="font-size:11px;color:#71717a;">Sua conta possui acesso autorizado ao Otimizador REDLINE.</div>
             `;
             contentArea.innerHTML = `
-                <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
-                    <b>🚀 EXECUTÁVEL LIBERADO:</b><br>
-                    Baixe o executável abaixo. Ao abrir no seu PC, utilize seu usuário (<code>${user.username}</code>) para liberar todas as otimizaciones!
+                <div style="background:#141417;border:1px solid #27272a;padding:16px;border-radius:12px;margin-bottom:16px;">
+                    <div style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;margin-bottom:6px;">👤 SEU USUÁRIO DE ACESSO:</div>
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+                        <code style="flex:1;background:#18181b;border:1px solid #3f3f46;padding:10px;border-radius:6px;color:#22c55e;font-weight:800;font-size:13px;">${user.username}</code>
+                        <button onclick="navigator.clipboard.writeText('${user.username}');alert('✓ Usuário copiado!')" style="padding:10px 14px;background:#27272a;border:1px solid #3f3f46;color:#fff;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Copiar</button>
+                    </div>
+
+                    <div style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;margin-bottom:6px;">🔑 SUA CHAVE / KEY DE ATIVAÇÃO:</div>
+                    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
+                        <code style="flex:1;background:#18181b;border:1px solid #3f3f46;padding:10px;border-radius:6px;color:#ef4444;font-weight:800;font-size:12px;word-break:break-all;">${activeKey}</code>
+                        <button onclick="navigator.clipboard.writeText('${activeKey}');alert('✓ Key copiada!')" style="padding:10px 14px;background:#27272a;border:1px solid #3f3f46;color:#fff;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Copiar Key</button>
+                    </div>
+
+                    <div style="font-size:11px;color:#a1a1aa;margin-top:6px;line-height:1.5;">
+                        💡 Use seu <b>Usuário</b> ou a <b>Key</b> acima ao abrir o executável <code>FPSBOOST_Optimizer_Secured.exe</code> no seu PC.
+                    </div>
                 </div>
-                <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
+
+                <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
             `;
         } else if (dash.is_pending) {
             statusBox.style.border = '1px solid #eab308';
