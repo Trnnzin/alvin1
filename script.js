@@ -1028,12 +1028,18 @@ function showWebPixModal(plan) {
     const encodedPix = encodeURIComponent(plan.code);
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedPix}`;
 
+    // Gera um código de licença único para o plano selecionado
+    const randomCode = Math.floor(10000 + Math.random() * 90000);
+    const generatedKey = plan.price === "25.00" 
+        ? `REDLINE-ADVANCED-${randomCode}` 
+        : `REDLINE-PLUS-${randomCode}`;
+
     modal = document.createElement('div');
     modal.id = 'web-pix-modal';
     modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(5,5,7,0.85);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
 
     modal.innerHTML = `
-        <div style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:440px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.3);position:relative;font-family:Inter,sans-serif;color:#fff;">
+        <div id="modal-pix-content" style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:460px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.3);position:relative;font-family:Inter,sans-serif;color:#fff;">
             <button id="close-web-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
             <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">💳 CHECKOUT PIX DIRETO</div>
             <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">${plan.name} — <span style="color:#22c55e;">R$ ${plan.price}</span></h3>
@@ -1043,13 +1049,14 @@ function showWebPixModal(plan) {
                 <div style="font-size:12px;color:#a1a1aa;">Escaneie o QR Code com o aplicativo do seu banco</div>
             </div>
 
-            <div style="margin-bottom:16px;">
+            <div style="margin-bottom:14px;">
                 <label style="font-size:11px;font-weight:700;color:#a1a1aa;display:block;margin-bottom:6px;">PIX COPIA E COLA:</label>
                 <input id="web-pix-input" type="text" readonly value="${plan.code}" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#ef4444;border-radius:8px;font-size:11px;font-family:Consolas,monospace;box-sizing:border-box;outline:none;">
             </div>
 
             <button id="copy-web-pix-btn" style="width:100%;padding:12px;background:#dc2626;border:none;color:#fff;font-weight:700;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;transition:background 0.2s;">📋 Copiar Código Pix</button>
-            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Prefere atendimento no Discord? Clique aqui</a>
+            <button id="confirm-payment-btn" style="width:100%;padding:12px;background:linear-gradient(135deg, #16a34a, #15803d);border:none;color:#fff;font-weight:700;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;box-shadow:0 0 15px rgba(22,163,74,0.4);">✅ Já Paguei! Libera meu Download & Licença 🚀</button>
+            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Precisa de ajuda? Suporte via Discord</a>
         </div>
     `;
 
@@ -1071,5 +1078,33 @@ function showWebPixModal(plan) {
             copyBtn.textContent = '📋 Copiar Código Pix';
             copyBtn.style.background = '#dc2626';
         }, 3000);
+    });
+
+    // Ao clicar em "Já Paguei", exibe a tela de Download e Licença
+    const confirmBtn = document.getElementById('confirm-payment-btn');
+    confirmBtn.addEventListener('click', () => {
+        const contentDiv = document.getElementById('modal-pix-content');
+        contentDiv.innerHTML = `
+            <button id="close-web-modal-2" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
+            <div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🎉 PAGAMENTO REGISTRADO COM SUCESSO!</div>
+            <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">Sua Licença do ${plan.name}</h3>
+            
+            <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #22c55e;margin-bottom:16px;text-align:center;">
+                <div style="font-size:11px;color:#a1a1aa;font-weight:700;margin-bottom:4px;">SUA CHAVE DE ATIVAÇÃO VITALÍCIA:</div>
+                <div style="font-size:18px;font-weight:900;color:#22c55e;letter-spacing:1px;font-family:Consolas,monospace;background:#09090b;padding:10px;border-radius:8px;border:1px dashed #22c55e;margin-bottom:10px;">${generatedKey}</div>
+                <div style="font-size:11px;color:#71717a;">Guarde este código ou envie no nosso Discord para registro VIP.</div>
+            </div>
+
+            <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
+                <b>🚀 Instruções de Instalação:</b><br>
+                1. Clique no botão vermelho abaixo para baixar o executável oficial do painel.<br>
+                2. Execute o arquivo <code>FPSBOOST_Optimizer.exe</code> como Administrador.<br>
+                3. Pronto! Todas as otimizações já estarão liberadas para o seu plano!
+            </div>
+
+            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:14px;background:#dc2626;color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR PAINEL REDLINE v1.0 (.EXE)</a>
+            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Entrar no Servidor do Discord para Suporte VIP</a>
+        `;
+        document.getElementById('close-web-modal-2').addEventListener('click', () => modal.remove());
     });
 }
