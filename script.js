@@ -1115,23 +1115,46 @@ function showWebPixModal(plan) {
 // =========================================================================
 const API_BASE_URL = "http://localhost:8080";
 
-function initClientAreaModal() {
+function updateHeaderUserStatus() {
     const authBtn = document.getElementById('open-auth-modal-btn');
     if (!authBtn) return;
 
-    authBtn.addEventListener('click', () => {
-        const savedSession = localStorage.getItem('redline_user_session');
-        if (savedSession) {
-            try {
-                const user = JSON.parse(savedSession);
-                showClientDashboardModal(user);
-            } catch (e) {
-                showAuthFormModal();
+    const savedSession = localStorage.getItem('redline_user_session');
+    if (savedSession) {
+        try {
+            const user = JSON.parse(savedSession);
+            if (user && user.username) {
+                authBtn.innerHTML = `👤 ${user.username}`;
+                authBtn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
+                authBtn.style.boxShadow = '0 0 15px rgba(34,197,94,0.35)';
+                authBtn.setAttribute('onclick', 'showClientDashboardModalFromSession()');
+                return;
             }
-        } else {
+        } catch (e) {}
+    }
+
+    authBtn.innerHTML = `🔑 Login / Registrar`;
+    authBtn.style.background = 'linear-gradient(135deg, #dc2626, #991b1b)';
+    authBtn.style.boxShadow = '0 0 15px rgba(220,38,38,0.3)';
+    authBtn.setAttribute('onclick', 'if(typeof showAuthFormModal==="function")showAuthFormModal();');
+}
+
+function showClientDashboardModalFromSession() {
+    const savedSession = localStorage.getItem('redline_user_session');
+    if (savedSession) {
+        try {
+            const user = JSON.parse(savedSession);
+            showClientDashboardModal(user);
+        } catch (e) {
             showAuthFormModal();
         }
-    });
+    } else {
+        showAuthFormModal();
+    }
+}
+
+function initClientAreaModal() {
+    updateHeaderUserStatus();
 }
 
 function showAuthFormModal() {
@@ -1236,6 +1259,7 @@ function showAuthFormModal() {
                     setTimeout(() => tabLogin.click(), 1500);
                 } else {
                     localStorage.setItem('redline_user_session', JSON.stringify(data.user || { username }));
+                    updateHeaderUserStatus();
                     modal.remove();
                     showClientDashboardModal(data.user || { username });
                 }
@@ -1281,6 +1305,7 @@ async function showClientDashboardModal(user) {
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     document.getElementById('user-logout-btn').addEventListener('click', () => {
         localStorage.removeItem('redline_user_session');
+        updateHeaderUserStatus();
         modal.remove();
         alert('Você saiu da sua conta.');
     });
