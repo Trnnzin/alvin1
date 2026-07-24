@@ -300,7 +300,7 @@ function calculateFPS() {
     // Regras de decisão inteligente do plano
     if (gpu === 'gpu-high' || cpu === 'intel-high' || cpu === 'amd-high' || game === 'fivem') {
         plan = 'Advanced Plus (Com IA)';
-        reason = 'Recomendado para extrair desempenho máximo do setup com o assistente conversacional de Inteligência Artificial REDLINE Copilot Pro 2026 habilitado ao vivo!';
+        reason = 'Recomendado para extrair desempenho máximo do setup com o assistente conversacional de Inteligência Artificial REDLINE Copilot v1.0 habilitado ao vivo!';
     } else {
         plan = 'Advanced (Painel)';
         reason = 'Ideal para acesso completo ao Painel Visual REDLINE com todas as otimizações automáticas de CPU, GPU, RAM e Input Lag em 1-Clique.';
