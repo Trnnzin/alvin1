@@ -1,0 +1,21 @@
+{
+  "name": "redline-performance",
+  "version": "1.0.0",
+  "description": "Redline Performance - Otimização de Performance Extrema para PC",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build required'",
+    "lint": "echo 'Linting not configured yet'"
+  },
+  "keywords": [
+    "performance",
+    "optimization",
+    "gaming"
+  ],
+  "author": "Redline Performance",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
