@@ -1113,7 +1113,9 @@ function showWebPixModal(plan) {
 // =========================================================================
 // 10. ÁREA DO CLIENTE & MODAL DE AUTENTICAÇÃO
 // =========================================================================
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = (window.location.protocol.startsWith('http') && !window.location.host.includes('localhost') && !window.location.host.includes('127.0.0.1'))
+    ? window.location.origin
+    : "http://localhost:8080";
 
 function updateHeaderUserStatus() {
     const authBtn = document.getElementById('open-auth-modal-btn');
