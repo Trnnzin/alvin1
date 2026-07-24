@@ -1010,11 +1010,22 @@ function showWebPixModal(plan) {
     const encodedPix = encodeURIComponent(plan.code);
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedPix}`;
 
-    // Gera um código de licença único para o plano selecionado
-    const randomCode = Math.floor(10000 + Math.random() * 90000);
-    const generatedKey = plan.price === "25.00" 
-        ? `REDLINE-ADVANCED-${randomCode}` 
-        : `REDLINE-PLUS-${randomCode}`;
+    // Gera um código de licença único para o plano selecionado (30 Dias)
+    const now = new Date();
+    now.setDate(now.getDate() + 30);
+    const expDate = now.toISOString().slice(0,10).replace(/-/g, '');
+    const planName = plan.price === "25.00" ? "Advanced" : "Advanced Plus";
+    const payload = JSON.stringify({
+        token: "FPS-" + expDate + "-" + Math.floor(100000 + Math.random() * 900000),
+        exp_date: expDate,
+        plan: planName,
+        cpu: "Auto",
+        gpu: "Auto",
+        ram: "16GB",
+        game: "Geral"
+    });
+    const b64 = btoa(payload).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const generatedKey = "FPS-" + b64;
 
     modal = document.createElement('div');
     modal.id = 'web-pix-modal';
@@ -1067,31 +1078,34 @@ function showWebPixModal(plan) {
         }, 3000);
     });
 
-    // Ao clicar em "Já Paguei", exibe a tela de Download e Licença
+    // Proteção de Checkout: Não entrega chave nem download sem verificação de comprovante pela Staff/Bot
     const confirmBtn = document.getElementById('confirm-payment-btn');
     confirmBtn.addEventListener('click', () => {
         const contentDiv = document.getElementById('modal-pix-content');
         contentDiv.innerHTML = `
             <button id="close-web-modal-2" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
-            <div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🎉 PAGAMENTO CONFIRMADO!</div>
-            <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">Sua Licença do ${plan.name}</h3>
+            <div style="font-size:11px;font-weight:700;color:#eab308;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⏳ CONFIRMAÇÃO DE PAGAMENTO & FICHA DO PC</div>
+            <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">Liberação do ${plan.name}</h3>
             
-            <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #22c55e;margin-bottom:16px;text-align:center;">
-                <div style="font-size:11px;color:#a1a1aa;font-weight:700;margin-bottom:4px;">SUA CHAVE DE ATIVAÇÃO VITALÍCIA:</div>
-                <div style="font-size:18px;font-weight:900;color:#22c55e;letter-spacing:1px;font-family:Consolas,monospace;background:#09090b;padding:10px;border-radius:8px;border:1px dashed #22c55e;margin-bottom:10px;">${generatedKey}</div>
-                <div style="font-size:11px;color:#71717a;">Guarde este código ou envie no nosso Discord para suporte VIP.</div>
+            <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #eab308;margin-bottom:16px;text-align:center;">
+                <div style="font-size:13px;color:#fff;font-weight:700;margin-bottom:6px;">📌 Passo Final Obrigatório:</div>
+                <div style="font-size:12px;color:#a1a1aa;line-height:1.5;">
+                    Para sua segurança e calibragem exclusiva das peças do seu computador (CPU, GPU e RAM), envie seu <b>Comprovante Pix</b> no atendimento do nosso Discord para receber o link direto e sua chave ativada!
+                </div>
             </div>
 
             <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
-                <b>🚀 Instruções de Instalação:</b><br>
-                1. Clique no botão vermelho abaixo para baixar o executável do painel.<br>
-                2. Execute o arquivo <code>FPSBOOST_Optimizer.exe</code> como Administrador.<br>
-                3. Pronto! Suas otimizações estarão liberadas!
+                <b>📋 Ficha do PC que será otimizado:</b><br>
+                • Processador (CPU)<br>
+                • Placa de Vídeo (GPU)<br>
+                • Memória RAM (GB)<br>
+                • Jogos Alvo (FiveM, Valorant, CS2, etc.)
             </div>
 
-            <a href="https://www.mediafire.com/file/rslhfojbj7k72xf/FPSBOOST_Optimizer.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:#dc2626;color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR PAINEL REDLINE v1.0 (.EXE)</a>
-            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Entrar no Servidor do Discord para Suporte VIP</a>
+            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">💬 ENVIAR COMPROVANTE NO DISCORD PARA LIBERAÇÃO 🚀</a>
+            <button id="back-to-pix" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;">← Voltar para o QR Code Pix</button>
         `;
         document.getElementById('close-web-modal-2').addEventListener('click', () => modal.remove());
+        document.getElementById('back-to-pix').addEventListener('click', () => showWebPixModal(plan));
     });
 }
