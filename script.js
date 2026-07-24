@@ -1109,3 +1109,193 @@ function showWebPixModal(plan) {
         document.getElementById('back-to-pix').addEventListener('click', () => showWebPixModal(plan));
     });
 }
+
+// =========================================================================
+// 10. ÁREA DO CLIENTE & MODAL DE AUTENTICAÇÃO
+// =========================================================================
+const API_BASE_URL = "http://localhost:8080";
+
+function initClientAreaModal() {
+    const authBtn = document.getElementById('open-auth-modal-btn');
+    if (!authBtn) return;
+
+    authBtn.addEventListener('click', () => {
+        const savedSession = localStorage.getItem('redline_user_session');
+        if (savedSession) {
+            try {
+                const user = JSON.parse(savedSession);
+                showClientDashboardModal(user);
+            } catch (e) {
+                showAuthFormModal();
+            }
+        } else {
+            showAuthFormModal();
+        }
+    });
+}
+
+function showAuthFormModal() {
+    let modal = document.getElementById('redline-auth-modal');
+    if (modal) modal.remove();
+
+    modal = document.createElement('div');
+    modal.id = 'redline-auth-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(5,5,7,0.85);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+
+    modal.innerHTML = `
+        <div style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:420px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.3);position:relative;font-family:Inter,sans-serif;color:#fff;">
+            <button id="close-auth-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
+            <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🔑 REDLINE AUTHENTICATION</div>
+            <h3 id="auth-modal-title" style="font-size:22px;font-weight:800;margin:0 0 16px 0;">Área do Cliente</h3>
+            
+            <div style="display:flex;gap:10px;margin-bottom:20px;background:#18181b;padding:4px;border-radius:8px;">
+                <button id="tab-login" style="flex:1;padding:10px;background:#dc2626;border:none;color:#fff;font-weight:700;border-radius:6px;cursor:pointer;font-size:12px;">Entrar</button>
+                <button id="tab-register" style="flex:1;padding:10px;background:none;border:none;color:#a1a1aa;font-weight:700;border-radius:6px;cursor:pointer;font-size:12px;">Criar Conta</button>
+            </div>
+
+            <div id="auth-msg-box" style="display:none;margin-bottom:14px;padding:10px;border-radius:8px;font-size:12px;text-align:center;"></div>
+
+            <form id="auth-form">
+                <div style="margin-bottom:12px;">
+                    <label style="font-size:11px;font-weight:700;color:#a1a1aa;display:block;margin-bottom:6px;">NOME DE USUÁRIO:</label>
+                    <input id="auth-username" type="text" required placeholder="Digite seu usuário" style="width:100%;padding:12px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:8px;font-size:13px;box-sizing:border-box;outline:none;">
+                </div>
+                <div style="margin-bottom:16px;">
+                    <label style="font-size:11px;font-weight:700;color:#a1a1aa;display:block;margin-bottom:6px;">SENHA:</label>
+                    <input id="auth-password" type="password" required placeholder="••••••••" style="width:100%;padding:12px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:8px;font-size:13px;box-sizing:border-box;outline:none;">
+                </div>
+                <div id="discord-id-group" style="margin-bottom:16px;display:none;">
+                    <label style="font-size:11px;font-weight:700;color:#a1a1aa;display:block;margin-bottom:6px;">DISCORD USERNAME / ID (OPCIONAL):</label>
+                    <input id="auth-discord" type="text" placeholder="Ex: usuario_discord" style="width:100%;padding:12px;background:#18181b;border:1px solid #27272a;color:#fff;border-radius:8px;font-size:13px;box-sizing:border-box;outline:none;">
+                </div>
+
+                <button id="auth-submit-btn" type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg, #dc2626, #991b1b);border:none;color:#fff;font-weight:800;border-radius:8px;cursor:pointer;font-size:14px;box-shadow:0 0 15px rgba(220,38,38,0.4);">ENTRAR NA MINHA CONTA 🚀</button>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById('close-auth-modal').addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
+    let isRegisterMode = false;
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const discordGroup = document.getElementById('discord-id-group');
+    const submitBtn = document.getElementById('auth-submit-btn');
+
+    tabLogin.addEventListener('click', () => {
+        isRegisterMode = false;
+        tabLogin.style.background = '#dc2626';
+        tabLogin.style.color = '#fff';
+        tabRegister.style.background = 'none';
+        tabRegister.style.color = '#a1a1aa';
+        discordGroup.style.display = 'none';
+        submitBtn.textContent = 'ENTRAR NA MINHA CONTA 🚀';
+    });
+
+    tabRegister.addEventListener('click', () => {
+        isRegisterMode = true;
+        tabRegister.style.background = '#dc2626';
+        tabRegister.style.color = '#fff';
+        tabLogin.style.background = 'none';
+        tabLogin.style.color = '#a1a1aa';
+        discordGroup.style.display = 'block';
+        submitBtn.textContent = 'CRIAR MINHA CONTA AGORA 🚀';
+    });
+
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('auth-username').value;
+        const password = document.getElementById('auth-password').value;
+        const discord_id = document.getElementById('auth-discord').value;
+        const msgBox = document.getElementById('auth-msg-box');
+
+        msgBox.style.display = 'block';
+        msgBox.style.background = 'rgba(239,68,68,0.1)';
+        msgBox.style.color = '#a1a1aa';
+        msgBox.textContent = 'Conectando ao servidor...';
+
+        const endpoint = isRegisterMode ? `${API_BASE_URL}/api/register` : `${API_BASE_URL}/api/login`;
+        const payload = isRegisterMode ? { username, password, discord_id } : { username, password };
+
+        try {
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.ok) {
+                if (isRegisterMode) {
+                    msgBox.style.background = 'rgba(34,197,94,0.15)';
+                    msgBox.style.color = '#22c55e';
+                    msgBox.textContent = '✓ Conta criada! Faça login agora.';
+                    setTimeout(() => tabLogin.click(), 1500);
+                } else {
+                    localStorage.setItem('redline_user_session', JSON.stringify(data.user || { username }));
+                    modal.remove();
+                    showClientDashboardModal(data.user || { username });
+                }
+            } else {
+                msgBox.style.background = 'rgba(239,68,68,0.2)';
+                msgBox.style.color = '#f87171';
+                msgBox.textContent = '❌ ' + (data.error || 'Falha ao autenticar.');
+            }
+        } catch (err) {
+            msgBox.style.background = 'rgba(239,68,68,0.2)';
+            msgBox.style.color = '#f87171';
+            msgBox.textContent = '⚠️ Servidor offline ou indisponível no momento.';
+        }
+    });
+}
+
+function showClientDashboardModal(user) {
+    let modal = document.getElementById('redline-dash-modal');
+    if (modal) modal.remove();
+
+    modal = document.createElement('div');
+    modal.id = 'redline-dash-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(5,5,7,0.85);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+
+    modal.innerHTML = `
+        <div style="background:#0c0c0e;border:1px solid #22c55e;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(34,197,94,0.25);position:relative;font-family:Inter,sans-serif;color:#fff;">
+            <button id="close-dash-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
+            <div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">👤 ÁREA DO CLIENTE REDLINE</div>
+            <h3 style="font-size:22px;font-weight:800;margin:0 0 16px 0;">Bem-vindo(a), <span style="color:#22c55e;">${user.username}</span>!</h3>
+            
+            <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:16px;">
+                <div style="font-size:12px;color:#a1a1aa;margin-bottom:6px;">STATUS DA CONTA: <strong style="color:#22c55e;">🟢 ATIVA & VERIFICADA</strong></div>
+                <div style="font-size:12px;color:#a1a1aa;">DISCORD VINCULADO: <strong style="color:#fff;">${user.discord_id || 'Não vinculado'}</strong></div>
+            </div>
+
+            <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
+                <b>🚀 SEUS EXECUTÁVEIS AUTENTICADOS:</b><br>
+                Utilize o botão abaixo para baixar o executável protegido do painel. Ao abrir no seu PC, insira seu usuário (<code>${user.username}</code>) para liberar o acesso.
+            </div>
+
+            <a href="https://www.mediafire.com/file/rslhfojbj7k72xf/FPSBOOST_Optimizer.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #dc2626, #991b1b);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
+            <button id="user-logout-btn" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#f87171;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;">Sair da Minha Conta</button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+    document.getElementById('close-dash-modal').addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+
+    document.getElementById('user-logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('redline_user_session');
+        modal.remove();
+        alert('Você saiu da sua conta.');
+    });
+}
+
+// Inicializa a Área do Cliente ao carregar o DOM ou imediatamente se já carregado
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => initClientAreaModal());
+} else {
+    initClientAreaModal();
+}
+
