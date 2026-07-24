@@ -297,31 +297,17 @@ function calculateFPS() {
     let fpsBefore = Math.round(gpuBaseFps * cpuMod * ramMod);
 
     // 3. Determinar o plano ideal baseado no cenário
-    let plan = 'Medium';
-    let reason = 'Recomendado para estabilizar o frametime, remover micro-travamentos e otimizar a fila de processamento.';
-
     // Regras de decisão inteligente do plano
-    if (gpu === 'gpu-high' || cpu === 'intel-high' || cpu === 'amd-high') {
-        // Máquinas high-end precisam de Advanced para gerenciar SMT/P-Cores e GPU Low Latency
-        plan = 'Advanced';
-        reason = 'Ideal para extrair desempenho máximo de setups poderosos com tweaks finos de latência de RAM, CPU SMT e GPU Low-Latency.';
-    } else if (gpu === 'gpu-integrated' || cpu === 'intel-low' || cpu === 'amd-low') {
-        // Máquinas de entrada jogando FiveM ou CS2 precisam de calibração profunda do Medium, senão continuam travando
-        if (game === 'fivem' || game === 'cs2') {
-            plan = 'Medium';
-            reason = 'Essencial para rodar este jogo em hardware de entrada. Melhora drasticamente a paginação de disco e reduz travamentos por falta de VRAM.';
-        } else {
-            plan = 'Light';
-            reason = 'A otimização essencial ideal para dar uma sobrevida ao seu hardware de entrada desativando processos inúteis.';
-        }
+    if (gpu === 'gpu-high' || cpu === 'intel-high' || cpu === 'amd-high' || game === 'fivem') {
+        plan = 'Advanced Plus (Com IA)';
+        reason = 'Recomendado para extrair desempenho máximo do setup com o assistente conversacional de Inteligência Artificial REDLINE Copilot Pro 2026 habilitado ao vivo!';
     } else {
-        // Categoria intermediária padrão
-        plan = 'Medium';
-        reason = 'Recomendado para equilibrar a resposta do processador e otimizar a latência de memória nos jogos competitivos.';
+        plan = 'Advanced (Painel)';
+        reason = 'Ideal para acesso completo ao Painel Visual REDLINE com todas as otimizações automáticas de CPU, GPU, RAM e Input Lag em 1-Clique.';
     }
 
     // 4. Calcular FPS Final (Com otimização)
-    const gainPct = gameData.gains[plan.toLowerCase()];
+    const gainPct = gameData.gains['advanced'] || 0.45;
     let fpsAfter = Math.round(fpsBefore * (1 + gainPct));
 
     // Aplicar limite de segurança máximo realista (Game engine limit caps)
@@ -337,6 +323,17 @@ function calculateFPS() {
     gainTextEl.textContent = `+${finalGainPct}% de FPS Médio Estável`;
     planNameEl.textContent = plan;
     planReasonEl.textContent = reason;
+
+    const metricLowEl = document.getElementById('metric-low-text');
+    const metricLagEl = document.getElementById('metric-lag-text');
+    if (metricLowEl) {
+        const lowFps = Math.round(fpsAfter * 0.72);
+        metricLowEl.textContent = `${lowFps} FPS (Liso / 0 Stutter)`;
+    }
+    if (metricLagEl) {
+        const lagMs = (1000 / fpsAfter).toFixed(1);
+        metricLagEl.textContent = `${lagMs} ms (-62% Delay)`;
+    }
 
     // Atualizar visualmente o link de compra conforme a recomendação
     const planLink = document.getElementById('recommended-plan-link');
@@ -939,4 +936,140 @@ function initFpsCalculator() {
     updateCalculations();
 }
 
-document.addEventListener('DOMContentLoaded', initFpsCalculator);
+// =========================================================================
+// 8. NOTIFICAÇÕES DE VENDAS EM TEMPO REAL (PROVA SOCIAL AO VIVO)
+// =========================================================================
+function initLiveSalesToasts() {
+    if (window.liveSalesToastInitialized) return;
+    window.liveSalesToastInitialized = true;
+
+    const names = ["Matheus S.", "Gabriel R.", "Lucas M.", "Felipe C.", "Enzo P.", "Bruno K.", "Rodrigo T.", "Vitor H."];
+    const cities = ["São Paulo, SP", "Rio de Janeiro, RJ", "Curitiba, PR", "Belo Horizonte, MG", "Porto Alegre, RS", "Salvador, BA", "Brasília, DF"];
+    const plans = ["Plano Advanced Plus (Com IA)", "Plano Advanced (Painel)", "Plano Advanced Plus (Com IA)"];
+
+    function showToast() {
+        let container = document.getElementById('sales-toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'sales-toast-container';
+            container.style.cssText = 'position:fixed;bottom:20px;left:20px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;';
+            document.body.appendChild(container);
+        }
+
+        // Limpa notificações anteriores para garantir que NUNCA haja duplicação na tela
+        container.innerHTML = '';
+
+        const name = names[Math.floor(Math.random() * names.length)];
+        const city = cities[Math.floor(Math.random() * cities.length)];
+        const plan = plans[Math.floor(Math.random() * plans.length)];
+        const min = Math.floor(Math.random() * 8) + 1;
+
+        const toast = document.createElement('div');
+        toast.style.cssText = 'background:rgba(12,12,14,0.95);border:1px solid #dc2626;border-radius:10px;padding:12px 16px;color:#fff;font-family:Inter,sans-serif;font-size:12px;box-shadow:0 10px 25px rgba(220,38,38,0.25);display:flex;align-items:center;gap:12px;transform:translateY(50px);opacity:0;transition:all 0.5s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;backdrop-filter:blur(10px);';
+        
+        toast.innerHTML = `
+            <div style="width:36px;height:36px;border-radius:50%;background:#dc2626;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">⚡</div>
+            <div>
+                <div style="font-weight:700;color:#fff;font-size:13px;">${name} (${city})</div>
+                <div style="color:#a1a1aa;margin-top:2px;">Adquiriu o <strong style="color:#ef4444;">${plan}</strong> há ${min} min • Pix Aprovado</div>
+            </div>
+        `;
+
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+        }, 100);
+
+        setTimeout(() => {
+            toast.style.transform = 'translateY(50px)';
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500);
+        }, 5000);
+    }
+
+    setTimeout(showToast, 4000);
+    setInterval(showToast, 22000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initFpsCalculator();
+    initLiveSalesToasts();
+    initWebCheckoutModal();
+});
+
+// =========================================================================
+// 9. MODAL DE CHECKOUT PIX DIRETO NO WEBSITE
+// =========================================================================
+function initWebCheckoutModal() {
+    const pixKeys = {
+        advanced: { name: "Plano Advanced", price: "25.00", code: "00020101021126580014br.gov.bcb.pix01365f05f92b-16a1-4d9c-a5e6-66f1d318f440520400005303986540525.005802BR5918ALVARO L A DA CRUZ6015LAURO DE FREITA62070503***6304EABB" },
+        advanced_plus: { name: "Plano Advanced Plus (Com IA)", price: "50.00", code: "00020101021126580014br.gov.bcb.pix01365f05f92b-16a1-4d9c-a5e6-66f1d318f440520400005303986540550.005802BR5918ALVARO L A DA CRUZ6015LAURO DE FREITA62070503***6304E781" }
+    };
+
+    const buyButtons = document.querySelectorAll('.buy-trigger, .price-btn');
+    buyButtons.forEach((btn, index) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            let planType = btn.getAttribute('data-plan');
+            if (!planType) {
+                planType = (index === 0) ? 'advanced' : 'advanced_plus';
+            }
+            const plan = pixKeys[planType] || pixKeys['advanced_plus'];
+            showWebPixModal(plan);
+        });
+    });
+}
+
+function showWebPixModal(plan) {
+    let modal = document.getElementById('web-pix-modal');
+    if (modal) modal.remove();
+
+    const encodedPix = encodeURIComponent(plan.code);
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedPix}`;
+
+    modal = document.createElement('div');
+    modal.id = 'web-pix-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(5,5,7,0.85);backdrop-filter:blur(10px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+
+    modal.innerHTML = `
+        <div style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:440px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.3);position:relative;font-family:Inter,sans-serif;color:#fff;">
+            <button id="close-web-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
+            <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">💳 CHECKOUT PIX DIRETO</div>
+            <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">${plan.name} — <span style="color:#22c55e;">R$ ${plan.price}</span></h3>
+            
+            <div style="text-align:center;background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:16px;">
+                <img src="${qrUrl}" alt="QR Code PIX" style="width:180px;height:180px;border-radius:8px;display:block;margin:0 auto 10px auto;">
+                <div style="font-size:12px;color:#a1a1aa;">Escaneie o QR Code com o aplicativo do seu banco</div>
+            </div>
+
+            <div style="margin-bottom:16px;">
+                <label style="font-size:11px;font-weight:700;color:#a1a1aa;display:block;margin-bottom:6px;">PIX COPIA E COLA:</label>
+                <input id="web-pix-input" type="text" readonly value="${plan.code}" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#ef4444;border-radius:8px;font-size:11px;font-family:Consolas,monospace;box-sizing:border-box;outline:none;">
+            </div>
+
+            <button id="copy-web-pix-btn" style="width:100%;padding:12px;background:#dc2626;border:none;color:#fff;font-weight:700;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;transition:background 0.2s;">📋 Copiar Código Pix</button>
+            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Prefere atendimento no Discord? Clique aqui</a>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document.getElementById('close-web-modal').addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+
+    const copyBtn = document.getElementById('copy-web-pix-btn');
+    copyBtn.addEventListener('click', () => {
+        const pixInput = document.getElementById('web-pix-input');
+        pixInput.select();
+        navigator.clipboard.writeText(pixInput.value);
+        copyBtn.textContent = '✓ Código Pix Copiado!';
+        copyBtn.style.background = '#22c55e';
+        setTimeout(() => {
+            copyBtn.textContent = '📋 Copiar Código Pix';
+            copyBtn.style.background = '#dc2626';
+        }, 3000);
+    });
+}
