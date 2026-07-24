@@ -1042,9 +1042,9 @@ function showWebPixModal(plan) {
         <div id="modal-pix-content" style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:460px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.3);position:relative;font-family:Inter,sans-serif;color:#fff;">
             <button id="close-web-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
             <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">💳 CHECKOUT PIX DIRETO</div>
-            <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">${plan.name} — <span style="color:#22c55e;">R$ ${plan.price}</span></h3>
+            <h3 style="font-size:20px;font-weight:800;margin:0 0 14px 0;">${plan.name} — <span style="color:#22c55e;">R$ ${plan.price}</span></h3>
             
-            <div style="text-align:center;background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:16px;">
+            <div style="text-align:center;background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:14px;">
                 <img src="${qrUrl}" alt="QR Code PIX" style="width:180px;height:180px;border-radius:8px;display:block;margin:0 auto 10px auto;">
                 <div style="font-size:12px;color:#a1a1aa;">Escaneie o QR Code com o aplicativo do seu banco</div>
             </div>
@@ -1055,7 +1055,12 @@ function showWebPixModal(plan) {
             </div>
 
             <button id="copy-web-pix-btn" style="width:100%;padding:12px;background:#dc2626;border:none;color:#fff;font-weight:700;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;transition:background 0.2s;">📋 Copiar Código Pix</button>
-            <button id="confirm-payment-btn" style="width:100%;padding:12px;background:linear-gradient(135deg, #16a34a, #15803d);border:none;color:#fff;font-weight:700;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;box-shadow:0 0 15px rgba(22,163,74,0.4);">✅ Já Paguei! Libera meu Download & Licença 🚀</button>
+            
+            <div style="margin-bottom:10px;padding:10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;font-size:11px;color:#a1a1aa;text-align:center;">
+                📌 Após realizar o Pix no seu banco, clique no botão verde abaixo para liberar seu <b>Download &amp; Chave de Licença</b>!
+            </div>
+
+            <button id="confirm-payment-btn" style="width:100%;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);border:none;color:#fff;font-weight:800;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;box-shadow:0 0 15px rgba(22,163,74,0.4);">✅ JÁ PAGUEI! LIBERAR DOWNLOAD &amp; LICENÇA 🚀</button>
             <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Precisa de ajuda? Suporte via Discord</a>
         </div>
     `;
@@ -1086,20 +1091,20 @@ function showWebPixModal(plan) {
         const contentDiv = document.getElementById('modal-pix-content');
         contentDiv.innerHTML = `
             <button id="close-web-modal-2" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
-            <div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🎉 PAGAMENTO REGISTRADO COM SUCESSO!</div>
+            <div style="font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">🎉 PAGAMENTO CONFIRMADO!</div>
             <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">Sua Licença do ${plan.name}</h3>
             
             <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #22c55e;margin-bottom:16px;text-align:center;">
                 <div style="font-size:11px;color:#a1a1aa;font-weight:700;margin-bottom:4px;">SUA CHAVE DE ATIVAÇÃO VITALÍCIA:</div>
                 <div style="font-size:18px;font-weight:900;color:#22c55e;letter-spacing:1px;font-family:Consolas,monospace;background:#09090b;padding:10px;border-radius:8px;border:1px dashed #22c55e;margin-bottom:10px;">${generatedKey}</div>
-                <div style="font-size:11px;color:#71717a;">Guarde este código ou envie no nosso Discord para registro VIP.</div>
+                <div style="font-size:11px;color:#71717a;">Guarde este código ou envie no nosso Discord para suporte VIP.</div>
             </div>
 
             <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
                 <b>🚀 Instruções de Instalação:</b><br>
-                1. Clique no botão vermelho abaixo para baixar o executável oficial do painel.<br>
+                1. Clique no botão vermelho abaixo para baixar o executável do painel.<br>
                 2. Execute o arquivo <code>FPSBOOST_Optimizer.exe</code> como Administrador.<br>
-                3. Pronto! Todas as otimizações já estarão liberadas para o seu plano!
+                3. Pronto! Suas otimizações estarão liberadas!
             </div>
 
             <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:14px;background:#dc2626;color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR PAINEL REDLINE v1.0 (.EXE)</a>
