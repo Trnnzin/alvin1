@@ -1276,7 +1276,7 @@ function showClientDashboardModal(user) {
                 Utilize o botão abaixo para baixar o executável protegido do painel. Ao abrir no seu PC, insira seu usuário (<code>${user.username}</code>) para liberar o acesso.
             </div>
 
-            <a href="https://www.mediafire.com/file/rslhfojbj7k72xf/FPSBOOST_Optimizer.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #dc2626, #991b1b);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
+            <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #dc2626, #991b1b);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
             <button id="user-logout-btn" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#f87171;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;">Sair da Minha Conta</button>
         </div>
     `;
