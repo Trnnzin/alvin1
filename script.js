@@ -1089,7 +1089,7 @@ function showWebPixModal(plan) {
                 3. Pronto! Suas otimizações estarão liberadas!
             </div>
 
-            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:14px;background:#dc2626;color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR PAINEL REDLINE v1.0 (.EXE)</a>
+            <a href="https://www.mediafire.com/file/rslhfojbj7k72xf/FPSBOOST_Optimizer.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:#dc2626;color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(220,38,38,0.4);">📥 BAIXAR PAINEL REDLINE v1.0 (.EXE)</a>
             <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Entrar no Servidor do Discord para Suporte VIP</a>
         `;
         document.getElementById('close-web-modal-2').addEventListener('click', () => modal.remove());
