@@ -12,10 +12,16 @@
     <meta property="og:title" content="Redline Performance | Otimização de PC">
     <meta property="og:description"
         content="Aumente seu FPS em até +70% e elimine o input lag com métodos 100% seguros e reversores inclusos.">
-    <meta property="og:image" content="banner.png">
+    <meta property="og:image" content="https://redline-fps.vercel.app/banner.png">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://redline-fps.vercel.app/">
+    <meta property="og:site_name" content="REDLINE Performance">
     <meta name="theme-color" content="#dc2626">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="REDLINE Performance | Otimização de PC">
+    <meta name="twitter:description" content="Aumente seu FPS em até +70% com métodos 100% seguros.">
+    <meta name="twitter:image" content="https://redline-fps.vercel.app/banner.png">
+    <link rel="canonical" href="https://redline-fps.vercel.app/">
 
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="favicon.png">
@@ -40,14 +46,15 @@
         <header>
             <nav class="nav-container">
                 <a href="#" class="logo">RED<span>LINE</span></a>
-                <ul class="nav-links">
-                    <li><a href="#beneficios">Benefícios</a></li>
-                    <li><a href="#planos">Planos</a></li>
-                    <li><a href="#faq">Dúvidas Frequentes</a></li>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#beneficios" class="nav-link-item">Benefícios</a></li>
+                    <li><a href="#planos" class="nav-link-item">Planos</a></li>
+                    <li><a href="#faq" class="nav-link-item">Dúvidas Frequentes</a></li>
                 </ul>
                 <div class="nav-actions" style="display: flex; align-items: center; gap: 10px;">
                     <button id="open-auth-modal-btn" onclick="if(typeof showAuthFormModal==='function')showAuthFormModal();" style="padding: 10px 18px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 8px; cursor: pointer; border: none; color: #fff; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 15px rgba(220,38,38,0.3); transition: all 0.2s;">🔑 Login / Registrar</button>
                     <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="btn-header-discord" style="padding: 10px 16px; font-size: 13px; font-weight: 700; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e4e4e7; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s;">💬 Discord</a>
+                    <button id="hamburger-btn" aria-label="Abrir menu" aria-expanded="false" style="display:none;background:none;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 10px;cursor:pointer;color:#fff;font-size:18px;line-height:1;">☰</button>
                 </div>
             </nav>
         </header>
@@ -56,50 +63,75 @@
         <section class="hero">
             <div class="hero-grid">
                 <div class="hero-content">
-                    <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:20px;font-size:12px;font-weight:800;color:#ef4444;margin-bottom:20px;letter-spacing:0.5px;box-shadow:0 0 15px rgba(239,68,68,0.2);">
-                        <span style="width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;display:inline-block;"></span>
+                    <div
+                        style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);border-radius:20px;font-size:12px;font-weight:800;color:#ef4444;margin-bottom:20px;letter-spacing:0.5px;box-shadow:0 0 15px rgba(239,68,68,0.2);">
+                        <span
+                            style="width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;display:inline-block;"></span>
                         ⚡ REDLINE PERFORMANCE ULTRA v1.0 AI EDITION
                     </div>
-                    <h1 style="font-size:3.5rem;font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:20px;">
+                    <h1
+                        style="font-size:3.5rem;font-weight:900;line-height:1.1;letter-spacing:-1px;margin-bottom:20px;">
                         Seu PC Rápido de Verdade.<br>
-                        <span style="background:linear-gradient(135deg, #ef4444 0%, #f87171 50%, #ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 25px rgba(239,68,68,0.35));">FPS no Máximo &amp; Delay Zero.</span>
+                        <span
+                            style="background:linear-gradient(135deg, #ef4444 0%, #f87171 50%, #ffffff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 25px rgba(239,68,68,0.35));">FPS
+                            no Máximo &amp; Delay Zero.</span>
                     </h1>
                     <p style="font-size:1.15rem;color:#a1a1aa;line-height:1.7;margin-bottom:32px;">
-                        Eleve o desempenho do seu computador com o otimizador eSports nº 1. Reduza o input lag para 0.5ms, elimine engasgos de CPU/GPU e ganhe até +70% de FPS com o assistente conversacional de IA integrado.
+                        Eleve o desempenho do seu computador com o otimizador eSports nº 1. Reduza o input lag para
+                        0.5ms, elimine engasgos de CPU/GPU e ganhe até +70% de FPS com o assistente conversacional de IA
+                        integrado.
                     </p>
                     <div class="hero-buttons">
-                        <a href="#planos" class="btn-primary" style="font-size:17px;padding:16px 36px;box-shadow:0 0 25px rgba(239,68,68,0.5);">🔥 GARANTIR FPS AGORA</a>
-                        <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="btn-secondary" style="font-size:15px;padding:16px 28px;">💬 Entrar no Discord Oficial</a>
+                        <a href="#planos" class="btn-primary"
+                            style="font-size:17px;padding:16px 36px;box-shadow:0 0 25px rgba(239,68,68,0.5);">🔥
+                            GARANTIR FPS AGORA</a>
+                        <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="btn-secondary"
+                            style="font-size:15px;padding:16px 28px;">💬 Entrar no Discord Oficial</a>
                     </div>
 
                     <!-- Selo de Garantia e Reversibilidade -->
-                    <div class="hero-security-badge" style="margin-top:35px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.25);">
+                    <div class="hero-security-badge"
+                        style="margin-top:35px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.25);">
                         <span class="badge-icon">🛡️</span>
-                        <span class="badge-text" style="color:#d4d4d8;"><strong style="color:#22c55e;">100% Seguro &amp; Reversível:</strong> O painel cria pontos de restauração automaticamente antes de aplicar qualquer otimização.</span>
+                        <span class="badge-text" style="color:#d4d4d8;"><strong style="color:#22c55e;">100% Seguro &amp;
+                                Reversível:</strong> O painel cria pontos de restauração automaticamente antes de
+                            aplicar qualquer otimização.</span>
                     </div>
                 </div>
 
                 <!-- Card de Status Lateral -->
-                <div class="hero-card" style="background:rgba(12,12,15,0.85);border:1px solid rgba(239,68,68,0.3);box-shadow:0 20px 50px rgba(239,68,68,0.15);backdrop-filter:blur(20px);border-radius:20px;padding:28px;">
-                    <div style="font-size:11px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
+                <div class="hero-card"
+                    style="background:rgba(12,12,15,0.85);border:1px solid rgba(239,68,68,0.3);box-shadow:0 20px 50px rgba(239,68,68,0.15);backdrop-filter:blur(20px);border-radius:20px;padding:28px;">
+                    <div
+                        style="font-size:11px;font-weight:800;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;">
                         <span>📈 BENCHMARK DE SISTEMA EM TEMPO REAL</span>
                         <span style="color:#22c55e;">v1.0 ONLINE</span>
                     </div>
-                    <div class="status-row" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <div class="status-row"
+                        style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
                         <div class="status-label" style="font-size:13px;color:#a1a1aa;">Ganho Médio de FPS</div>
-                        <div class="status-value accent" style="font-size:24px;font-weight:900;color:#22c55e;text-shadow:0 0 12px rgba(34,197,94,0.4);">+70% FPS</div>
+                        <div class="status-value accent"
+                            style="font-size:24px;font-weight:900;color:#22c55e;text-shadow:0 0 12px rgba(34,197,94,0.4);">
+                            +70% FPS</div>
                     </div>
-                    <div class="status-row" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
-                        <div class="status-label" style="font-size:13px;color:#a1a1aa;">Input Lag &amp; Timer Resolution</div>
-                        <div class="status-value" style="font-size:20px;font-weight:800;color:#ef4444;">0.5 ms (-62%)</div>
+                    <div class="status-row"
+                        style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+                        <div class="status-label" style="font-size:13px;color:#a1a1aa;">Input Lag &amp; Timer Resolution
+                        </div>
+                        <div class="status-value" style="font-size:20px;font-weight:800;color:#ef4444;">0.5 ms (-62%)
+                        </div>
                     </div>
-                    <div class="status-row" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
+                    <div class="status-row"
+                        style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.06);">
                         <div class="status-label" style="font-size:13px;color:#a1a1aa;">Assistente de IA Copilot</div>
-                        <div class="status-value" style="font-size:15px;font-weight:700;color:#3b82f6;">🤖 Resposta Instantânea</div>
+                        <div class="status-value" style="font-size:15px;font-weight:700;color:#3b82f6;">🤖 Resposta
+                            Instantânea</div>
                     </div>
                     <div class="status-row">
-                        <div class="status-label" style="font-size:13px;color:#a1a1aa;">Segurança &amp; Reversibilidade</div>
-                        <div class="status-value success" style="font-size:15px;font-weight:700;color:#22c55e;">✅ 100% Protegido</div>
+                        <div class="status-label" style="font-size:13px;color:#a1a1aa;">Segurança &amp; Reversibilidade
+                        </div>
+                        <div class="status-value success" style="font-size:15px;font-weight:700;color:#22c55e;">✅ 100%
+                            Protegido</div>
                     </div>
                 </div>
             </div>
@@ -221,14 +253,24 @@
                                 <span id="fps-gain-text" class="fps-gain-pill">+0% de Ganho</span>
                             </div>
 
-                            <div class="sim-metrics-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0;">
-                                <div class="metric-box" style="background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 10px; text-align: left;">
-                                    <span style="font-size: 11px; color: #a1a1aa; font-weight: 600; display: block; margin-bottom: 3px;">🎯 1% LOW (SEM STUTTER)</span>
-                                    <span id="metric-low-text" style="font-size: 14px; font-weight: 800; color: #22c55e;">68 FPS (Sem Stutter)</span>
+                            <div class="sim-metrics-grid"
+                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0;">
+                                <div class="metric-box"
+                                    style="background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 10px; text-align: left;">
+                                    <span
+                                        style="font-size: 11px; color: #a1a1aa; font-weight: 600; display: block; margin-bottom: 3px;">🎯
+                                        1% LOW (SEM STUTTER)</span>
+                                    <span id="metric-low-text"
+                                        style="font-size: 14px; font-weight: 800; color: #22c55e;">68 FPS (Sem
+                                        Stutter)</span>
                                 </div>
-                                <div class="metric-box" style="background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 10px; text-align: left;">
-                                    <span style="font-size: 11px; color: #a1a1aa; font-weight: 600; display: block; margin-bottom: 3px;">🕹️ DELAY DE INPUT</span>
-                                    <span id="metric-lag-text" style="font-size: 14px; font-weight: 800; color: #38bdf8;">8.8 ms (-60%)</span>
+                                <div class="metric-box"
+                                    style="background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 10px; text-align: left;">
+                                    <span
+                                        style="font-size: 11px; color: #a1a1aa; font-weight: 600; display: block; margin-bottom: 3px;">🕹️
+                                        DELAY DE INPUT</span>
+                                    <span id="metric-lag-text"
+                                        style="font-size: 14px; font-weight: 800; color: #38bdf8;">8.8 ms (-60%)</span>
                                 </div>
                             </div>
 
@@ -252,16 +294,28 @@
                 <h2 class="section-title">Escolha o seu plano de Otimização</h2>
             </div>
 
-            <div class="pricing-grid" style="max-width: 950px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+            <!-- SELO DE SEGURANÇA E PONTO DE RESTAURAÇÃO -->
+            <div style="max-width:950px;margin:-10px auto 30px auto;padding:16px 24px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.25);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;">
+                <span style="font-size:28px;">🛡️</span>
+                <div>
+                    <strong style="color:#22c55e;font-size:14px;display:block;margin-bottom:2px;">GARANTIA DE SEGURANÇA TOTAL & REVERSIBILIDADE</strong>
+                    <span style="font-size:12px;color:#a1a1aa;">O painel cria automaticamente um <b>Ponto de Restauração no seu Windows</b> antes de aplicar qualquer otimização. Reversível em 1-clique!</span>
+                </div>
+            </div>
+
+            <div class="pricing-grid"
+                style="max-width: 950px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
 
                 <!-- Plano Advanced (Sem IA) -->
                 <div class="price-card">
                     <h3>🔴 Advanced</h3>
-                    <p class="price-desc">Acesso completo ao Painel Visual REDLINE com todas as otimizações manuais e automáticas em 1-Clique.</p>
+                    <p class="price-desc">Acesso completo ao Painel Visual REDLINE com todas as otimizações manuais e
+                        automáticas em 1-Clique.</p>
                     <div class="price-amount">
                         <span class="currency">R$</span>
                         <span class="value">25</span>
-                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou € 5,00)</span>
+                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou €
+                            5,00)</span>
                     </div>
                     <ul class="price-features">
                         <li>Acesso ao <strong>Painel Visual REDLINE Ultra v1.0</strong></li>
@@ -280,11 +334,13 @@
                 <div class="price-card popular premium">
                     <div class="price-badge">Mais Recomendado (IA Incluída)</div>
                     <h3>⭐ Advanced Plus</h3>
-                    <p class="price-desc">A experiência definitiva: Painel REDLINE Completo + Assistente de IA Conversacional v1.0 Integrado.</p>
+                    <p class="price-desc">A experiência definitiva: Painel REDLINE Completo + Assistente de IA
+                        Conversacional v1.0 Integrado.</p>
                     <div class="price-amount">
                         <span class="currency">R$</span>
                         <span class="value">50</span>
-                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou € 10,00)</span>
+                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou €
+                            10,00)</span>
                     </div>
                     <ul class="price-features">
                         <li><strong>Tudo do Plano Advanced Incluso</strong></li>
@@ -295,7 +351,9 @@
                         <li>Execução de Correções em 1-Clique diretamente pela própria IA</li>
                         <li>Atualizações VIP Prioritárias & Suporte Prioritário</li>
                     </ul>
-                    <button class="price-btn buy-trigger" data-plan="advanced_plus" style="background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 0 20px rgba(239,68,68,0.4);">COMPRAR ADVANCED PLUS</button>
+                    <button class="price-btn buy-trigger" data-plan="advanced_plus"
+                        style="background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 0 20px rgba(239,68,68,0.4);">COMPRAR
+                        ADVANCED PLUS</button>
                 </div>
 
             </div>

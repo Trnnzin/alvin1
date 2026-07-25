@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Bloquear acesso a arquivos sensíveis
+Disallow: /redline/.git/
+
+Sitemap: https://redline-fps.vercel.app/sitemap.xml

@@ -280,6 +280,7 @@ function calculateFPS() {
 
     // 3. Determinar o plano ideal baseado no cenário
     // Regras de decisão inteligente do plano
+    let plan, reason;
     if (gpu === 'gpu-high' || cpu === 'intel-high' || cpu === 'amd-high' || game === 'fivem') {
         plan = 'Advanced Plus (Com IA)';
         reason = 'Recomendado para extrair desempenho máximo do setup com o assistente conversacional de Inteligência Artificial REDLINE Copilot v1.0 habilitado ao vivo!';
@@ -373,37 +374,7 @@ const salesData = [
     { name: "@pedro_valorant", plan: "Plano Medium (R$ 10)", time: "há 18 minutos" }
 ];
 
-function initSalesToast() {
-    const toast = document.createElement('div');
-    toast.id = 'sales-toast';
-    toast.className = 'sales-toast';
-    document.body.appendChild(toast);
-
-    let currentIndex = 0;
-
-    function showNextToast() {
-        const sale = salesData[currentIndex];
-        toast.innerHTML = `
-            <div class="toast-icon">⚡</div>
-            <div class="toast-content">
-                <strong>${sale.name}</strong> adquiriu o <span class="toast-plan">${sale.plan}</span>
-                <span class="toast-time">${sale.time} • Pix Aprovado</span>
-            </div>
-        `;
-        toast.classList.add('show');
-
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 5000);
-
-        currentIndex = (currentIndex + 1) % salesData.length;
-    }
-
-    setTimeout(showNextToast, 3000);
-    setInterval(showNextToast, 16000);
-}
-
-document.addEventListener('DOMContentLoaded', initSalesToast);
+// Nota: initSalesToast legacy removida — substituída por initLiveSalesToasts (seção 8)
 
 // =========================================================================
 // 7. ROTAÇÃO AUTOMÁTICA DE 25 DEPOIMENTOS DE CLIENTES NA TELA
@@ -1010,22 +981,8 @@ function showWebPixModal(plan) {
     const encodedPix = encodeURIComponent(plan.code);
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedPix}`;
 
-    // Gera um código de licença único para o plano selecionado (30 Dias)
-    const now = new Date();
-    now.setDate(now.getDate() + 30);
-    const expDate = now.toISOString().slice(0,10).replace(/-/g, '');
-    const planName = plan.price === "25.00" ? "Advanced" : "Advanced Plus";
-    const payload = JSON.stringify({
-        token: "FPS-" + expDate + "-" + Math.floor(100000 + Math.random() * 900000),
-        exp_date: expDate,
-        plan: planName,
-        cpu: "Auto",
-        gpu: "Auto",
-        ram: "16GB",
-        game: "Geral"
-    });
-    const b64 = btoa(payload).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-    const generatedKey = "FPS-" + b64;
+    // SEGURANÇA: Chaves de licença são geradas APENAS pelo servidor após validação de pagamento pela Staff.
+    // Não geramos chaves no frontend para evitar fraudes.
 
     modal = document.createElement('div');
     modal.id = 'web-pix-modal';
@@ -1116,6 +1073,16 @@ function showWebPixModal(plan) {
 const API_BASE_URL = (window.location.protocol.startsWith('http') && !window.location.host.includes('localhost') && !window.location.host.includes('127.0.0.1'))
     ? window.location.origin
     : "http://localhost:8080";
+
+// Helper: retorna headers com JWT se disponível
+function getAuthHeaders(extra = {}) {
+    const token = localStorage.getItem('redline_jwt_token');
+    return {
+        'Content-Type': 'application/json',
+        ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        ...extra
+    };
+}
 
 function updateHeaderUserStatus() {
     const authBtn = document.getElementById('open-auth-modal-btn');
@@ -1260,7 +1227,11 @@ function showAuthFormModal() {
                     msgBox.textContent = '✓ Conta criada! Faça login agora.';
                     setTimeout(() => tabLogin.click(), 1500);
                 } else {
+                    // Salva sessão do usuário e token JWT
                     localStorage.setItem('redline_user_session', JSON.stringify(data.user || { username }));
+                    if (data.token) {
+                        localStorage.setItem('redline_jwt_token', data.token);
+                    }
                     updateHeaderUserStatus();
                     modal.remove();
                     showClientDashboardModal(data.user || { username });
@@ -1307,16 +1278,25 @@ async function showClientDashboardModal(user) {
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     document.getElementById('user-logout-btn').addEventListener('click', () => {
         localStorage.removeItem('redline_user_session');
+        localStorage.removeItem('redline_jwt_token'); // Remove JWT
         updateHeaderUserStatus();
         modal.remove();
-        alert('Você saiu da sua conta.');
+        // Toast de logout no lugar de alert() nativo
+        const logoutToast = document.createElement('div');
+        logoutToast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:rgba(12,12,14,0.96);border:1px solid #27272a;border-radius:10px;padding:12px 18px;color:#a1a1aa;font-family:Inter,sans-serif;font-size:13px;z-index:999999;transform:translateY(30px);opacity:0;transition:all 0.4s ease;';
+        logoutToast.textContent = '✓ Você saiu da sua conta.';
+        document.body.appendChild(logoutToast);
+        setTimeout(() => { logoutToast.style.transform = 'translateY(0)'; logoutToast.style.opacity = '1'; }, 50);
+        setTimeout(() => { logoutToast.style.opacity = '0'; setTimeout(() => logoutToast.remove(), 400); }, 3000);
     });
 
     const statusBox = document.getElementById('dash-status-box');
     const contentArea = document.getElementById('dash-content-area');
 
     try {
-        const res = await fetch(`${API_BASE_URL}/api/user/dashboard?username=${encodeURIComponent(user.username)}`);
+        const res = await fetch(`${API_BASE_URL}/api/user/dashboard`, {
+            headers: getAuthHeaders()
+        });
         const data = await res.json();
         const dash = data.dashboard || {};
 
@@ -1348,7 +1328,9 @@ async function showClientDashboardModal(user) {
                 </div>
 
                 <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
+                <button onclick="resetUserHwid('${user.username}')" style="width:100%;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-weight:700;border-radius:8px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;">🔄 Resetar Vínculo de HWID (Trocar de PC)</button>
             `;
+
         } else if (dash.is_pending) {
             statusBox.style.border = '1px solid #eab308';
             statusBox.innerHTML = `
@@ -1438,10 +1420,71 @@ async function showClientDashboardModal(user) {
     }
 }
 
+window.resetUserHwid = async function(username) {
+
+    if (!confirm('Deseja realmente resetar o vínculo de HWID do seu computador? Isso permitirá vincular sua licença em um novo PC.')) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/reset-hwid`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username })
+        });
+        const data = await res.json();
+        if (data.ok) {
+            alert('✅ ' + data.message);
+        } else {
+            alert('❌ Erro: ' + (data.error || 'Não foi possível resetar seu HWID.'));
+        }
+    } catch (e) {
+        alert('⚠️ Erro de conexão com a API.');
+    }
+};
+
 // Inicializa a Área do Cliente ao carregar o DOM ou imediatamente se já carregado
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => initClientAreaModal());
 } else {
     initClientAreaModal();
 }
+
+// =========================================================================
+// 11. MENU HAMBURGUER MOBILE
+// =========================================================================
+(function initMobileMenu() {
+    function setup() {
+        const btn = document.getElementById('hamburger-btn');
+        const navLinks = document.getElementById('nav-links');
+        if (!btn || !navLinks) return;
+
+        btn.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            btn.innerHTML = isOpen ? '&#10005;' : '&#9776;';
+        });
+
+        // Fecha o menu ao clicar em qualquer link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = '&#9776;';
+            });
+        });
+
+        // Fecha ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!btn.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('open');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = '&#9776;';
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', setup);
+    } else {
+        setup();
+    }
+})();
 
