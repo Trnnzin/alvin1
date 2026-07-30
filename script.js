@@ -383,7 +383,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@letty_fps",
         name: "Letty",
-        image: "letty.png",
+        image: "letty.webp",
         avatar: "L",
         color: "#ec4899",
         time: "Hoje às 15:10",
@@ -397,7 +397,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@jilo_vtm",
         name: "Jiló",
-        image: "jilo.png",
+        image: "jilo.webp",
         avatar: "J",
         color: "#10b981",
         time: "Hoje às 14:50",
@@ -691,7 +691,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@lari_cs",
         name: "Larissa",
-        image: "letty.png",
+        image: "letty.webp",
         avatar: "L",
         color: "#e11d48",
         time: "Há 2 semanas",
@@ -719,7 +719,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@rick_valorant",
         name: "Henrique",
-        image: "jilo.png",
+        image: "jilo.webp",
         avatar: "H",
         color: "#dc2626",
         time: "Há 3 semanas",
