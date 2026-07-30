@@ -1418,3 +1418,30 @@ footer p {
     flex-shrink: 0;
 }
 
+
+/* CSS Adicionado Automaticamente - Limpeza de Inline Styles */
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+#open-auth-modal-btn { padding: 10px 18px; font-size: 13px; font-weight: 800; background: linear-gradient(135deg, #dc2626, #991b1b); border-radius: 8px; cursor: pointer; border: none; color: #fff; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 0 15px rgba(220,38,38,0.3); transition: all 0.2s; }
+.btn-header-discord { padding: 10px 16px; font-size: 13px; font-weight: 700; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: #e4e4e7; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+#hamburger-btn { display: none; background: none; border: 1px solid rgba(255,255,255,0.15); border-radius: 8px; padding: 8px 10px; cursor: pointer; color: #fff; font-size: 18px; line-height: 1; }
+
+.hero-edition-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); border-radius: 20px; font-size: 12px; font-weight: 800; color: #ef4444; margin-bottom: 20px; letter-spacing: 0.5px; box-shadow: 0 0 15px rgba(239,68,68,0.2); }
+.hero-edition-badge-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; display: inline-block; }
+.hero-title { font-size: 3.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -1px; margin-bottom: 20px; }
+.hero-title-highlight { background: linear-gradient(135deg, #ef4444 0%, #f87171 50%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 25px rgba(239,68,68,0.35)); }
+.hero-desc { font-size: 1.15rem; color: #a1a1aa; line-height: 1.7; margin-bottom: 32px; }
+.hero-btn-primary { font-size: 17px; padding: 16px 36px; box-shadow: 0 0 25px rgba(239,68,68,0.5); }
+.hero-btn-secondary { font-size: 15px; padding: 16px 28px; }
+.hero-security-badge-container { margin-top: 35px; background: rgba(34,197,94,0.06); border: 1px solid rgba(34,197,94,0.25); border-radius: 12px; padding: 15px; display: flex; align-items: center; gap: 12px; }
+.hero-security-badge-container .badge-text { color: #d4d4d8; font-size: 14px; line-height: 1.5; }
+.hero-security-badge-container strong { color: #22c55e; }
+.hero-card { background: rgba(12,12,15,0.85); border: 1px solid rgba(239,68,68,0.3); box-shadow: 0 20px 50px rgba(239,68,68,0.15); backdrop-filter: blur(20px); border-radius: 20px; padding: 28px; }
+.hero-card-header { font-size: 11px; font-weight: 800; color: #ef4444; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; }
+.hero-card-header span:last-child { color: #22c55e; }
+.status-row { margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+.status-row.no-border { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.status-label { font-size: 13px; color: #a1a1aa; }
+.status-value { font-size: 20px; font-weight: 800; color: #ef4444; margin-top: 4px; }
+.status-value.accent { font-size: 24px; font-weight: 900; color: #22c55e; text-shadow: 0 0 12px rgba(34,197,94,0.4); }
+.status-value.copilot { font-size: 15px; font-weight: 700; color: #3b82f6; }
+.status-value.success { font-size: 15px; font-weight: 700; color: #22c55e; }
