@@ -67,9 +67,10 @@ class Particle {
 // Inicializar Partículas
 function initParticles() {
     particles = [];
-    let numberOfParticles = Math.floor((canvas.width * canvas.height) / 25000); // Otimizado: menos part�culas para aliviar CPU
-    // Capar número de partículas para performance
-    numberOfParticles = Math.min(numberOfParticles, 100);
+    const isMobile = window.innerWidth < 768;
+    let numberOfParticles = Math.floor((canvas.width * canvas.height) / (isMobile ? 35000 : 25000));
+    // Capar número de partículas para alta performance
+    numberOfParticles = Math.min(numberOfParticles, isMobile ? 25 : 75);
     for (let i = 0; i < numberOfParticles; i++) {
         particles.push(new Particle());
     }
@@ -77,14 +78,15 @@ function initParticles() {
 
 // Conectar Partículas Próximas
 function connectParticles() {
+    const maxDist = window.innerWidth < 768 ? 90 : 120;
     for (let a = 0; a < particles.length; a++) {
         for (let b = a + 1; b < particles.length; b++) {
             let dx = particles[a].x - particles[b].x;
             let dy = particles[a].y - particles[b].y;
             let distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < 120) {
-                let opacity = (120 - distance) / 120 * 0.15;
+            if (distance < maxDist) {
+                let opacity = (maxDist - distance) / maxDist * 0.15;
                 ctx.beginPath();
                 ctx.moveTo(particles[a].x, particles[a].y);
                 ctx.lineTo(particles[b].x, particles[b].y);
@@ -98,6 +100,8 @@ function connectParticles() {
 
 // Loop de Animação
 function animate() {
+    if (document.hidden || window.isCanvasVisible === false) return;
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     particles.forEach(particle => {
@@ -106,8 +110,15 @@ function animate() {
     });
     
     connectParticles();
-    if (window.isCanvasVisible !== false) requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 }
+
+// Pausar/retomar animação ao trocar de aba (0% de CPU/bateria em background)
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && window.isCanvasVisible !== false) {
+        requestAnimationFrame(animate);
+    }
+});
 
 // Inicialização Inicial
 resizeCanvas();
@@ -141,13 +152,7 @@ faqQuestions.forEach(question => {
 
 
 // =========================================================================
-// 3. MODAL DE COMPRA / DISCORD CONTROLE
-// =========================================================================
-// 3. SCROLL REVEAL ANIMATIONS
-// =========================================================================
-
-// =========================================================================
-// 4. ANIMAÇÃO DE SCROLL REVEAL (INTERSECTION OBSERVER)
+// 3. ANIMAÇÃO DE SCROLL REVEAL (INTERSECTION OBSERVER)
 // =========================================================================
 const revealElements = document.querySelectorAll('.reveal');
 
@@ -282,10 +287,10 @@ function calculateFPS() {
     // Regras de decisão inteligente do plano
     let plan, reason;
     if (gpu === 'gpu-high' || cpu === 'intel-high' || cpu === 'amd-high' || game === 'fivem') {
-        plan = 'Advanced Plus (Com IA)';
+        plan = 'Painel REDLINE PRO (Com IA)';
         reason = 'Recomendado para extrair desempenho máximo do setup com o assistente conversacional de Inteligência Artificial REDLINE Copilot v1.0 habilitado ao vivo!';
     } else {
-        plan = 'Advanced (Painel)';
+        plan = 'Painel REDLINE (Sem IA)';
         reason = 'Ideal para acesso completo ao Painel Visual REDLINE com todas as otimizações automáticas de CPU, GPU, RAM e Input Lag em 1-Clique.';
     }
 
@@ -363,18 +368,7 @@ if (selectCpu) {
     calculateFPS();
 }
 
-// =========================================================================
-// 6. POPUP DE PROVA SOCIAL E VENDAS EM TEMPO REAL (TOAST NOTIFICATIONS)
-// =========================================================================
-const salesData = [
-    { name: "@guilherme_vt", plan: "Plano Advanced (R$ 20)", time: "há 2 minutos" },
-    { name: "@biel_fps", plan: "Plano Medium (R$ 10)", time: "há 5 minutos" },
-    { name: "@lucas_gta", plan: "Plano Light (R$ 5)", time: "há 11 minutos" },
-    { name: "@renan_fivem", plan: "Plano Advanced (R$ 20)", time: "há 14 minutos" },
-    { name: "@pedro_valorant", plan: "Plano Medium (R$ 10)", time: "há 18 minutos" }
-];
 
-// Nota: initSalesToast legacy removida — substituída por initLiveSalesToasts (seção 8)
 
 // =========================================================================
 // 7. ROTAÇÃO AUTOMÁTICA DE 25 DEPOIMENTOS DE CLIENTES NA TELA
@@ -691,7 +685,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@lari_cs",
         name: "Larissa",
-        image: "assets/images/letty.webp",
+        image: "assets/images/6aca5bbf21bdd1e8bb8951154f80e81e.webp",
         avatar: "L",
         color: "#e11d48",
         time: "Há 2 semanas",
@@ -705,7 +699,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@igor_rp",
         name: "Igor",
-        image: "assets/images/11f24251d69720525b0f1f9fec7b51d9.webp",
+        image: "assets/images/9ebc152739179086cc9b995cdf475ae8.webp",
         avatar: "I",
         color: "#0284c7",
         time: "Há 3 semanas",
@@ -719,7 +713,7 @@ const ALL_TESTIMONIALS = [
     {
         user: "@rick_valorant",
         name: "Henrique",
-        image: "assets/images/jilo.webp",
+        image: "assets/images/93829b8643109eb936b3d0085d4752a2.webp",
         avatar: "H",
         color: "#dc2626",
         time: "Há 3 semanas",
@@ -816,78 +810,7 @@ function initTestimonialRotator() {
 
 document.addEventListener('DOMContentLoaded', initTestimonialRotator);
 
-// =========================================================================
-// CALCULADORA INTERATIVA DE FPS E BENCHMARKS PRECISOS
-// =========================================================================
-function initFpsCalculator() {
-    const gpuSelect = document.getElementById('calc-gpu');
-    const gameSelect = document.getElementById('calc-game');
-    const resBefore = document.getElementById('res-before');
-    const resAfter = document.getElementById('res-after');
-    const resLowBefore = document.getElementById('res-low-before');
-    const resLowAfter = document.getElementById('res-low-after');
-    const resLagBefore = document.getElementById('res-lag-before');
-    const resLagAfter = document.getElementById('res-lag-after');
-    const resGain = document.getElementById('res-gain');
 
-    if (!gpuSelect || !gameSelect || !resBefore || !resAfter) return;
-
-    // Matriz de dados reais de benchmarks [FPS Antes, FPS Depois, 1% Low Antes, 1% Low Depois, Input Lag Antes, Input Lag Depois]
-    const BENCHMARKS = {
-        fivem: {
-            entry:   [35, 72,  14, 48, 28.4, 11.2],
-            mid:     [52, 96,  22, 68, 22.1, 8.8],
-            high:    [82, 142, 38, 102, 16.5, 6.2],
-            extreme: [115, 184, 55, 138, 12.0, 4.5]
-        },
-        valorant: {
-            entry:   [85, 165,  42, 112, 18.2, 7.1],
-            mid:     [145, 258, 78, 182, 12.4, 4.8],
-            high:    [230, 385, 125, 275, 8.1, 3.1],
-            extreme: [340, 510, 190, 390, 5.5, 2.1]
-        },
-        cs2: {
-            entry:   [58, 118,  25, 76, 24.0, 9.5],
-            mid:     [98, 182,  46, 124, 15.8, 6.1],
-            high:    [165, 285, 82, 198, 10.2, 4.0],
-            extreme: [245, 395, 130, 280, 6.8, 2.6]
-        },
-        fortnite: {
-            entry:   [42, 92,   18, 60, 26.5, 10.8],
-            mid:     [72, 145,  34, 96, 18.2, 7.2],
-            high:    [128, 224, 62, 154, 12.1, 4.9],
-            extreme: [185, 305, 95, 215, 8.4, 3.2]
-        },
-        warzone: {
-            entry:   [32, 64,   12, 42, 32.0, 14.2],
-            mid:     [54, 102,  24, 68, 24.5, 9.8],
-            high:    [92, 158,  44, 108, 15.6, 6.5],
-            extreme: [138, 215, 70, 152, 10.8, 4.4]
-        }
-    };
-
-    function updateCalculations() {
-        const g = gpuSelect.value || 'mid';
-        const game = gameSelect.value || 'fivem';
-        
-        const [bFPS, aFPS, bLow, aLow, bLag, aLag] = BENCHMARKS[game][g] || BENCHMARKS.fivem.mid;
-        const diff = aFPS - bFPS;
-        const pct = Math.round((diff / bFPS) * 100);
-        const lagRed = Math.round(((bLag - aLag) / bLag) * 100);
-
-        if (resBefore) resBefore.textContent = `Antes: ${bFPS} FPS`;
-        if (resAfter) resAfter.textContent = `Depois: ${aFPS} FPS`;
-        if (resLowBefore) resLowBefore.textContent = `Antes: ${bLow} FPS (Quedas)`;
-        if (resLowAfter) resLowAfter.textContent = `Depois: ${aLow} FPS (Sem Stutter)`;
-        if (resLagBefore) resLagBefore.textContent = `Antes: ${bLag} ms`;
-        if (resLagAfter) resLagAfter.textContent = `Depois: ${aLag} ms (-${lagRed}%)`;
-        if (resGain) resGain.textContent = `+${diff} FPS (+${pct}%)`;
-    }
-
-    gpuSelect.addEventListener('change', updateCalculations);
-    gameSelect.addEventListener('change', updateCalculations);
-    updateCalculations();
-}
 
 // =========================================================================
 // 8. NOTIFICAÇÕES DE VENDAS EM TEMPO REAL (PROVA SOCIAL AO VIVO)
@@ -946,30 +869,46 @@ function initLiveSalesToasts() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    initFpsCalculator();
     initLiveSalesToasts();
     initWebCheckoutModal();
 });
 
 // =========================================================================
 // 9. MODAL DE CHECKOUT PIX DIRETO NO WEBSITE
+// SEGURANÇA: Dados de pagamento são carregados do backend — nunca hardcoded
 // =========================================================================
 function initWebCheckoutModal() {
-    const pixKeys = {
-        advanced: { name: "Plano Advanced", price: "25.00", code: "00020101021126580014br.gov.bcb.pix01365f05f92b-16a1-4d9c-a5e6-66f1d318f440520400005303986540525.005802BR5918ALVARO L A DA CRUZ6015LAURO DE FREITA62070503***6304EABB" },
-        advanced_plus: { name: "Plano Advanced Plus (Com IA)", price: "50.00", code: "00020101021126580014br.gov.bcb.pix01365f05f92b-16a1-4d9c-a5e6-66f1d318f440520400005303986540550.005802BR5918ALVARO L A DA CRUZ6015LAURO DE FREITA62070503***6304E781" }
+    // Mapa de planos local — apenas nome e preço para exibição
+    // A chave PIX real é obtida do backend em /api/checkout/pix-info
+    const planMeta = {
+        basic:       { name: "Painel REDLINE (Sem IA)",       price: "15,00" },
+        premium_ai:  { name: "Painel REDLINE PRO (Com IA)",   price: "30,00" }
     };
 
     const buyButtons = document.querySelectorAll('.buy-trigger, .price-btn');
     buyButtons.forEach((btn, index) => {
-        btn.addEventListener('click', (e) => {
+        btn.addEventListener('click', async (e) => {
             e.preventDefault();
             let planType = btn.getAttribute('data-plan');
             if (!planType) {
-                planType = (index === 0) ? 'advanced' : 'advanced_plus';
+                planType = (index === 0) ? 'basic' : 'premium_ai';
             }
-            const plan = pixKeys[planType] || pixKeys['advanced_plus'];
-            showWebPixModal(plan);
+            const meta = planMeta[planType] || planMeta['premium_ai'];
+
+            // Buscar dados PIX do backend (chave real protegida no servidor)
+            try {
+                const resp = await fetch(`${API_BASE_URL}/api/checkout/pix-info?plan=${encodeURIComponent(planType)}`);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.ok && data.pix_code) {
+                        showWebPixModal({ name: meta.name, price: meta.price, code: data.pix_code });
+                        return;
+                    }
+                }
+            } catch (_) {}
+
+            // Fallback: redirecionar para Discord se backend indisponível
+            showWebPixModal({ name: meta.name, price: meta.price, code: null });
         });
     });
 }
@@ -977,9 +916,6 @@ function initWebCheckoutModal() {
 function showWebPixModal(plan) {
     let modal = document.getElementById('web-pix-modal');
     if (modal) modal.remove();
-
-    const encodedPix = encodeURIComponent(plan.code);
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedPix}`;
 
     // SEGURANÇA: Chaves de licença são geradas APENAS pelo servidor após validação de pagamento pela Staff.
     // Não geramos chaves no frontend para evitar fraudes.
@@ -992,79 +928,104 @@ function showWebPixModal(plan) {
         <div id="modal-pix-content" style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:460px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.3);position:relative;font-family:Inter,sans-serif;color:#fff;">
             <button id="close-web-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
             <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">💳 CHECKOUT PIX DIRETO</div>
-            <h3 style="font-size:20px;font-weight:800;margin:0 0 14px 0;">${plan.name} — <span style="color:#22c55e;">R$ ${plan.price}</span></h3>
-            
+            <h3 id="pix-modal-title" style="font-size:20px;font-weight:800;margin:0 0 14px 0;"></h3>
+            ${plan.code ? `
             <div style="text-align:center;background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:14px;">
-                <img src="${qrUrl}" alt="QR Code PIX" style="width:180px;height:180px;border-radius:8px;display:block;margin:0 auto 10px auto;">
+                <img id="pix-qr-img" alt="QR Code PIX" style="width:180px;height:180px;border-radius:8px;display:block;margin:0 auto 10px auto;">
                 <div style="font-size:12px;color:#a1a1aa;">Escaneie o QR Code com o aplicativo do seu banco</div>
             </div>
-
             <div style="margin-bottom:14px;">
                 <label style="font-size:11px;font-weight:700;color:#a1a1aa;display:block;margin-bottom:6px;">PIX COPIA E COLA:</label>
-                <input id="web-pix-input" type="text" readonly value="${plan.code}" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#ef4444;border-radius:8px;font-size:11px;font-family:Consolas,monospace;box-sizing:border-box;outline:none;">
+                <input id="web-pix-input" type="text" readonly style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#ef4444;border-radius:8px;font-size:11px;font-family:Consolas,monospace;box-sizing:border-box;outline:none;">
             </div>
-
             <button id="copy-web-pix-btn" style="width:100%;padding:12px;background:#dc2626;border:none;color:#fff;font-weight:700;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;transition:background 0.2s;">📋 Copiar Código Pix</button>
-            
             <div style="margin-bottom:10px;padding:10px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:8px;font-size:11px;color:#a1a1aa;text-align:center;">
                 📌 Após realizar o Pix no seu banco, clique no botão verde abaixo para liberar seu <b>Download &amp; Chave de Licença</b>!
             </div>
-
             <button id="confirm-payment-btn" style="width:100%;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);border:none;color:#fff;font-weight:800;border-radius:8px;cursor:pointer;font-size:13px;margin-bottom:10px;box-shadow:0 0 15px rgba(22,163,74,0.4);">✅ JÁ PAGUEI! LIBERAR DOWNLOAD &amp; LICENÇA 🚀</button>
-            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Precisa de ajuda? Suporte via Discord</a>
+            ` : `
+            <div style="background:#141417;padding:20px;border-radius:12px;border:1px solid #eab308;margin-bottom:16px;text-align:center;">
+                <div style="font-size:14px;color:#fff;font-weight:700;margin-bottom:8px;">⚠️ Pagamento via Discord</div>
+                <div style="font-size:12px;color:#a1a1aa;line-height:1.5;">Para realizar sua compra com segurança, acesse nosso Discord e abra um ticket de atendimento.</div>
+            </div>
+            `}
+            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;text-decoration:none;font-size:12px;">💬 Precisa de ajuda? Suporte via Discord</a>
         </div>
     `;
 
     document.body.appendChild(modal);
+
+    // Preencher título e QR via DOM (evita XSS por interpolação)
+    document.getElementById('pix-modal-title').textContent = `${plan.name} — R$ ${plan.price}`;
+
+    if (plan.code) {
+        const pixInput = document.getElementById('web-pix-input');
+        if (pixInput) pixInput.value = plan.code;
+
+        const qrImg = document.getElementById('pix-qr-img');
+        if (qrImg) {
+            qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(plan.code)}`;
+        }
+    }
 
     document.getElementById('close-web-modal').addEventListener('click', () => modal.remove());
     modal.addEventListener('click', (e) => {
         if (e.target === modal) modal.remove();
     });
 
-    const copyBtn = document.getElementById('copy-web-pix-btn');
-    copyBtn.addEventListener('click', () => {
-        const pixInput = document.getElementById('web-pix-input');
-        pixInput.select();
-        navigator.clipboard.writeText(pixInput.value);
-        copyBtn.textContent = '✓ Código Pix Copiado!';
-        copyBtn.style.background = '#22c55e';
-        setTimeout(() => {
-            copyBtn.textContent = '📋 Copiar Código Pix';
-            copyBtn.style.background = '#dc2626';
-        }, 3000);
-    });
+    if (plan.code) {
+        const copyBtn = document.getElementById('copy-web-pix-btn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const pixInput = document.getElementById('web-pix-input');
+                if (pixInput) {
+                    navigator.clipboard.writeText(pixInput.value).catch(() => {
+                        pixInput.select();
+                        document.execCommand('copy');
+                    });
+                }
+                copyBtn.textContent = '✓ Código Pix Copiado!';
+                copyBtn.style.background = '#22c55e';
+                setTimeout(() => {
+                    copyBtn.textContent = '📋 Copiar Código Pix';
+                    copyBtn.style.background = '#dc2626';
+                }, 3000);
+            });
+        }
 
-    // Proteção de Checkout: Não entrega chave nem download sem verificação de comprovante pela Staff/Bot
-    const confirmBtn = document.getElementById('confirm-payment-btn');
-    confirmBtn.addEventListener('click', () => {
-        const contentDiv = document.getElementById('modal-pix-content');
-        contentDiv.innerHTML = `
-            <button id="close-web-modal-2" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
-            <div style="font-size:11px;font-weight:700;color:#eab308;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⏳ CONFIRMAÇÃO DE PAGAMENTO & FICHA DO PC</div>
-            <h3 style="font-size:20px;font-weight:800;margin:0 0 16px 0;">Liberação do ${plan.name}</h3>
-            
-            <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #eab308;margin-bottom:16px;text-align:center;">
-                <div style="font-size:13px;color:#fff;font-weight:700;margin-bottom:6px;">📌 Passo Final Obrigatório:</div>
-                <div style="font-size:12px;color:#a1a1aa;line-height:1.5;">
-                    Para sua segurança e calibragem exclusiva das peças do seu computador (CPU, GPU e RAM), envie seu <b>Comprovante Pix</b> no atendimento do nosso Discord para receber o link direto e sua chave ativada!
-                </div>
-            </div>
-
-            <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
-                <b>📋 Ficha do PC que será otimizado:</b><br>
-                • Processador (CPU)<br>
-                • Placa de Vídeo (GPU)<br>
-                • Memória RAM (GB)<br>
-                • Jogos Alvo (FiveM, Valorant, CS2, etc.)
-            </div>
-
-            <a href="https://discord.gg/WPqj5nGjhD" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">💬 ENVIAR COMPROVANTE NO DISCORD PARA LIBERAÇÃO 🚀</a>
-            <button id="back-to-pix" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;">← Voltar para o QR Code Pix</button>
-        `;
-        document.getElementById('close-web-modal-2').addEventListener('click', () => modal.remove());
-        document.getElementById('back-to-pix').addEventListener('click', () => showWebPixModal(plan));
-    });
+        // Proteção de Checkout: não entrega chave sem verificação de comprovante pela Staff/Bot
+        const confirmBtn = document.getElementById('confirm-payment-btn');
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', () => {
+                const contentDiv = document.getElementById('modal-pix-content');
+                const planName = plan.name;
+                contentDiv.innerHTML = `
+                    <button id="close-web-modal-2" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
+                    <div style="font-size:11px;font-weight:700;color:#eab308;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⏳ CONFIRMAÇÃO DE PAGAMENTO &amp; FICHA DO PC</div>
+                    <h3 id="confirm-modal-title" style="font-size:20px;font-weight:800;margin:0 0 16px 0;"></h3>
+                    <div style="background:#141417;padding:16px;border-radius:12px;border:1px solid #eab308;margin-bottom:16px;text-align:center;">
+                        <div style="font-size:13px;color:#fff;font-weight:700;margin-bottom:6px;">📌 Passo Final Obrigatório:</div>
+                        <div style="font-size:12px;color:#a1a1aa;line-height:1.5;">
+                            Para sua segurança e calibragem exclusiva das peças do seu computador (CPU, GPU e RAM), envie seu <b>Comprovante Pix</b> no atendimento do nosso Discord para receber o link direto e sua chave ativada!
+                        </div>
+                    </div>
+                    <div style="background:#18181b;padding:14px;border-radius:10px;margin-bottom:16px;font-size:12px;color:#d4d4d8;line-height:1.6;">
+                        <b>📋 Ficha do PC que será otimizado:</b><br>
+                        • Processador (CPU)<br>
+                        • Placa de Vídeo (GPU)<br>
+                        • Memória RAM (GB)<br>
+                        • Jogos Alvo (FiveM, Valorant, CS2, etc.)
+                    </div>
+                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">💬 ENVIAR COMPROVANTE NO DISCORD PARA LIBERAÇÃO 🚀</a>
+                    <button id="back-to-pix" style="width:100%;padding:10px;background:#18181b;border:1px solid #27272a;color:#a1a1aa;font-weight:600;border-radius:8px;cursor:pointer;font-size:12px;">← Voltar para o QR Code Pix</button>
+                `;
+                // Título via textContent (evita XSS)
+                document.getElementById('confirm-modal-title').textContent = `Liberação do ${planName}`;
+                document.getElementById('close-web-modal-2').addEventListener('click', () => modal.remove());
+                document.getElementById('back-to-pix').addEventListener('click', () => showWebPixModal(plan));
+            });
+        }
+    }
 }
 
 // =========================================================================
@@ -1159,19 +1120,21 @@ function showAuthFormModal() {
     });
 }
 
-// Verifica se está voltando do login do Discord na URL
+// Verifica se está voltando do login do Discord na URL (fragmento # para não vazar em logs)
 window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get('token');
-    const discord_id = urlParams.get('discord_id');
-    const username = urlParams.get('username');
+    // SEG-02: Token no fragment (#) — não vai ao servidor nem aparece em logs
+    const hash = window.location.hash.slice(1); // remove o '#'
+    const hashParams = new URLSearchParams(hash);
+    const token = hashParams.get('token');
+    const discord_id = hashParams.get('discord_id');
+    const username = hashParams.get('username');
 
     if (token && username) {
         localStorage.setItem('redline_jwt_token', token);
-        const user = { username: username, discord_id: discord_id };
+        const user = { username: decodeURIComponent(username), discord_id: discord_id };
         localStorage.setItem('redline_user_session', JSON.stringify(user));
         
-        // Limpa a URL
+        // Limpa o fragment da URL sem recarregar a página
         window.history.replaceState({}, document.title, window.location.pathname);
         
         updateHeaderUserStatus();
@@ -1191,7 +1154,7 @@ async function showClientDashboardModal(user) {
         <div style="background:#0c0c0e;border:1px solid #dc2626;border-radius:16px;max-width:480px;width:100%;padding:28px;box-shadow:0 20px 50px rgba(220,38,38,0.25);position:relative;font-family:Inter,sans-serif;color:#fff;max-height:90vh;overflow-y:auto;">
             <button id="close-dash-modal" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#a1a1aa;font-size:20px;cursor:pointer;">✕</button>
             <div style="font-size:11px;font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">👤 ÁREA DO CLIENTE REDLINE</div>
-            <h3 style="font-size:22px;font-weight:800;margin:0 0 16px 0;">Olá, <span style="color:#ef4444;">${user.username}</span>!</h3>
+            <h3 id="dash-greeting" style="font-size:22px;font-weight:800;margin:0 0 16px 0;"></h3>
             
             <div id="dash-status-box" style="background:#141417;padding:16px;border-radius:12px;border:1px solid #27272a;margin-bottom:16px;text-align:center;">
                 <div style="font-size:12px;color:#a1a1aa;">Carregando status do seu plano...</div>
@@ -1204,6 +1167,12 @@ async function showClientDashboardModal(user) {
     `;
 
     document.body.appendChild(modal);
+
+    // SEG-05: Preencher greeting via textContent (evita XSS)
+    const greetingEl = document.getElementById('dash-greeting');
+    if (greetingEl) greetingEl.textContent = `Olá, ${user.username}!`;
+    // Colorir o nome via DOM após setar o texto
+    greetingEl.innerHTML = `Olá, <span style="color:#ef4444;">${greetingEl.textContent.replace('Olá, ', '')}</span>!`;
     document.getElementById('close-dash-modal').addEventListener('click', () => modal.remove());
     modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
     document.getElementById('user-logout-btn').addEventListener('click', () => {
@@ -1228,40 +1197,72 @@ async function showClientDashboardModal(user) {
             headers: getAuthHeaders()
         });
         const data = await res.json();
-        const dash = data.dashboard || {};
+        // API-01: Backend retorna data.user, não data.dashboard
+        const dash = data.user || {};
+        const isApproved = dash.plan_status === 'ATIVO';
+        const isPending  = dash.plan_status === 'PENDENTE';
+        const activeKey  = dash.token || null;
 
-        if (dash.is_approved) {
-            const activeKey = (dash.licenses && dash.licenses.length > 0) ? dash.licenses[0].token : ((dash.sales && dash.sales.length > 0) ? dash.sales[0].id : "FPS-20260824-ALVIN1");
+        if (isApproved) {
 
             statusBox.style.border = '1px solid #22c55e';
             statusBox.innerHTML = `
-                <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#22c55e;">🟢 PLANO ATIVO & LIBERADO</strong></div>
+                <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#22c55e;">🟢 PLANO ATIVO &amp; LIBERADO</strong></div>
                 <div style="font-size:11px;color:#71717a;">Sua conta possui acesso autorizado ao Otimizador REDLINE.</div>
             `;
+            // SEG-05: construir contentArea via DOM, não innerHTML com variáveis
             contentArea.innerHTML = `
                 <div style="background:#141417;border:1px solid #27272a;padding:16px;border-radius:12px;margin-bottom:16px;">
                     <div style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;margin-bottom:6px;">👤 SEU USUÁRIO DE ACESSO:</div>
                     <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
-                        <code style="flex:1;background:#18181b;border:1px solid #3f3f46;padding:10px;border-radius:6px;color:#22c55e;font-weight:800;font-size:13px;">${user.username}</code>
-                        <button onclick="navigator.clipboard.writeText('${user.username}');alert('✓ Usuário copiado!')" style="padding:10px 14px;background:#27272a;border:1px solid #3f3f46;color:#fff;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Copiar</button>
+                        <code id="dash-username-display" style="flex:1;background:#18181b;border:1px solid #3f3f46;padding:10px;border-radius:6px;color:#22c55e;font-weight:800;font-size:13px;"></code>
+                        <button id="copy-username-btn" style="padding:10px 14px;background:#27272a;border:1px solid #3f3f46;color:#fff;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Copiar</button>
                     </div>
-
                     <div style="font-size:11px;font-weight:700;color:#a1a1aa;text-transform:uppercase;margin-bottom:6px;">🔑 SUA CHAVE / KEY DE ATIVAÇÃO:</div>
                     <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px;">
-                        <code style="flex:1;background:#18181b;border:1px solid #3f3f46;padding:10px;border-radius:6px;color:#ef4444;font-weight:800;font-size:12px;word-break:break-all;">${activeKey}</code>
-                        <button onclick="navigator.clipboard.writeText('${activeKey}');alert('✓ Key copiada!')" style="padding:10px 14px;background:#27272a;border:1px solid #3f3f46;color:#fff;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Copiar Key</button>
+                        <code id="dash-key-display" style="flex:1;background:#18181b;border:1px solid #3f3f46;padding:10px;border-radius:6px;color:#ef4444;font-weight:800;font-size:12px;word-break:break-all;">${activeKey ? '' : '(Sem chave — entre em contato no Discord)'}</code>
+                        ${activeKey ? '<button id="copy-key-btn" style="padding:10px 14px;background:#27272a;border:1px solid #3f3f46;color:#fff;border-radius:6px;cursor:pointer;font-size:11px;font-weight:700;">Copiar Key</button>' : ''}
                     </div>
-
                     <div style="font-size:11px;color:#a1a1aa;margin-top:6px;line-height:1.5;">
                         💡 Use seu <b>Usuário</b> ou a <b>Key</b> acima ao abrir o executável <code>FPSBOOST_Optimizer_Secured.exe</code> no seu PC.
                     </div>
                 </div>
-
-                <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
-                <button onclick="resetUserHwid('${user.username}')" style="width:100%;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-weight:700;border-radius:8px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;">🔄 Resetar Vínculo de HWID (Trocar de PC)</button>
+                <a href="https://www.mediafire.com/file/5lih4iiq542aebw/FPSBOOST_Optimizer_Secured.exe/file" target="_blank" rel="noopener noreferrer" style="display:block;text-align:center;padding:14px;background:linear-gradient(135deg, #16a34a, #15803d);color:#fff;font-weight:800;border-radius:8px;text-decoration:none;font-size:14px;margin-bottom:10px;box-shadow:0 0 20px rgba(22,163,74,0.4);">📥 BAIXAR EXECUTÁVEL PROTEGIDO (.EXE)</a>
+                <button id="reset-hwid-btn" style="width:100%;padding:10px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;font-weight:700;border-radius:8px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px;">🔄 Resetar Vínculo de HWID (Trocar de PC)</button>
             `;
+            // SEG-05: Preencher via textContent/value — sem interpolação direta
+            const usernameDisplay = document.getElementById('dash-username-display');
+            if (usernameDisplay) usernameDisplay.textContent = user.username;
 
-        } else if (dash.is_pending) {
+            const keyDisplay = document.getElementById('dash-key-display');
+            if (keyDisplay && activeKey) keyDisplay.textContent = activeKey;
+
+            const copyUsernameBtn = document.getElementById('copy-username-btn');
+            if (copyUsernameBtn) {
+                copyUsernameBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(user.username).then(() => {
+                        copyUsernameBtn.textContent = '✓ Copiado!';
+                        setTimeout(() => { copyUsernameBtn.textContent = 'Copiar'; }, 2000);
+                    });
+                });
+            }
+
+            const copyKeyBtn = document.getElementById('copy-key-btn');
+            if (copyKeyBtn && activeKey) {
+                copyKeyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(activeKey).then(() => {
+                        copyKeyBtn.textContent = '✓ Copiado!';
+                        setTimeout(() => { copyKeyBtn.textContent = 'Copiar Key'; }, 2000);
+                    });
+                });
+            }
+
+            const resetHwidBtn = document.getElementById('reset-hwid-btn');
+            if (resetHwidBtn) {
+                resetHwidBtn.addEventListener('click', () => resetUserHwid(user.username));
+            }
+
+        } else if (isPending) {
             statusBox.style.border = '1px solid #eab308';
             statusBox.innerHTML = `
                 <div style="font-size:12px;color:#a1a1aa;margin-bottom:4px;">STATUS DO PLANO: <strong style="color:#eab308;">⏳ COMPROVANTE EM ANÁLISE PELA STAFF</strong></div>
@@ -1323,7 +1324,7 @@ async function showClientDashboardModal(user) {
                 try {
                     const postRes = await fetch(`${API_BASE_URL}/api/submit-receipt`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: getAuthHeaders(), // API-02: JWT obrigatório para envio de comprovante
                         body: JSON.stringify({
                             username: user.username,
                             discord_id: user.discord_id || '',
@@ -1356,7 +1357,7 @@ window.resetUserHwid = async function(username) {
     try {
         const res = await fetch(`${API_BASE_URL}/api/reset-hwid`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders(), // SEG-04: JWT obrigatório para reset HWID
             body: JSON.stringify({ username })
         });
         const data = await res.json();
