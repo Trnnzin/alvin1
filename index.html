@@ -23,8 +23,13 @@
     <meta name="twitter:image" content="https://redline-fps.vercel.app/assets/images/banner.webp">
     <link rel="canonical" href="https://redline-fps.vercel.app/">
 
+    <!-- Preconnect para Google Fonts (Otimização de LCP e FCP) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" type="image/png" href="assets/images/favicon.webp">
+    <link rel="icon" type="image/webp" href="assets/images/favicon.webp">
 
     <!-- Vercel Web Analytics & Speed Insights -->
     <script>
@@ -53,8 +58,8 @@
                 </ul>
                 <div class="nav-actions">
                     <button id="open-auth-modal-btn" onclick="if(typeof showAuthFormModal==='function')showAuthFormModal();">🔑 Login / Registrar</button>
-                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="btn-header-discord">💬 Discord</a>
-                    <button id="hamburger-btn" aria-label="Abrir menu" aria-expanded="false">☰</button>
+                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" rel="noopener noreferrer" class="btn-header-discord">💬 Discord</a>
+                    <button id="hamburger-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">☰</button>
                 </div>
             </nav>
         </header>
@@ -78,7 +83,7 @@
                     </p>
                     <div class="hero-buttons">
                         <a href="#planos" class="btn-primary hero-btn-primary">🔥 GARANTIR FPS AGORA</a>
-                        <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="btn-secondary hero-btn-secondary">💬 Entrar no Discord Oficial</a>
+                        <a href="https://discord.gg/WPqj5nGjhD" target="_blank" rel="noopener noreferrer" class="btn-secondary hero-btn-secondary">💬 Entrar no Discord Oficial</a>
                     </div>
 
                     <!-- Selo de Garantia e Reversibilidade -->
@@ -283,54 +288,49 @@
             <div class="pricing-grid"
                 style="max-width: 950px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
 
-                <!-- Plano Advanced (Sem IA) -->
+                <!-- Plano Sem IA -->
                 <div class="price-card">
-                    <h3>🔴 Advanced</h3>
-                    <p class="price-desc">Acesso completo ao Painel Visual REDLINE com todas as otimizações manuais e
-                        automáticas em 1-Clique.</p>
+                    <h3>⚡ Painel REDLINE (Sem IA)</h3>
+                    <p class="price-desc">Acesso completo ao Painel Visual REDLINE com todas as otimizações essenciais de sistema em 1-Clique.</p>
                     <div class="price-amount">
                         <span class="currency">R$</span>
-                        <span class="value">25</span>
-                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou €
-                            5,00)</span>
+                        <span class="value">15</span>
+                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou € 3,00)</span>
                     </div>
                     <ul class="price-features">
                         <li>Acesso ao <strong>Painel Visual REDLINE Ultra v1.0</strong></li>
                         <li>Otimização Completa de CPU, GPU & RAM em 1-Clique</li>
                         <li>Tweaks eSports para redução de Input Lag (Timer 0.5ms & Mouse 1:1)</li>
-                        <li>Limpeza Profunda de Standby List e Temp</li>
-                        <li>Benchmark de Rede, Latência, Ping & DNS</li>
+                        <li>Limpeza Profunda de Standby List e Cache de Jogos</li>
+                        <li>Gerenciador de Inicialização (Startup Manager)</li>
                         <li>Modo MSI na GPU & Desativação de Core Parking</li>
                         <li class="not-included">Assistente Conversacional de IA REDLINE Copilot</li>
-                        <li>Licença Vitalícia & Suporte Técnico</li>
+                        <li>Licença Vitalícia & Entrega Imediata</li>
                     </ul>
-                    <button class="price-btn buy-trigger" data-plan="advanced">COMPRAR PLANO ADVANCED</button>
+                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="price-btn buy-trigger" data-plan="basic" style="display:block;text-align:center;text-decoration:none;">⚡ COMPRAR SEM IA (R$ 15,00)</a>
                 </div>
 
-                <!-- Plano Advanced Plus (Com IA) -->
+                <!-- Plano Com IA -->
                 <div class="price-card popular premium">
                     <div class="price-badge">Mais Recomendado (IA Incluída)</div>
-                    <h3>⭐ Advanced Plus</h3>
-                    <p class="price-desc">A experiência definitiva: Painel REDLINE Completo + Assistente de IA
-                        Conversacional v1.0 Integrado.</p>
+                    <h3>🤖 Painel REDLINE PRO (Com IA)</h3>
+                    <p class="price-desc">A experiência definitiva: Painel REDLINE Completo + Assistente de IA Conversacional v1.0 Integrado.</p>
                     <div class="price-amount">
                         <span class="currency">R$</span>
-                        <span class="value">50</span>
-                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou €
-                            10,00)</span>
+                        <span class="value">30</span>
+                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou € 6,00)</span>
                     </div>
                     <ul class="price-features">
-                        <li><strong>Tudo do Plano Advanced Incluso</strong></li>
-                        <li>🤖 <strong>REDLINE AI Copilot v1.0 Habilitada ao Vivo</strong></li>
+                        <li><strong>Tudo do Painel Padrão Incluso</strong></li>
+                        <li>🤖 <strong>REDLINE AI Copilot v1.0 Habilitada no Chat ao Vivo</strong></li>
                         <li>Diagnósticos Inteligentes por Texto para qualquer dúvida de PC</li>
-                        <li>Resolução Automática de Crashes/Limbo no FiveM e GTA RP</li>
-                        <li>Análise de Gargalo de Hardware & DPC Latency em Tempo Real</li>
-                        <li>Execução de Correções em 1-Clique diretamente pela própria IA</li>
-                        <li>Atualizações VIP Prioritárias & Suporte Prioritário</li>
+                        <li>Resolução Automática de Quedas de FPS no FiveM, Valorant e CS2</li>
+                        <li>Análise de Gargalo de Hardware (CPU/GPU/RAM) em Tempo Real</li>
+                        <li>Action Cards com Execução de Correções em 1-Clique</li>
+                        <li>Cargo VIP no Discord + Suporte Prioritário</li>
                     </ul>
-                    <button class="price-btn buy-trigger" data-plan="advanced_plus"
-                        style="background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 0 20px rgba(239,68,68,0.4);">COMPRAR
-                        ADVANCED PLUS</button>
+                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="price-btn buy-trigger" data-plan="premium_ai"
+                        style="display:block;text-align:center;text-decoration:none;background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 0 20px rgba(239,68,68,0.4);">🤖 COMPRAR COM IA (R$ 30,00)</a>
                 </div>
 
             </div>
@@ -583,7 +583,7 @@
 
     </div>
 
-    <script src="assets/js/script.js"></script>
+    <script src="assets/js/script.js" defer></script>
 
 </body>
 
