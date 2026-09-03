@@ -881,7 +881,7 @@ function initWebCheckoutModal() {
     // Mapa de planos local — apenas nome e preço para exibição
     // A chave PIX real é obtida do backend em /api/checkout/pix-info
     const planMeta = {
-        basic:       { name: "Painel REDLINE (Sem IA)",       price: "15,00" },
+        basic:       { name: "Painel REDLINE (Sem IA)",       price: "20,00" },
         premium_ai:  { name: "Painel REDLINE PRO (Com IA)",   price: "30,00" }
     };
 
