@@ -1,48 +1,42 @@
 /**
- * REDLINE Main Interactions, Tab Switching & DOM Setup
+ * REDLINE Performance - Fluid One-Page Interactions & Smooth Scroll
+ * 144 FPS Engine - Zero Lag, Passive Event Listeners & IntersectionObserver ScrollSpy
  */
 
+// Navegação fluida para qualquer seção da página
+function scrollToSection(sectionId) {
+  if (!sectionId) sectionId = 'inicio';
+  sectionId = sectionId.replace('#', '').toLowerCase();
+
+  const target = document.getElementById(sectionId);
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+
+    // Atualiza destaque ativo nas abas
+    updateActiveTab(sectionId);
+
+    // Atualiza hash sem causar pulo brusco
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState(null, null, '#' + sectionId);
+    }
+  }
+}
+
+// Compatibilidade com botões que chamam switchTab('loja')
 function switchTab(tabName) {
-  if (!tabName) tabName = 'inicio';
-  tabName = tabName.replace('#', '').toLowerCase();
+  scrollToSection(tabName);
+}
 
-  const validTabs = ['inicio', 'loja', 'recursos', 'avaliacoes', 'faq'];
-  if (!validTabs.includes(tabName)) {
-    tabName = 'inicio';
-  }
-
-  // 1. Alterna visualização das abas principais
-  const views = document.querySelectorAll('.app-view');
-  views.forEach(v => {
-    v.classList.remove('active');
-  });
-
-  const targetView = document.getElementById('view-' + tabName);
-  if (targetView) {
-    targetView.classList.add('active');
-  }
-
-  // 2. Atualiza destaque ativo nos botões da navbar
+function updateActiveTab(tabName) {
+  if (!tabName) return;
   document.querySelectorAll('.nav-link[data-tab]').forEach(link => {
-    const isThis = link.getAttribute('data-tab') === tabName;
-    link.classList.toggle('tab-active', isThis);
+    const isMatch = link.getAttribute('data-tab') === tabName;
+    link.classList.toggle('tab-active', isMatch);
   });
-
-  // 3. Atualiza na gaveta mobile
   document.querySelectorAll('.mobile-nav-link[data-tab]').forEach(link => {
-    const isThis = link.getAttribute('data-tab') === tabName;
-    link.classList.toggle('tab-active', isThis);
+    const isMatch = link.getAttribute('data-tab') === tabName;
+    link.classList.toggle('tab-active', isMatch);
   });
-
-  // 4. Garante que a tela fique no topo da aba sem rolagem residual
-  window.scrollTo({ top: 0, behavior: 'instant' });
-
-  // 5. Atualiza URL hash sem recarregar
-  if (history.pushState) {
-    history.replaceState(null, null, '#' + tabName);
-  } else {
-    location.hash = '#' + tabName;
-  }
 }
 
 // Filtro de produtos da aba Loja
@@ -55,7 +49,7 @@ function filterProducts(category, btnElement) {
     const cardCat = card.getAttribute('data-category') || 'todos';
     if (category === 'todos' || cardCat.includes(category)) {
       card.style.display = 'flex';
-      card.style.animation = 'viewFadeIn 0.3s ease';
+      card.style.opacity = '1';
     } else {
       card.style.display = 'none';
     }
@@ -63,19 +57,45 @@ function filterProducts(category, btnElement) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Header scroll effect
+  // 1. Header scroll effect com requestAnimationFrame e listener passivo
   const header = document.querySelector('.header-floating');
-  window.addEventListener('scroll', () => {
-    if (!header) return;
-    header.classList.toggle('scrolled', window.scrollY > 30);
-  });
+  let ticking = false;
 
-  // 2. Inicializar Módulos
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (header) {
+          header.classList.toggle('scrolled', window.scrollY > 25);
+        }
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // 2. Scroll Spy: ativa a aba correta conforme o usuário rola a página
+  const sections = document.querySelectorAll('.app-section');
+  if ('IntersectionObserver' in window && sections.length > 0) {
+    const spyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          updateActiveTab(entry.target.id);
+        }
+      });
+    }, {
+      rootMargin: '-20% 0px -65% 0px',
+      threshold: 0
+    });
+
+    sections.forEach(sec => spyObserver.observe(sec));
+  }
+
+  // 3. Inicializar Módulos de Loja e Auth
   if (typeof Cart !== 'undefined') Cart.updateUI();
   if (typeof initSearch === 'function') initSearch();
   if (typeof initAuth === 'function') initAuth();
 
-  // 3. Mobile Drawer
+  // 4. Mobile Drawer
   const openDrawerBtn = document.getElementById('btn-open-drawer');
   const closeDrawerBtn = document.getElementById('btn-close-drawer');
   const mobileDrawer = document.getElementById('mobile-drawer');
@@ -100,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => toggleMobileDrawer(false));
   if (drawerBackdrop) drawerBackdrop.addEventListener('click', () => toggleMobileDrawer(false));
 
-  // 4. Cart Drawer events
+  // 5. Cart Drawer events
   const cartBackdrop = document.getElementById('cart-backdrop');
   if (cartBackdrop && typeof Cart !== 'undefined') {
     cartBackdrop.addEventListener('click', () => Cart.closeDrawer());
@@ -114,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 5. FAQ Accordion
+  // 6. FAQ Accordion
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
@@ -124,28 +144,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 6. Configurar cliques nos links de aba
+  // 7. Configurar cliques nos links da navbar e gaveta
   document.querySelectorAll('[data-tab]').forEach(el => {
     el.addEventListener('click', (e) => {
-      e.preventDefault();
       const tab = el.getAttribute('data-tab');
-      switchTab(tab);
-      toggleMobileDrawer(false);
+      if (tab) {
+        e.preventDefault();
+        scrollToSection(tab);
+        toggleMobileDrawer(false);
+      }
     });
   });
 
-  // 7. Carrega aba inicial da URL hash (ou 'inicio')
+  // 8. Rola suavemente para a seção se houver hash na URL inicial (#loja, #recursos, etc.)
   const initialHash = window.location.hash.replace('#', '');
   if (initialHash && ['inicio', 'loja', 'recursos', 'avaliacoes', 'faq'].includes(initialHash)) {
-    switchTab(initialHash);
-  } else {
-    switchTab('inicio');
+    setTimeout(() => scrollToSection(initialHash), 100);
   }
-
-  window.addEventListener('hashchange', () => {
-    const h = window.location.hash.replace('#', '');
-    if (h) switchTab(h);
-  });
 });
 
 // Helper de compra rápida

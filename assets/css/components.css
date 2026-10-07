@@ -12,7 +12,8 @@
   z-index: 50;
   padding: 0.75rem 1rem;
   pointer-events: none;
-  transition: all 0.35s var(--ease-smooth);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .nav-glass {
@@ -28,7 +29,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 1.25rem;
-  transition: all 0.35s ease;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .header-floating.scrolled .nav-glass {
@@ -1388,7 +1389,7 @@
 }
 
 /* ==========================================
-   SISTEMA DE ABAS & VIEWS (SPA SEM SCROLL)
+   SISTEMA DE SEÇÕES FLUIDAS (ONE-PAGE SCROLL 144 FPS)
    ========================================== */
 #particles-canvas {
   position: fixed;
@@ -1399,35 +1400,21 @@
   z-index: 0;
   pointer-events: none;
   opacity: 0.65;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-.app-view {
-  display: none;
-  opacity: 0;
-  transform: translateY(8px);
+.app-section {
+  display: block;
   position: relative;
   z-index: 1;
-  padding-top: 105px;
-  padding-bottom: 4rem;
-  min-height: calc(100vh - 120px);
+  padding: 4.5rem 0;
+  scroll-margin-top: 85px;
 }
 
-.app-view.active {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
-  animation: viewFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes viewFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+#inicio {
+  padding-top: 110px;
+  padding-bottom: 3.5rem;
 }
 
 .nav-links li a.tab-active {
