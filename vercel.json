@@ -28,7 +28,7 @@
     {
       "source": "/(.*\\.png|.*\\.webp|.*\\.jpg|.*\\.ico)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=86400, immutable" }
+        { "key": "Cache-Control", "value": "public, max-age=60, must-revalidate" }
       ]
     }
   ]
