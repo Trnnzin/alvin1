@@ -53,8 +53,9 @@
 .brand-logo img {
   height: 38px;
   width: auto;
-  object-contain: contain;
-  filter: drop-shadow(0 0 10px rgba(255, 51, 68, 0.3));
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 0 12px rgba(255, 51, 68, 0.45));
 }
 .brand-name {
   font-family: 'Outfit', sans-serif;
