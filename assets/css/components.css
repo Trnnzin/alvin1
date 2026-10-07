@@ -1283,18 +1283,45 @@
 }
 
 /* ==========================================
-   RODAPÉ (Footer)
+   RODAPÉ (Footer Global)
    ========================================== */
+.footer-global,
 .footer-main {
-  margin-top: 4rem;
-  border-top: 2px solid rgba(255, 51, 68, 0.3);
-  background: #06070a;
-  padding: 3.5rem 0 1.5rem 0;
+  margin-top: 5rem;
+  position: relative;
+  z-index: 10;
+  background: linear-gradient(180deg, rgba(24, 28, 42, 0.88) 0%, rgba(10, 13, 20, 0.96) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  padding: 4rem 0 2rem 0;
 }
+
+.footer-global::before,
+.footer-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 51, 68, 0.5) 25%, rgba(0, 210, 255, 0.5) 75%, transparent 100%);
+  pointer-events: none;
+}
+
+.footer-brand p {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 360px;
+}
+
 .footer-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  gap: 2rem;
+  gap: 2.5rem;
   margin-bottom: 2.5rem;
 }
 @media (min-width: 768px) {
@@ -1310,34 +1337,41 @@
 .footer-col h4 {
   font-size: 0.95rem;
   font-weight: 800;
-  margin-bottom: 1rem;
+  margin-bottom: 1.1rem;
   letter-spacing: 0.05em;
   color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 .footer-links {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.65rem;
 }
 .footer-links a {
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.86rem;
-  transition: color 0.2s;
+  font-size: 0.875rem;
+  transition: all 0.2s var(--ease-smooth);
+  display: inline-flex;
+  align-items: center;
 }
 .footer-links a:hover {
-  color: var(--primary);
+  color: #fff;
+  transform: translateX(3px);
 }
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 1.8rem;
+  margin-top: 1rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-dim);
 }
 
