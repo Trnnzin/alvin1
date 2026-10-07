@@ -3,36 +3,44 @@
  */
 const PRODUCTS_CATALOG = [
   {
-    id: 'plano-premium',
+    id: 1,
     title: 'REDLINE Plano Premium (IA + Otimizador)',
     price: 30.00,
     category: 'planos',
-    image: 'assets/images/prod_premium.jpg',
+    image: 'assets/images/cat_planos.jpg?v=2026_pro2',
     desc: 'Acesso total ao Painel Desktop, REDLINE Intelligence (IA Gamer), Timer 0.5ms e Tweaks de Latência.'
   },
   {
-    id: 'plano-basico',
+    id: 2,
     title: 'REDLINE Plano Básico (Sem IA)',
     price: 20.00,
     category: 'planos',
-    image: 'assets/images/prod_basico.jpg',
+    image: 'assets/images/cat_basico.jpg?v=2026_pro2',
     desc: 'Otimização clássica de FPS, limpeza de processos, ajustes de Registro e estabilização de frametime.'
   },
   {
-    id: 'tweak-fivem',
-    title: 'Pacote Especial FiveM & GTA RP',
+    id: 3,
+    title: 'Booster Definitivo FiveM & GTA V',
     price: 25.00,
-    category: 'especiais',
-    image: 'assets/images/prod_fivem.jpg',
+    category: 'fivem',
+    image: 'assets/images/cat_fivem.jpg?v=2026_pro2',
     desc: 'Eliminação de gargalos na Standby RAM, renderização prioritária e redução de stuttering em cidades cheias.'
   },
   {
-    id: 'tweak-competitivo',
-    title: 'Preset Competitivo Valorant / CS2',
+    id: 4,
+    title: 'Preset Competitivo CS2 & Valorant',
     price: 25.00,
-    category: 'especiais',
-    image: 'assets/images/cat_competitivo.jpg',
+    category: 'competitivo',
+    image: 'assets/images/cat_competitivo.jpg?v=2026_pro2',
     desc: 'Sincronização de clock, desativação de Nagle/TCP e prioridade CPU Win32 Quantum para hitreg perfeito.'
+  },
+  {
+    id: 5,
+    title: 'Pacote de Tweaks RAW do Windows',
+    price: 15.00,
+    category: 'tweaks',
+    image: 'assets/images/cat_tweaks.jpg?v=2026_pro2',
+    desc: 'Desativação de telemetria, Modo Ultimate Performance, limpeza de processos e otimização de RAM.'
   }
 ];
 
