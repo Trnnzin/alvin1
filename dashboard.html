@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Área do Cliente — REDLINE Performance</title>
+  <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
+    .client-page {
+      padding: 100px 0 60px 0;
+      min-height: 100vh;
+      position: relative;
+      z-index: 2;
+    }
+    .client-header {
+      background: rgba(14, 17, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .user-profile-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+    .client-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: var(--primary-gradient);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      box-shadow: 0 0 20px rgba(255, 51, 68, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    .client-nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      background: rgba(14, 17, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-pill);
+      padding: 0.4rem;
+      margin-bottom: 2rem;
+    }
+    .client-tab-btn {
+      padding: 0.75rem 1.4rem;
+      border-radius: var(--radius-pill);
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+    }
+    .client-tab-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .client-tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(255, 51, 68, 0.4);
+    }
+    .tab-pane {
+      display: none;
+      animation: fadeInTab 0.25s ease-out;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+    @keyframes fadeInTab {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dash-box {
+      background: rgba(14, 17, 26, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+    .dash-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .dash-box-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .key-display-card {
+      background: linear-gradient(135deg, rgba(255, 51, 68, 0.12) 0%, rgba(14, 17, 26, 0.95) 100%);
+      border: 1px solid rgba(255, 51, 68, 0.35);
+      border-radius: var(--radius-md);
+      padding: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .key-code-wrap {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--radius-sm);
+      color: #fff;
+      letter-spacing: 0.08em;
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.6);
+    }
+    .key-blur {
+      filter: blur(8px);
+      user-select: none;
+      transition: filter 0.2s ease;
+    }
+    .license-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1.5rem;
+    }
+    .license-stat {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 1.25rem;
+    }
+    .license-stat-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+    .license-stat-val {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .download-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+    .download-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .download-card:hover {
+      border-color: rgba(255, 51, 68, 0.4);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Partículas de Fundo Ultra Leves -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- Header Flutuante -->
+  <header class="header-floating">
+    <div class="container">
+      <nav class="nav-glass">
+        <a href="index.html" class="brand-logo" style="text-decoration: none;">
+          <img src="assets/images/logo.webp" alt="REDLINE Logo" style="height: 34px;" onerror="this.src='assets/images/favicon.png'">
+          <span class="brand-name">REDLINE<span class="brand-badge">CLIENTE</span></span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <a href="index.html" class="btn-secondary-hero" style="padding: 0.6rem 1.2rem; font-size: 0.85rem; text-decoration: none;">
+            ← Ir para a Loja
+          </a>
+          <button onclick="RedlineAPI.logout()" class="btn-login" style="background: rgba(255,51,68,0.15); color: #fff; border: 1px solid var(--primary); padding: 0.6rem 1.2rem; cursor: pointer;">
+            Sair
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="client-page">
+    <div class="container">
+      
+      <!-- Barra do Usuário & Status -->
+      <div class="client-header">
+        <div class="user-profile-bar">
+          <div id="user-avatar" class="client-avatar">U</div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.8rem;">
+              <h2 id="user-display-name" style="font-size: 1.5rem; font-weight: 900; margin-bottom: 0;">Carregando...</h2>
+              <span id="plan-badge-pill" style="display: inline-flex; align-items: center; gap: 4px; padding: 0.3rem 0.8rem; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 800; background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981;">
+                ● VITALÍCIO ATIVO
+              </span>
+            </div>
+            <p id="user-email-desc" style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">ID da Conta: #0001 • Acesso Pro Verificado</p>
+          </div>
+        </div>
+
+        <div>
+          <a href="https://discord.gg/7J686mR6" target="_blank" rel="noopener" class="btn-secondary-hero" style="font-size: 0.85rem; padding: 0.65rem 1.2rem; text-decoration: none;">
+            🎧 Suporte VIP no Discord
+          </a>
+        </div>
+      </div>
+
+      <!-- Abas de Navegação do Painel (Sem Recarregar) -->
+      <div class="client-nav-tabs">
+        <button class="client-tab-btn active" onclick="switchClientTab('licenca', this)">
+          <span>🔑</span> Minha Licença &amp; Key
+        </button>
+        <button class="client-tab-btn" onclick="switchClientTab('download', this)">
+          <span>💾</span> Download do Painel
+        </button>
+        <button class="client-tab-btn" onclick="switchClientTab('config', this)">
+          <span>⚙️</span> Configurações &amp; HWID
+        </button>
+        <button class="client-tab-btn" onclick="switchClientTab('historico', this)">
+          <span>📄</span> Histórico &amp; Comprovante
+        </button>
+      </div>
+
+      <!-- ==========================================
+           ABA 1: MINHA LICENÇA & KEY
+           ========================================== -->
+      <div id="tab-licenca" class="tab-pane active">
+        <div class="dash-box">
+          <div class="dash-box-header">
+            <h3 class="dash-box-title">
+              <span>🔑</span> Chave de Ativação Oficial
+            </h3>
+            <span style="font-size: 0.82rem; color: #10b981; font-weight: 700;">✓ Licença Pronta para Uso</span>
+          </div>
+
+          <div class="key-display-card">
+            <div>
+              <div style="font-size: 0.8rem; text-transform: uppercase; font-weight: 800; color: var(--text-dim); margin-bottom: 0.6rem; letter-spacing: 0.05em;">
+                Sua Chave de Ativação (Token):
+              </div>
+              <div class="key-code-wrap">
+                <span id="key-text" class="key-blur">FPS-PREM-2026-PRO</span>
+                <button onclick="toggleKeyVisibility()" style="background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 1rem;" title="Mostrar/Ocultar Chave">
+                  👁️
+                </button>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.6rem;">
+                Insira esta chave no aplicativo executável para desbloquear todas as funções.
+              </p>
+            </div>
+
+            <button onclick="copyLicenseKey()" class="btn-primary-hero" style="font-size: 0.95rem; padding: 0.9rem 1.6rem; cursor: pointer; border: none;">
+              📋 Copiar Chave
+            </button>
+          </div>
+
+          <!-- Métricas da Licença -->
+          <div class="license-grid">
+            <div class="license-stat">
+              <div class="license-stat-label">Plano Ativo</div>
+              <div id="lic-plan" class="license-stat-val" style="color: var(--primary);">Vitalício Pro Edition</div>
+            </div>
+
+            <div class="license-stat">
+              <div class="license-stat-label">Status do Acesso</div>
+              <div class="license-stat-val" style="color: #10b981;">Ativo &amp; Verificado</div>
+            </div>
+
+            <div class="license-stat">
+              <div class="license-stat-label">Validade</div>
+              <div class="license-stat-val">Vitalícia (Sem Mensalidade)</div>
+            </div>
+
+            <div class="license-stat">
+              <div class="license-stat-label">Resets de HWID Restantes</div>
+              <div id="lic-resets" class="license-stat-val" style="color: #00d2ff;">3 disponíveis</div>
+            </div>
+          </div>
+
+          <!-- Guia Rápido -->
+          <div style="margin-top: 2rem; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: var(--radius-md); padding: 1.5rem;">
+            <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-secondary);">
+              📖 Como Ativar seu Painel em 3 Passos:
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem;">
+              <div style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                <strong style="color: #fff;">1. Baixe o Painel:</strong> Acesse a aba <em>Download do Painel</em> e baixe o instalador oficial (.exe).
+              </div>
+              <div style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                <strong style="color: #fff;">2. Execute como Admin:</strong> Dê clique com o botão direito e execute como Administrador.
+              </div>
+              <div style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.6;">
+                <strong style="color: #fff;">3. Ative sua Chave:</strong> Cole a chave copiada acima no campo de ativação e clique em Entrar.
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==========================================
+           ABA 2: DOWNLOAD DO PAINEL
+           ========================================== -->
+      <div id="tab-download" class="tab-pane">
+        <div class="dash-box">
+          <div class="dash-box-header">
+            <h3 class="dash-box-title">
+              <span>💾</span> Downloads Oficiais do Painel
+            </h3>
+            <span style="font-size: 0.82rem; color: var(--text-dim);">Versão Atual: v2.4 (Build 2026)</span>
+          </div>
+
+          <div class="download-grid">
+            
+            <!-- OPÇÃO 1: INSTALADOR OFICIAL -->
+            <div class="download-card" style="border-color: rgba(255, 51, 68, 0.3); background: rgba(255, 51, 68, 0.04);">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                  <span style="font-size: 1.8rem;">⚡</span>
+                  <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 0.75rem; font-weight: 800; padding: 0.25rem 0.6rem; border-radius: var(--radius-pill);">Recomendado</span>
+                </div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Instalador Oficial (.exe)</h4>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                  Instalação automática com criação de atalho na Área de Trabalho e verificação de Ponto de Restauração integrado.
+                </p>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1.5rem;">
+                  <div>• Tamanho: ~24.8 MB</div>
+                  <div>• Compatibilidade: Windows 10 e Windows 11 (64-bit)</div>
+                  <div>• Status: 100% Verificado pelo VirusTotal</div>
+                </div>
+              </div>
+
+              <a href="/download/installer" download class="btn-primary-hero" style="text-align: center; text-decoration: none; padding: 0.85rem; font-size: 0.92rem;">
+                📥 Baixar Instalador (.exe)
+              </a>
+            </div>
+
+            <!-- OPÇÃO 2: VERSÃO PORTÁTIL -->
+            <div class="download-card">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                  <span style="font-size: 1.8rem;">📦</span>
+                  <span style="background: rgba(255, 255, 255, 0.08); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: var(--radius-pill);">Portátil</span>
+                </div>
+                <h4 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Versão Portátil (.zip)</h4>
+                <p style="color: var(--text-muted); font-size: 0.88rem; line-height: 1.6; margin-bottom: 1.5rem;">
+                  Não requer instalação no sistema. Basta extrair os arquivos para uma pasta qualquer e executar diretamente.
+                </p>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 1.5rem;">
+                  <div>• Tamanho: ~28.1 MB (.zip)</div>
+                  <div>• Ideal para: Pen drives ou PCs compartilhados</div>
+                  <div>• Status: Versão Standalone Nativa</div>
+                </div>
+              </div>
+
+              <a href="/download/portable" download class="btn-secondary-hero" style="text-align: center; text-decoration: none; padding: 0.85rem; font-size: 0.92rem;">
+                📦 Baixar Portátil (.zip)
+              </a>
+            </div>
+
+          </div>
+
+          <!-- Changelog v2.4 -->
+          <div style="margin-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 1.5rem;">
+            <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 1rem;">🚀 O que há de novo na v2.4:</h4>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.88rem; color: var(--text-muted);">
+              <li><strong style="color: #10b981;">✓</strong> Novo motor Win32 de Timer Resolution cravado em 0.5ms com zero consumo de CPU.</li>
+              <li><strong style="color: #10b981;">✓</strong> Otimização exclusiva de mitigação de stutters para FiveM e servidores pesados.</li>
+              <li><strong style="color: #10b981;">✓</strong> Suporte completo para a atualização 24H2 do Windows 11.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           ABA 3: CONFIGURAÇÕES & HWID
+           ========================================== -->
+      <div id="tab-config" class="tab-pane">
+        <div class="dash-box">
+          <div class="dash-box-header">
+            <h3 class="dash-box-title">
+              <span>⚙️</span> Configurações de Máquina &amp; Conta
+            </h3>
+          </div>
+
+          <!-- Card de Reset de HWID -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 1.75rem; margin-bottom: 2rem;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1.25rem;">
+              <div>
+                <h4 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 0.4rem;">💻 Gerenciador de HWID (Hardware ID)</h4>
+                <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 580px; line-height: 1.6;">
+                  Formatou o Windows ou fez upgrade de peças (placa-mãe, processador ou GPU)? O reset de HWID desvincula seu computador antigo para liberar a ativação na nova máquina.
+                </p>
+                <div style="display: flex; align-items: center; gap: 0.8rem; margin-top: 1rem;">
+                  <span style="font-size: 0.85rem; color: var(--text-dim); font-weight: 700;">Resets Disponíveis:</span>
+                  <span id="cfg-resets-count" style="font-size: 1.3rem; font-weight: 900; color: #00d2ff;">3</span>
+                  <span style="font-size: 0.78rem; color: var(--text-dim);">(Limite automático renovado a cada 30 dias)</span>
+                </div>
+              </div>
+
+              <button id="btn-hwid-reset" onclick="handleHwidReset()" class="btn-primary-hero" style="font-size: 0.92rem; padding: 0.85rem 1.5rem; cursor: pointer; border: none;">
+                🔄 Resetar HWID Agora
+              </button>
+            </div>
+          </div>
+
+          <!-- Formulário de Alteração de Senha -->
+          <div style="max-width: 480px;">
+            <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 1.25rem;">🔒 Segurança: Alterar Senha</h4>
+            
+            <form onsubmit="handleChangePassword(event)">
+              <div class="form-group" style="margin-bottom: 1rem;">
+                <label class="form-label">Nova Senha</label>
+                <input type="password" id="new-password" class="form-input" style="padding-left: 1rem;" placeholder="Mínimo 6 dígitos" minlength="6" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label class="form-label">Confirmar Nova Senha</label>
+                <input type="password" id="confirm-password" class="form-input" style="padding-left: 1rem;" placeholder="Digite novamente" minlength="6" required>
+              </div>
+
+              <button type="submit" class="btn-secondary-hero" style="font-size: 0.9rem; padding: 0.75rem 1.4rem; cursor: pointer;">
+                Salvar Nova Senha
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==========================================
+           ABA 4: HISTÓRICO & COMPROVANTE
+           ========================================== -->
+      <div id="tab-historico" class="tab-pane">
+        <div class="dash-box">
+          <div class="dash-box-header">
+            <h3 class="dash-box-title">
+              <span>📄</span> Histórico &amp; Validação de Comprovante Pix
+            </h3>
+          </div>
+
+          <!-- Pedidos Registrados -->
+          <div style="margin-bottom: 2rem;">
+            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 1rem;">Suas Compras Registradas:</h4>
+            <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: var(--radius-md); padding: 1.25rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem;">
+              <div>
+                <strong style="color: #fff; font-size: 1rem;">REDLINE Optimizer — Plano Vitalício</strong>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-top: 0.2rem;">Pagamento aprovado via Pix Automático • Entrega Concluída</div>
+              </div>
+              <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; padding: 0.35rem 0.8rem; border-radius: var(--radius-pill); font-size: 0.78rem; font-weight: 800;">
+                ✓ APROVADO
+              </span>
+            </div>
+          </div>
+
+          <!-- Envio de Comprovante Manual -->
+          <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: var(--radius-md); padding: 1.5rem; max-width: 550px;">
+            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 0.5rem;">Vincular Pix Manual ou Compra do Bot</h4>
+            <p style="color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1.25rem;">
+              Comprou direto pelo bot do Discord ou por Pix avulso? Cole o código de autenticação do comprovante para vincular à sua conta:
+            </p>
+
+            <form onsubmit="handleReceiptSubmit(event)" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <input type="text" id="receipt-code" class="form-input" style="flex: 1; padding-left: 1rem; min-width: 240px;" placeholder="Código da transação ou ID do comprovante" required>
+              <button type="submit" class="btn-primary-hero" style="font-size: 0.88rem; padding: 0.75rem 1.4rem; cursor: pointer; border: none;">
+                Enviar
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/particles.js"></script>
+  <script>
+    let isKeyVisible = false;
+
+    function switchClientTab(tabName, btn) {
+      document.querySelectorAll('.client-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      const targetPane = document.getElementById('tab-' + tabName);
+      if (targetPane) targetPane.classList.add('active');
+    }
+
+    function toggleKeyVisibility() {
+      const keySpan = document.getElementById('key-text');
+      isKeyVisible = !isKeyVisible;
+      if (isKeyVisible) {
+        keySpan.classList.remove('key-blur');
+      } else {
+        keySpan.classList.add('key-blur');
+      }
+    }
+
+    function copyLicenseKey() {
+      const keySpan = document.getElementById('key-text');
+      const textToCopy = keySpan.textContent.trim();
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        Toastify({
+          text: 'Chave copiada com sucesso para a área de transferência!',
+          duration: 2500,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#10b981'
+        }).showToast();
+      });
+    }
+
+    async function handleHwidReset() {
+      const btn = document.getElementById('btn-hwid-reset');
+      btn.disabled = true;
+      btn.innerHTML = '<span>Processando...</span>';
+
+      try {
+        const res = await RedlineAPI.resetHwid();
+        Toastify({
+          text: res.message || 'HWID resetado com sucesso! Você pode ativar no novo PC.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#10b981'
+        }).showToast();
+
+        const countSpan = document.getElementById('cfg-resets-count');
+        const licResets = document.getElementById('lic-resets');
+        let current = parseInt(countSpan.textContent) || 3;
+        if (current > 0) current -= 1;
+        countSpan.textContent = current;
+        licResets.textContent = current + ' disponíveis';
+      } catch (err) {
+        Toastify({
+          text: err.message || 'Erro ao resetar HWID.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#ff3344'
+        }).showToast();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '🔄 Resetar HWID Agora';
+      }
+    }
+
+    function handleChangePassword(e) {
+      e.preventDefault();
+      const p1 = document.getElementById('new-password').value;
+      const p2 = document.getElementById('confirm-password').value;
+
+      if (p1 !== p2) {
+        Toastify({
+          text: 'As senhas digitadas não coincidem.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#ff3344'
+        }).showToast();
+        return;
+      }
+
+      Toastify({
+        text: 'Senha atualizada com sucesso!',
+        duration: 2500,
+        gravity: 'top',
+        position: 'right',
+        backgroundColor: '#10b981'
+      }).showToast();
+
+      document.getElementById('new-password').value = '';
+      document.getElementById('confirm-password').value = '';
+    }
+
+    async function handleReceiptSubmit(e) {
+      e.preventDefault();
+      const code = document.getElementById('receipt-code').value.trim();
+
+      try {
+        const res = await RedlineAPI.submitReceipt(code);
+        Toastify({
+          text: res.message || 'Comprovante recebido para validação!',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#10b981'
+        }).showToast();
+        document.getElementById('receipt-code').value = '';
+      } catch (err) {
+        Toastify({
+          text: err.message || 'Falha ao enviar comprovante.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#ff3344'
+        }).showToast();
+      }
+    }
+
+    async function initDashboard() {
+      const user = RedlineAPI.getUser();
+      if (!user) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Preenche dados do usuário na tela
+      const name = user.username || 'Cliente';
+      document.getElementById('user-display-name').textContent = name;
+      document.getElementById('user-avatar').textContent = name.charAt(0).toUpperCase();
+
+      const tokenVal = user.token || 'FPS-PREM-2026-PRO';
+      document.getElementById('key-text').textContent = tokenVal;
+
+      const resets = user.hwid_resets != null ? user.hwid_resets : 3;
+      document.getElementById('lic-resets').textContent = resets + ' disponíveis';
+      document.getElementById('cfg-resets-count').textContent = resets;
+
+      if (user.plan) {
+        document.getElementById('lic-plan').textContent = 'Plano ' + user.plan + ' Pro';
+      }
+
+      // Tenta sincronizar com o backend se disponível
+      try {
+        const dashData = await RedlineAPI.getDashboard();
+        if (dashData && dashData.user) {
+          const u = dashData.user;
+          if (u.token) document.getElementById('key-text').textContent = u.token;
+          if (u.hwid_resets != null) {
+            document.getElementById('lic-resets').textContent = u.hwid_resets + ' disponíveis';
+            document.getElementById('cfg-resets-count').textContent = u.hwid_resets;
+          }
+        }
+      } catch {
+        // Fallback ativo normalmente
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>

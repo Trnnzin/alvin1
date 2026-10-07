@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acesso à Conta — REDLINE Performance</title>
+  <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+      position: relative;
+      z-index: 2;
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(14, 17, 26, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 51, 68, 0.1);
+      position: relative;
+    }
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 20%;
+      right: 20%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .auth-tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-pill);
+      padding: 0.3rem;
+      margin-bottom: 1.75rem;
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 0.65rem;
+      text-align: center;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      transition: all 0.2s ease;
+    }
+    .auth-tab.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(255, 51, 68, 0.4);
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+    }
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-dim);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 0.85rem 1rem 0.85rem 2.75rem;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 0 12px rgba(255, 51, 68, 0.25);
+    }
+    .btn-toggle-pass {
+      position: absolute;
+      right: 0.85rem;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 0.3rem;
+      font-size: 0.9rem;
+    }
+    .btn-toggle-pass:hover {
+      color: #fff;
+    }
+    .btn-auth-submit {
+      width: 100%;
+      padding: 0.95rem;
+      border-radius: var(--radius-md);
+      background: var(--primary-gradient);
+      color: #fff;
+      font-weight: 800;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(255, 51, 68, 0.35);
+      transition: all 0.2s ease;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    .btn-auth-submit:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+    .btn-auth-submit:active {
+      transform: translateY(0);
+    }
+    .quick-logins {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .quick-btn {
+      flex: 1;
+      padding: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .quick-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Partículas de Fundo Ultra Leves -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="auth-header">
+        <a href="index.html" class="brand-logo" style="justify-content: center; margin-bottom: 0.8rem; text-decoration: none;">
+          <img src="assets/images/logo.webp" alt="REDLINE Logo" style="height: 38px;" onerror="this.src='assets/images/favicon.png'">
+          <span class="brand-name">REDLINE<span class="brand-badge">CLIENTE</span></span>
+        </a>
+        <p style="color: var(--text-muted); font-size: 0.88rem;">Gerencie sua chave, downloads e configurações de hardware</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button id="tab-login" class="auth-tab active" onclick="switchAuthTab('login')">Entrar</button>
+        <button id="tab-register" class="auth-tab" onclick="switchAuthTab('register')">Criar Conta</button>
+      </div>
+
+      <!-- FORMULÁRIO DE LOGIN -->
+      <form id="form-login" onsubmit="handleLogin(event)">
+        <div class="form-group">
+          <label class="form-label" for="login-username">Nome de Usuário</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="login-username" class="form-input" placeholder="Seu usuário" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <label class="form-label" for="login-password" style="margin-bottom: 0;">Senha</label>
+            <a href="https://discord.gg/7J686mR6" target="_blank" rel="noopener" style="font-size: 0.78rem; color: var(--primary); text-decoration: none;">Esqueceu a senha?</a>
+          </div>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="login-password" class="form-input" placeholder="Sua senha" required autocomplete="current-password">
+            <button type="button" class="btn-toggle-pass" onclick="togglePassword('login-password', this)">👁️</button>
+          </div>
+        </div>
+
+        <button type="submit" id="btn-login-submit" class="btn-auth-submit">
+          <span>Acessar Painel</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+
+        <div class="quick-logins">
+          <button type="button" class="quick-btn" onclick="quickFill('cliente', 'cliente123')">🔑 Acesso Cliente Demo</button>
+          <button type="button" class="quick-btn" onclick="quickFill('admin', 'admin123')">👑 Acesso Admin Demo</button>
+        </div>
+      </form>
+
+      <!-- FORMULÁRIO DE REGISTRO -->
+      <form id="form-register" style="display: none;" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label class="form-label" for="reg-username">Nome de Usuário</label>
+          <div class="input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="reg-username" class="form-input" placeholder="Escolha um usuário" required autocomplete="username">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-password">Senha (mínimo 6 caracteres)</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="reg-password" class="form-input" placeholder="Crie sua senha" minlength="6" required autocomplete="new-password">
+            <button type="button" class="btn-toggle-pass" onclick="togglePassword('reg-password', this)">👁️</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg-token">Chave / Token Pix (Opcional)</label>
+          <div class="input-wrap">
+            <span class="input-icon">🔑</span>
+            <input type="text" id="reg-token" class="form-input" placeholder="FPS-XXXX-XXXX (se já comprou)">
+          </div>
+        </div>
+
+        <button type="submit" id="btn-reg-submit" class="btn-auth-submit">
+          <span>Criar Minha Conta</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+        <a href="index.html" style="font-size: 0.85rem; color: var(--text-dim); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem;">
+          ← Voltar para a Loja
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/particles.js"></script>
+  <script>
+    function togglePassword(inputId, btn) {
+      const inp = document.getElementById(inputId);
+      if (inp.type === 'password') {
+        inp.type = 'text';
+        btn.textContent = '🙈';
+      } else {
+        inp.type = 'password';
+        btn.textContent = '👁️';
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const tabLogin = document.getElementById('tab-login');
+      const tabReg = document.getElementById('tab-register');
+      const formLogin = document.getElementById('form-login');
+      const formReg = document.getElementById('form-register');
+
+      if (tab === 'login') {
+        tabLogin.classList.add('active');
+        tabReg.classList.remove('active');
+        formLogin.style.display = 'block';
+        formReg.style.display = 'none';
+      } else {
+        tabReg.classList.add('active');
+        tabLogin.classList.remove('active');
+        formReg.style.display = 'block';
+        formLogin.style.display = 'none';
+      }
+    }
+
+    function quickFill(user, pass) {
+      document.getElementById('login-username').value = user;
+      document.getElementById('login-password').value = pass;
+      document.getElementById('btn-login-submit').click();
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('login-username').value.trim();
+      const p = document.getElementById('login-password').value.trim();
+      const btn = document.getElementById('btn-login-submit');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Verificando...</span>';
+
+      try {
+        const res = await RedlineAPI.login(u, p);
+        if (res.ok) {
+          Toastify({
+            text: 'Login efetuado com sucesso! Redirecionando...',
+            duration: 1500,
+            gravity: 'top',
+            position: 'right',
+            backgroundColor: '#10b981'
+          }).showToast();
+
+          setTimeout(() => {
+            if (res.user && res.user.role === 'admin') {
+              window.location.href = 'admin.html';
+            } else {
+              window.location.href = 'dashboard.html';
+            }
+          }, 800);
+        } else {
+          throw new Error(res.error || 'Credenciais inválidas.');
+        }
+      } catch (err) {
+        Toastify({
+          text: err.message || 'Falha no login.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#ff3344'
+        }).showToast();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Acessar Painel</span>';
+      }
+    }
+
+    async function handleRegister(e) {
+      e.preventDefault();
+      const u = document.getElementById('reg-username').value.trim();
+      const p = document.getElementById('reg-password').value.trim();
+      const tok = document.getElementById('reg-token').value.trim();
+      const btn = document.getElementById('btn-reg-submit');
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Criando conta...</span>';
+
+      try {
+        const res = await RedlineAPI.register(u, p, null, tok);
+        Toastify({
+          text: 'Conta criada com sucesso! Conectando...',
+          duration: 1800,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#10b981'
+        }).showToast();
+
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 1000);
+      } catch (err) {
+        Toastify({
+          text: err.message || 'Erro ao registrar.',
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor: '#ff3344'
+        }).showToast();
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Criar Minha Conta</span>';
+      }
+    }
+
+    // Se já estiver logado, redireciona direto
+    document.addEventListener('DOMContentLoaded', () => {
+      const u = RedlineAPI.getUser();
+      if (u && !window.location.search.includes('logout')) {
+        window.location.href = u.role === 'admin' ? 'admin.html' : 'dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>

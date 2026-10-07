@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel Administrativo — REDLINE</title>
+  <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
+    .admin-page {
+      padding: 100px 0 60px 0;
+      min-height: 100vh;
+    }
+    .admin-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .admin-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      overflow-x: auto;
+      box-shadow: var(--shadow-md);
+    }
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      text-align: left;
+    }
+    .admin-table th {
+      background: rgba(255, 255, 255, 0.04);
+      padding: 1rem 1.25rem;
+      color: var(--text-dim);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .admin-table td {
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+    }
+    .admin-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .badge-status {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+    .badge-active { background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-inactive { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-suspended { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .action-btn-sm {
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-xs);
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .action-btn-sm:hover {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header-floating">
+    <div class="container">
+      <nav class="nav-glass">
+        <a href="index.html" class="brand-logo">
+          <img src="assets/images/logo.webp" alt="REDLINE Logo">
+          <span class="brand-name">REDLINE<span class="brand-badge" style="background: rgba(0,210,255,0.15); color: #00d2ff; border-color: rgba(0,210,255,0.3);">ADMIN</span></span>
+        </a>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+          <a href="dashboard.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem;">Painel do Cliente</a>
+          <button onclick="RedlineAPI.logout()" class="btn-login" style="background: rgba(255,51,68,0.2); color: #fff; border: 1px solid var(--primary);">
+            Sair
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="admin-page">
+    <div class="container">
+      
+      <div class="admin-header">
+        <div>
+          <h2 style="font-size: 1.8rem; font-weight: 900;">Gerenciamento Geral de Clientes</h2>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Controle de planos, renovações, revogações e resets de HWID.</p>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+          <input type="text" id="admin-search" oninput="filterUsers()" placeholder="Buscar cliente por nome..." class="form-input" style="width: 250px; font-size: 0.85rem; padding: 0.5rem 1rem;">
+          <button onclick="loadUsers()" class="btn-primary-hero" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
+            🔄 Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Usuário</th>
+              <th>Discord ID</th>
+              <th>Plano</th>
+              <th>Status</th>
+              <th>Token / Chave</th>
+              <th>HWID</th>
+              <th>Resets</th>
+              <th>Validade</th>
+              <th>Ações Rápidas</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr>
+              <td colspan="10" style="text-align: center; padding: 2rem; color: var(--text-dim);">Carregando usuários...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="assets/js/api.js"></script>
+  <script>
+    let allUsers = [];
+
+    async function loadUsers() {
+      const token = RedlineAPI.getToken();
+      if (!token) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        const data = await RedlineAPI.request('/api/admin/users');
+        if (data.ok && Array.isArray(data.users)) {
+          allUsers = data.users;
+          renderUsersTable(allUsers);
+        }
+      } catch (err) {
+        Toastify({ text: "Acesso negado ou erro ao carregar usuários (" + err.message + ")", style: { background: "#ef4444" } }).showToast();
+      }
+    }
+
+    function renderUsersTable(users) {
+      const tbody = document.getElementById('users-table-body');
+      if (users.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align: center; padding: 2rem; color: var(--text-dim);">Nenhum usuário encontrado.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = users.map(u => {
+        let statusBadge = '<span class="badge-status badge-inactive">INATIVO</span>';
+        if (u.plan_status === 'ATIVO') statusBadge = '<span class="badge-status badge-active">ATIVO</span>';
+        else if (u.plan_status === 'SUSPENSO') statusBadge = '<span class="badge-status badge-suspended">SUSPENSO</span>';
+
+        const exp = u.exp_date ? new Date(u.exp_date).toLocaleDateString('pt-BR') : 'N/A';
+        const hwidShort = u.hwid ? (u.hwid.substring(0, 10) + '...') : '<span style="color:var(--text-dim)">Não atrelado</span>';
+
+        return `
+          <tr>
+            <td><strong>#${u.id}</strong></td>
+            <td><strong>${u.username}</strong> ${u.role === 'admin' ? '👑' : ''}</td>
+            <td style="font-family: monospace; font-size: 0.78rem;">${u.discord_id || '-'}</td>
+            <td><strong style="color: var(--primary);">${u.plan || 'BASIC'}</strong></td>
+            <td>${statusBadge}</td>
+            <td style="font-family: monospace; font-size: 0.78rem;">${u.token || '-'}</td>
+            <td style="font-size: 0.78rem;" title="${u.hwid || ''}">${hwidShort}</td>
+            <td style="text-align: center; font-weight: 700;">${u.hwid_resets ?? 0}</td>
+            <td style="font-size: 0.8rem;">${exp}</td>
+            <td>
+              <div style="display: flex; gap: 0.3rem; flex-wrap: wrap;">
+                <button class="action-btn-sm" onclick="handleUserAction(${u.id}, 'renew')" title="Renovar +30 dias">⏱️ +30d</button>
+                <button class="action-btn-sm" onclick="handleUserAction(${u.id}, 'change_plan', '${u.plan === 'PREMIUM' ? 'BASIC' : 'PREMIUM'}')" title="Alternar Plano">🔄 Plano</button>
+                <button class="action-btn-sm" onclick="handleUserAction(${u.id}, 'reset_hwid')" title="Resetar HWID">💻 HWID</button>
+                <button class="action-btn-sm" style="color: #ef4444;" onclick="handleUserAction(${u.id}, 'suspend')" title="Suspender">⛔</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filterUsers() {
+      const q = document.getElementById('admin-search').value.toLowerCase().trim();
+      const filtered = allUsers.filter(u => 
+        u.username.toLowerCase().includes(q) || 
+        (u.discord_id && u.discord_id.includes(q)) ||
+        (u.token && u.token.toLowerCase().includes(q))
+      );
+      renderUsersTable(filtered);
+    }
+
+    async function handleUserAction(user_id, action, new_plan = null) {
+      try {
+        const body = { user_id, action };
+        if (new_plan) body.new_plan = new_plan;
+
+        const res = await RedlineAPI.request('/api/admin/user/update', {
+          method: 'POST',
+          body: JSON.stringify(body)
+        });
+
+        Toastify({ text: res.message || "Ação executada com sucesso!", style: { background: "#10b981" } }).showToast();
+        loadUsers();
+      } catch (err) {
+        Toastify({ text: err.message, style: { background: "#ef4444" } }).showToast();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadUsers);
+  </script>
+</body>
+</html>

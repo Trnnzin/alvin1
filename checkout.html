@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Pedido — REDLINE Performance</title>
+  <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <style>
+    .checkout-page {
+      padding: 100px 0 60px 0;
+      min-height: 100vh;
+    }
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    @media (min-width: 1024px) {
+      .checkout-grid {
+        grid-template-columns: 1.4fr 1fr;
+      }
+    }
+    .checkout-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-md);
+    }
+    .checkout-card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 0.8rem;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .order-item img {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      object-fit: cover;
+      background: #181d2c;
+    }
+    .order-item-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      flex: 1;
+    }
+    .order-item-price {
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .pix-box {
+      background: rgba(16, 185, 129, 0.06);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      text-align: center;
+      margin-top: 1rem;
+      display: none;
+    }
+    .pix-box.active {
+      display: block;
+      animation: fadeInDown 0.3s ease;
+    }
+    .qr-placeholder {
+      width: 180px;
+      height: 180px;
+      background: #ffffff;
+      padding: 10px;
+      margin: 1rem auto;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .qr-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .copia-cola-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 0.6rem 0.8rem;
+      color: #fff;
+      font-family: monospace;
+      font-size: 0.8rem;
+      margin: 0.5rem 0;
+      text-align: center;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Simples -->
+  <header class="header-floating">
+    <div class="container">
+      <nav class="nav-glass">
+        <a href="index.html" class="brand-logo">
+          <img src="assets/images/logo.webp" alt="REDLINE Logo">
+          <span class="brand-name">REDLINE<span class="brand-badge">CHECKOUT</span></span>
+        </a>
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 600;">
+          ← Voltar à Loja
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="checkout-page">
+    <div class="container">
+      <div class="checkout-grid">
+        
+        <!-- COLUNA ESQUERDA: DADOS & PAGAMENTO -->
+        <div class="checkout-card">
+          <h3>
+            <span style="color: var(--primary);">👤</span> Seus Dados de Entrega
+          </h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            A sua licença (Token <code>FPS-XXXX-XXXX</code>) será entregue instantaneamente após a confirmação do pagamento.
+          </p>
+
+          <form id="checkout-form" onsubmit="handleGeneratePix(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+              <div>
+                <label style="display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem;">Nome Completo</label>
+                <input type="text" id="cust-name" class="form-input" placeholder="Seu nome" required>
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem;">E-mail (para recebimento)</label>
+                <input type="email" id="cust-email" class="form-input" placeholder="seuemail@gmail.com" required>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+              <label style="display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 0.4rem;">Discord (Usuário ou ID para sincronização)</label>
+              <input type="text" id="cust-discord" class="form-input" placeholder="Ex: usuario_discord ou 849204918294019284">
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.5rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                  <span style="font-size: 1.5rem;">❖</span>
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.95rem;">Pix Instantâneo</div>
+                    <div style="font-size: 0.78rem; color: var(--text-dim);">Aprovação automática e entrega imediata</div>
+                  </div>
+                </div>
+                <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); padding: 0.2rem 0.6rem; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 800;">RECOMENDADO</span>
+              </div>
+            </div>
+
+            <button type="submit" id="btn-submit-order" class="btn-checkout">
+              <span>Gerar Pagamento Pix</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </form>
+
+          <!-- BOX DO PIX GERADO -->
+          <div id="pix-container" class="pix-box">
+            <h4 style="color: #10b981; font-weight: 800; font-size: 1.15rem; margin-bottom: 0.25rem;">QR Code Pix Oficial Gerado!</h4>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">Escaneie com o aplicativo do seu banco ou copie o código Pix Copia e Cola:</p>
+            
+            <div class="qr-placeholder">
+              <img id="pix-qr-img" src="assets/images/logo.webp" alt="QR Code Pix">
+            </div>
+
+            <input type="text" id="pix-code" class="copia-cola-input" readonly value="Carregando Pix...">
+            
+            <button onclick="copyPixCode()" class="btn-primary-hero" style="width: 100%; justify-content: center; padding: 0.75rem; margin-top: 0.5rem; font-size: 0.9rem;">
+              📋 Copiar Código Pix
+            </button>
+
+            <div id="pix-status-badge" style="margin-top: 1rem; color: #38bdf8; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: var(--radius-sm); padding: 0.6rem;">
+              <span>⏳</span> Aguardando confirmação do banco em tempo real...
+            </div>
+
+            <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--text-dim); text-align: left;">
+              ℹ️ Assim que o banco aprovar, a tela atualizará sozinha e sua chave será entregue aqui.
+            </div>
+          </div>
+
+          <!-- BOX DO PAGAMENTO APROVADO -->
+          <div id="pix-approved-container" class="pix-box" style="display: none; border-color: #10b981; background: rgba(16, 185, 129, 0.1);">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎉</div>
+            <h4 style="color: #10b981; font-weight: 900; font-size: 1.35rem; margin-bottom: 0.5rem;">PAGAMENTO CONFIRMADO!</h4>
+            <p style="font-size: 0.9rem; color: #fff; margin-bottom: 1rem;">Sua licença e acesso ao REDLINE Performance foram ativados com sucesso!</p>
+            
+            <div style="background: rgba(0,0,0,0.4); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: var(--radius-md); padding: 1rem; text-align: left; margin-bottom: 1rem;">
+              <div style="margin-bottom: 0.6rem;">
+                <label style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700;">Chave de Acesso (Token)</label>
+                <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
+                  <input type="text" id="approved-token" class="copia-cola-input" readonly style="text-align: left; font-weight: 700; color: #10b981;">
+                  <button onclick="copyApprovedToken()" class="btn-primary-hero" style="padding: 0.4rem 0.8rem; font-size: 0.8rem;">Copiar</button>
+                </div>
+              </div>
+              <div id="approved-credentials-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.82rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.6rem;">
+                <div><span style="color: var(--text-dim);">Usuário:</span> <strong id="approved-username" style="color: #fff;">-</strong></div>
+                <div><span style="color: var(--text-dim);">Senha Provisória:</span> <strong id="approved-password" style="color: #fff;">-</strong></div>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+              <a href="/download/installer" class="btn-primary-hero" style="justify-content: center; padding: 0.85rem; font-size: 0.95rem; text-decoration: none;">
+                📥 Baixar Instalador do Painel (.exe)
+              </a>
+              <a href="dashboard.html" class="btn-secondary" style="justify-content: center; padding: 0.75rem; font-size: 0.85rem; text-decoration: none; border: 1px solid var(--glass-border); border-radius: var(--radius-sm); color: #fff; background: rgba(255,255,255,0.05); text-align: center;">
+                Acessar Área do Cliente
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUNA DIREITA: RESUMO DO PEDIDO -->
+        <div class="checkout-card">
+          <h3>
+            <span style="color: var(--primary);">🛒</span> Resumo do Pedido
+          </h3>
+
+          <div id="order-items-list">
+            <!-- Injetado dinamicamente -->
+          </div>
+
+          <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 0.6rem;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted);">
+              <span>Subtotal:</span>
+              <span id="summary-subtotal">R$ 0,00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #10b981;">
+              <span>Desconto Pix:</span>
+              <span>- R$ 0,00</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 900; color: #fff; margin-top: 0.5rem; border-top: 1px solid var(--glass-border); padding-top: 0.8rem;">
+              <span>Total:</span>
+              <span id="summary-total" style="color: var(--primary);">R$ 0,00</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.75rem; background: rgba(255,255,255,0.02); border: 1px solid var(--glass-border); border-radius: var(--radius-md); padding: 1rem; font-size: 0.78rem; color: var(--text-dim); line-height: 1.5;">
+            🔒 <strong>Compra 100% Protegida:</strong> Seus dados estão seguros e o suporte técnico do REDLINE estará disponível no Discord para qualquer dúvida.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const items = Cart.getItems();
+      const list = document.getElementById('order-items-list');
+      const subtotalEl = document.getElementById('summary-subtotal');
+      const totalEl = document.getElementById('summary-total');
+
+      if (items.length === 0) {
+        list.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem; padding: 1rem 0;">Seu carrinho está vazio. Adicione um produto antes de finalizar.</p>';
+        document.getElementById('btn-submit-order').disabled = true;
+        document.getElementById('btn-submit-order').style.opacity = '0.5';
+        return;
+      }
+
+      list.innerHTML = items.map(item => `
+        <div class="order-item">
+          <img src="${item.image}" alt="${item.title}" onerror="this.src='assets/images/logo.webp'">
+          <div class="order-item-title">
+            ${item.title}
+            <div style="font-size: 0.75rem; color: var(--text-dim); font-weight: 500;">Qtd: ${item.qty || 1}</div>
+          </div>
+          <div class="order-item-price">${Cart.formatMoney(item.price * (item.qty || 1))}</div>
+        </div>
+      `).join('');
+
+      const total = Cart.getTotal();
+      subtotalEl.textContent = Cart.formatMoney(total);
+      totalEl.textContent = Cart.formatMoney(total);
+
+      // Preenche dados se estiver logado
+      const user = RedlineAPI.getUser();
+      if (user) {
+        if (user.username) document.getElementById('cust-name').value = user.username;
+        if (user.discord_id) document.getElementById('cust-discord').value = user.discord_id;
+      }
+    });
+
+    let currentPaymentId = null;
+    let pollTimer = null;
+
+    async function handleGeneratePix(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-submit-order');
+      const name = document.getElementById('cust-name').value.trim();
+      const email = document.getElementById('cust-email').value.trim();
+      const discord = document.getElementById('cust-discord').value.trim();
+      const items = Cart.getItems();
+      const total = Cart.getTotal();
+
+      if (!items || items.length === 0) {
+        Cart.showToast('Adicione um produto antes de finalizar.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = 'Gerando Pix no Mercado Pago...';
+
+      try {
+        const planName = items.some(i => (i.title || '').toUpperCase().includes('PREMIUM') || (i.plan || '').toUpperCase().includes('PREMIUM')) ? 'PREMIUM' : 'BASIC';
+        const targetUrl = (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/checkout/pix';
+        
+        const resp = await fetch(targetUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            email,
+            discord,
+            plan_type: planName,
+            amount: total,
+            items
+          })
+        });
+
+        const data = await resp.json();
+        if (!resp.ok || !data.ok) {
+          throw new Error(data.error || 'Erro ao gerar Pix.');
+        }
+
+        currentPaymentId = data.payment_id;
+        document.getElementById('pix-code').value = data.qr_code;
+        if (data.qr_code_img) {
+          document.getElementById('pix-qr-img').src = data.qr_code_img;
+        }
+
+        btn.style.display = 'none';
+        const pixBox = document.getElementById('pix-container');
+        pixBox.classList.add('active');
+        pixBox.scrollIntoView({ behavior: 'smooth' });
+        Cart.showToast('Pix gerado com sucesso! Efetue o pagamento.');
+
+        startPaymentPolling(currentPaymentId);
+      } catch (err) {
+        btn.disabled = false;
+        btn.innerHTML = 'Gerar Pagamento Pix';
+        Cart.showToast('Erro: ' + err.message);
+      }
+    }
+
+    function startPaymentPolling(paymentId) {
+      if (pollTimer) clearInterval(pollTimer);
+      pollTimer = setInterval(async () => {
+        try {
+          const checkUrl = (typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/checkout/check/' + paymentId;
+          const resp = await fetch(checkUrl);
+          const data = await resp.json();
+
+          if (data.ok && data.status === 'approved') {
+            clearInterval(pollTimer);
+            showPaymentApproved(data);
+          }
+        } catch (e) {
+          console.warn('Polling check error:', e);
+        }
+      }, 3000);
+    }
+
+    function showPaymentApproved(data) {
+      document.getElementById('pix-container').style.display = 'none';
+      const approvedBox = document.getElementById('pix-approved-container');
+      approvedBox.style.display = 'block';
+      approvedBox.classList.add('active');
+
+      document.getElementById('approved-token').value = data.token || 'FPS-PREM-2026';
+      if (data.username) document.getElementById('approved-username').textContent = data.username;
+      if (data.password) document.getElementById('approved-password').textContent = data.password;
+
+      Cart.clear();
+      Cart.showToast('Pagamento confirmado com sucesso!');
+      approvedBox.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyPixCode() {
+      const input = document.getElementById('pix-code');
+      input.select();
+      document.execCommand('copy');
+      Cart.showToast('Código Pix copiado para a área de transferência! 📋');
+    }
+
+    function copyApprovedToken() {
+      const input = document.getElementById('approved-token');
+      input.select();
+      document.execCommand('copy');
+      Cart.showToast('Chave de acesso copiada! 📋');
+    }
+  </script>
+</body>
+</html>

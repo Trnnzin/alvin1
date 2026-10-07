@@ -1,590 +1,813 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REDLINE | Otimização de Performance Extrema para PC</title>
-    <meta name="description"
-        content="Aumente seu FPS, reduza seu input lag e elimine gargalos com a otimização de Windows líder de mercado. Métodos 100% seguros e customizados para o seu setup.">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REDLINE Performance — A Maior Loja de Otimização Gamer do Brasil</title>
+  <meta name="description" content="Turbine seus FPS, elimine o input lag e maximize a estabilidade do seu PC com o ecossistema REDLINE Performance. Entrega instantânea via Pix.">
+  <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
 
-    <!-- Open Graph / Discord Embed Preview Tags -->
-    <meta property="og:title" content="Redline Performance | Otimização de PC">
-    <meta property="og:description"
-        content="Aumente seu FPS em até +70% e elimine o input lag com métodos 100% seguros e reversores inclusos.">
-    <meta property="og:image" content="https://redline-fps.vercel.app/assets/images/banner.webp">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://redline-fps.vercel.app/">
-    <meta property="og:site_name" content="REDLINE Performance">
-    <meta name="theme-color" content="#dc2626">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="REDLINE Performance | Otimização de PC">
-    <meta name="twitter:description" content="Aumente seu FPS em até +70% com métodos 100% seguros.">
-    <meta name="twitter:image" content="https://redline-fps.vercel.app/assets/images/banner.webp">
-    <link rel="canonical" href="https://redline-fps.vercel.app/">
+  <!-- Estilos do Design System -->
+  <link rel="stylesheet" href="assets/css/design-system.css">
+  <link rel="stylesheet" href="assets/css/components.css">
 
-    <!-- Preconnect para Google Fonts (Otimização de LCP e FCP) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="icon" type="image/webp" href="assets/images/favicon.webp">
-
-    <!-- Vercel Web Analytics & Speed Insights -->
-    <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-        window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-    <script defer src="/_vercel/speed-insights/script.js"></script>
+  <!-- Toastify Notifications -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
-
 <body>
 
-    <!-- Canvas de Partículas Interativo -->
-    <canvas id="particles-canvas"></canvas>
+  <!-- Canvas de Partículas Interativas (Fundo Gamer) -->
+  <canvas id="particles-canvas"></canvas>
 
-    <div class="content-wrapper">
+  <!-- ==========================================
+       HEADER FLUTUANTE (Pill Glass) COM NAVEGAÇÃO EM ABAS
+       ========================================== -->
+  <header class="header-floating">
+    <div class="container">
+      <nav class="nav-glass">
+        <!-- Esquerda: Menu Mobile + Logo -->
+        <div style="display: flex; align-items: center; gap: 0.8rem;">
+          <button id="btn-open-drawer" class="btn-menu-mobile" aria-label="Abrir menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          
+          <a href="#inicio" data-tab="inicio" class="brand-logo">
+            <img src="assets/images/logo.webp" alt="REDLINE Logo" onerror="this.src='assets/images/favicon.png'">
+            <span class="brand-name">REDLINE<span class="brand-badge">PRO</span></span>
+          </a>
+        </div>
 
-        <!-- Cabeçalho (Navbar) -->
-        <header>
-            <nav class="nav-container">
-                <a href="#" class="logo">RED<span>LINE</span></a>
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="#beneficios" class="nav-link-item">Benefícios</a></li>
-                    <li><a href="#planos" class="nav-link-item">Planos</a></li>
-                    <li><a href="#faq" class="nav-link-item">Dúvidas Frequentes</a></li>
-                </ul>
-                <div class="nav-actions">
-                    <button id="open-auth-modal-btn" onclick="if(typeof showAuthFormModal==='function')showAuthFormModal();">🔑 Login / Registrar</button>
-                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" rel="noopener noreferrer" class="btn-header-discord">💬 Discord</a>
-                    <button id="hamburger-btn" aria-label="Abrir menu" aria-expanded="false" aria-controls="nav-links">☰</button>
-                </div>
-            </nav>
-        </header>
+        <!-- Centro: Abas de Navegação Direta (Sem Rolagem) -->
+        <ul class="nav-links">
+          <li><a href="#inicio" data-tab="inicio" class="nav-link tab-active">Início</a></li>
+          <li><a href="#loja" data-tab="loja" class="nav-link">Loja</a></li>
+          <li><a href="#recursos" data-tab="recursos" class="nav-link">Recursos</a></li>
+          <li><a href="#avaliacoes" data-tab="avaliacoes" class="nav-link">Avaliações</a></li>
+          <li><a href="#faq" data-tab="faq" class="nav-link">FAQ</a></li>
+          <li><a href="https://discord.gg/7J686mR6" target="_blank" rel="noopener" class="nav-link" style="color: #5865F2;">Discord</a></li>
+        </ul>
 
-        <!-- Seção Hero -->
-        <section class="hero">
-            <div class="hero-grid">
-                <div class="hero-content">
-                    <div class="hero-edition-badge">
-                        <span class="hero-edition-badge-dot"></span>
-                        ⚡ REDLINE PERFORMANCE ULTRA v1.0 AI EDITION
-                    </div>
-                    <h1 class="hero-title">
-                        Seu PC Rápido de Verdade.<br>
-                        <span class="hero-title-highlight">FPS no Máximo &amp; Delay Zero.</span>
-                    </h1>
-                    <p class="hero-desc">
-                        Eleve o desempenho do seu computador com o otimizador eSports nº 1. Reduza o input lag para
-                        0.5ms, elimine engasgos de CPU/GPU e ganhe até +70% de FPS com o assistente conversacional de IA
-                        integrado.
-                    </p>
-                    <div class="hero-buttons">
-                        <a href="#planos" class="btn-primary hero-btn-primary">🔥 GARANTIR FPS AGORA</a>
-                        <a href="https://discord.gg/WPqj5nGjhD" target="_blank" rel="noopener noreferrer" class="btn-secondary hero-btn-secondary">💬 Entrar no Discord Oficial</a>
-                    </div>
+        <!-- Direita: Busca, Login & Carrinho -->
+        <div class="nav-actions">
+          <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Buscar otimização..." autocomplete="off">
+            <div id="search-portal" class="search-portal"></div>
+          </div>
 
-                    <!-- Selo de Garantia e Reversibilidade -->
-                    <div class="hero-security-badge-container">
-                        <span class="badge-icon">🛡️</span>
-                        <span class="badge-text"><strong>100% Seguro &amp; Reversível:</strong> O painel cria pontos de restauração automaticamente antes de aplicar qualquer otimização.</span>
-                    </div>
-                </div>
+          <a href="login.html" id="header-login-btn" class="btn-login">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>
+            <span>Entrar</span>
+          </a>
 
-                <!-- Card de Status Lateral -->
-                <div class="hero-card">
-                    <div class="hero-card-header">
-                        <span>📈 BENCHMARK DE SISTEMA EM TEMPO REAL</span>
-                        <span>v1.0 ONLINE</span>
-                    </div>
-                    <div class="status-row">
-                        <div class="status-label">Ganho Médio de FPS</div>
-                        <div class="status-value accent">+70% FPS</div>
-                    </div>
-                    <div class="status-row">
-                        <div class="status-label">Input Lag &amp; Timer Resolution</div>
-                        <div class="status-value">0.5 ms (-62%)</div>
-                    </div>
-                    <div class="status-row">
-                        <div class="status-label">Assistente de IA Copilot</div>
-                        <div class="status-value copilot">🤖 Resposta Instantânea</div>
-                    </div>
-                    <div class="status-row no-border">
-                        <div class="status-label">Segurança &amp; Reversibilidade</div>
-                        <div class="status-value success">✅ 100% Protegido</div>
-                    </div>
-                </div>
-            </div>
-        </section>
+          <button class="btn-cart" onclick="Cart.openDrawer()" aria-label="Abrir carrinho">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="cart-badge" style="display: none;">0</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-        <!-- Seção Benefícios -->
-        <section id="beneficios" class="section reveal">
-            <div class="section-header">
-                <span class="section-badge">Benefícios</span>
-                <h2 class="section-title">Por que otimizar o seu computador?</h2>
-            </div>
-
-            <div class="benefits-grid">
-                <div class="benefit-card">
-                    <div class="benefit-icon">⚙️</div>
-                    <h3>Otimização do Windows</h3>
-                    <p>Desativação de telemetria desnecessária, remoção de bloatwares e liberação profunda de processos
-                        de CPU e memória RAM em segundo plano.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎮</div>
-                    <h3>Calibração de Processador</h3>
-                    <p>Tweaks de SMT para chips AMD Ryzen e isolamento de P-Cores em processadores Intel Core para
-                        otimizar a fila de processamento de jogos.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">📡</div>
-                    <h3>Ping Tester em Tempo Real</h3>
-                    <p>Mede a latência dos servidores de FiveM, Valorant, CS2 e Fortnite direto do painel para
-                        diagnosticar instabilidade de rotas.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🔌</div>
-                    <h3>Delay de Input Reduzido</h3>
-                    <p>Ajustes de tempo de resposta do teclado e do mouse no registro, permitindo que suas jogadas sejam
-                        registradas instantaneamente na tela.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🔄</div>
-                    <h3>Restaurar em 1 Clique</h3>
-                    <p>Função integrada para reverter todas as otimizações e restaurar as configurações originais do
-                        Windows quando você quiser.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🛡️</div>
-                    <h3>Segurança Máxima</h3>
-                    <p>Criação automática de pontos de restauração antes de qualquer tweak. Oferecemos reversores
-                        completos para retornar tudo ao padrão.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção Simulador de FPS -->
-        <section id="simulador" class="section reveal">
-            <div class="section-header">
-                <span class="section-badge">⚡ Simulador Interativo</span>
-                <h2 class="section-title">Calcule o ganho de FPS no seu setup</h2>
-            </div>
-
-            <div class="simulador-container">
-                <div class="simulador-grid">
-                    <!-- Configuração do Hardware -->
-                    <div class="simulador-form">
-                        <h3>1. Insira seu Setup</h3>
-
-                        <div class="simulador-field">
-                            <label for="sim-cpu">Processador (CPU)</label>
-                            <select id="sim-cpu" class="sim-select">
-                                <option value="intel-low">Intel Core (i3, Pentium, antigo)</option>
-                                <option value="intel-med" selected>Intel Core i5 (Intermediário)</option>
-                                <option value="intel-high">Intel Core i7 / i9 (Alto Desempenho)</option>
-                                <option value="amd-low">AMD Ryzen 3 / FX Series (Entrada)</option>
-                                <option value="amd-med">AMD Ryzen 5 (Intermediário)</option>
-                                <option value="amd-high">AMD Ryzen 7 / 9 (Alto Desempenho)</option>
-                            </select>
-                        </div>
-
-                        <div class="simulador-field">
-                            <label for="sim-gpu">Placa de Vídeo (GPU)</label>
-                            <select id="sim-gpu" class="sim-select">
-                                <option value="gpu-integrated">Gráficos Integrados (Intel HD, Ryzen Vega/Radeon)
-                                </option>
-                                <option value="gpu-low">Nvidia GTX antiga / RX Série 500 (Entrada)</option>
-                                <option value="gpu-med" selected>Nvidia GTX 1660, RTX 2060 / RX 6600 (Média)</option>
-                                <option value="gpu-high">Nvidia RTX 30/40 Series / RX 7000 Series (High-End)</option>
-                            </select>
-                        </div>
-
-                        <div class="simulador-field">
-                            <label for="sim-ram">Memória RAM</label>
-                            <select id="sim-ram" class="sim-select">
-                                <option value="ram-8">8 GB ou menos</option>
-                                <option value="ram-16" selected>16 GB</option>
-                                <option value="ram-32">32 GB ou mais</option>
-                            </select>
-                        </div>
-
-                        <div class="simulador-field">
-                            <label for="sim-game">Jogo Alvo</label>
-                            <select id="sim-game" class="sim-select">
-                                <option value="fivem" selected>FiveM (GTA RP)</option>
-                                <option value="cs2">Counter-Strike 2</option>
-                                <option value="valorant">Valorant</option>
-                                <option value="fortnite">Fortnite</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Resultado da Simulação -->
-                    <div class="simulador-result">
-                        <h3>2. Resultado da Simulação</h3>
-                        <div class="simulador-display">
-                            <div class="simulador-fps-wrapper">
-                                <span class="simulador-fps-label">FPS ESTIMADO PÓS-OTIMIZAÇÃO</span>
-                                <div class="fps-value-box">
-                                    <span id="fps-counter" class="fps-number">0</span>
-                                    <span class="fps-unit">FPS</span>
-                                </div>
-                                <span id="fps-gain-text" class="fps-gain-pill">+0% de Ganho</span>
-                            </div>
-
-                            <div class="sim-metrics-grid"
-                                style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 15px 0;">
-                                <div class="metric-box"
-                                    style="background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 10px; text-align: left;">
-                                    <span
-                                        style="font-size: 11px; color: #a1a1aa; font-weight: 600; display: block; margin-bottom: 3px;">🎯
-                                        1% LOW (SEM STUTTER)</span>
-                                    <span id="metric-low-text"
-                                        style="font-size: 14px; font-weight: 800; color: #22c55e;">68 FPS (Sem
-                                        Stutter)</span>
-                                </div>
-                                <div class="metric-box"
-                                    style="background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255,255,255,0.08); padding: 10px 14px; border-radius: 10px; text-align: left;">
-                                    <span
-                                        style="font-size: 11px; color: #a1a1aa; font-weight: 600; display: block; margin-bottom: 3px;">🕹️
-                                        DELAY DE INPUT</span>
-                                    <span id="metric-lag-text"
-                                        style="font-size: 14px; font-weight: 800; color: #38bdf8;">8.8 ms (-60%)</span>
-                                </div>
-                            </div>
-
-                            <div class="recommended-plan-card">
-                                <span class="plan-label">Plano Recomendado</span>
-                                <span id="recommended-plan-name" class="plan-name">Medium</span>
-                                <p id="recommended-plan-reason" class="plan-reason">Ideal para reduzir o delay de
-                                    periféricos e estabilizar o tempo de resposta em jogos competitivos.</p>
-                                <a href="#planos" id="recommended-plan-link" class="sim-btn-cta">GARANTIR MEU FPS</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção Planos -->
-        <section id="planos" class="section reveal">
-            <div class="section-header">
-                <span class="section-badge">Tabela de Preços</span>
-                <h2 class="section-title">Escolha o seu plano de Otimização</h2>
-            </div>
-
-            <!-- SELO DE SEGURANÇA E PONTO DE RESTAURAÇÃO -->
-            <div style="max-width:950px;margin:-10px auto 30px auto;padding:16px 24px;background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.25);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;">
-                <span style="font-size:28px;">🛡️</span>
-                <div>
-                    <strong style="color:#22c55e;font-size:14px;display:block;margin-bottom:2px;">GARANTIA DE SEGURANÇA TOTAL & REVERSIBILIDADE</strong>
-                    <span style="font-size:12px;color:#a1a1aa;">O painel cria automaticamente um <b>Ponto de Restauração no seu Windows</b> antes de aplicar qualquer otimização. Reversível em 1-clique!</span>
-                </div>
-            </div>
-
-            <div class="pricing-grid"
-                style="max-width: 950px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
-
-                <!-- Plano Sem IA -->
-                <div class="price-card">
-                    <h3>⚡ Painel REDLINE (Sem IA)</h3>
-                    <p class="price-desc">Acesso completo ao Painel Visual REDLINE com todas as otimizações essenciais de sistema em 1-Clique.</p>
-                    <div class="price-amount">
-                        <span class="currency">R$</span>
-                        <span class="value">20</span>
-                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou € 4,00)</span>
-                    </div>
-                    <ul class="price-features">
-                        <li>Acesso ao <strong>Painel Visual REDLINE Ultra v1.0</strong></li>
-                        <li>Otimização Completa de CPU, GPU & RAM em 1-Clique</li>
-                        <li>Tweaks eSports para redução de Input Lag (Timer 0.5ms & Mouse 1:1)</li>
-                        <li>Limpeza Profunda de Standby List e Cache de Jogos</li>
-                        <li>Gerenciador de Inicialização (Startup Manager)</li>
-                        <li>Modo MSI na GPU & Desativação de Core Parking</li>
-                        <li class="not-included">Assistente Conversacional de IA REDLINE Copilot</li>
-                        <li>Licença Vitalícia & Entrega Imediata</li>
-                    </ul>
-                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="price-btn buy-trigger" data-plan="basic" style="display:block;text-align:center;text-decoration:none;">⚡ COMPRAR SEM IA (R$ 20,00)</a>
-                </div>
-
-                <!-- Plano Com IA -->
-                <div class="price-card popular premium">
-                    <div class="price-badge">Mais Recomendado (IA Incluída)</div>
-                    <h3>🤖 Painel REDLINE PRO (Com IA)</h3>
-                    <p class="price-desc">A experiência definitiva: Painel REDLINE Completo + Assistente de IA Conversacional v1.0 Integrado.</p>
-                    <div class="price-amount">
-                        <span class="currency">R$</span>
-                        <span class="value">30</span>
-                        <span style="font-size: 0.95rem; color: #a1a1aa; font-weight: normal; margin-left: 6px;">(ou € 6,00)</span>
-                    </div>
-                    <ul class="price-features">
-                        <li><strong>Tudo do Painel Padrão Incluso</strong></li>
-                        <li>🤖 <strong>REDLINE AI Copilot v1.0 Habilitada no Chat ao Vivo</strong></li>
-                        <li>Diagnósticos Inteligentes por Texto para qualquer dúvida de PC</li>
-                        <li>Resolução Automática de Quedas de FPS no FiveM, Valorant e CS2</li>
-                        <li>Análise de Gargalo de Hardware (CPU/GPU/RAM) em Tempo Real</li>
-                        <li>Action Cards com Execução de Correções em 1-Clique</li>
-                        <li>Cargo VIP no Discord + Suporte Prioritário</li>
-                    </ul>
-                    <a href="https://discord.gg/WPqj5nGjhD" target="_blank" class="price-btn buy-trigger" data-plan="premium_ai"
-                        style="display:block;text-align:center;text-decoration:none;background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 0 20px rgba(239,68,68,0.4);">🤖 COMPRAR COM IA (R$ 30,00)</a>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Seção Depoimentos -->
-        <section id="depoimentos" class="section reveal">
-            <div class="section-header">
-                <span class="section-badge">Prova Social</span>
-                <h2 class="section-title">O que dizem os nossos clientes</h2>
-            </div>
-
-            <div class="testimonials-grid" id="testimonials-grid">
-                <!-- Feedback 1 -->
-                <div class="testimonial-card-wrapper">
-                    <div class="testimonial-card-inner">
-                        <!-- Frente -->
-                        <div class="testimonial-card-front">
-                            <div class="testimonial-header">
-                                <div class="user-avatar" style="background-color: #ef4444;">G</div>
-                                <div class="user-meta">
-                                    <div class="username-row">
-                                        <span class="user-tag">@guilherme_vt</span>
-                                        <span class="verified-badge">✓ Verificado</span>
-                                    </div>
-                                    <span class="review-time">Hoje às 14:32</span>
-                                </div>
-                            </div>
-
-                            <div class="feedback-meta-row">
-                                <span class="plan-badge advanced">Advanced</span>
-                                <span class="rating-badge">⭐ 5/5 (Nota 10)</span>
-                                <span class="gain-badge">+40 FPS</span>
-                            </div>
-
-                            <p class="testimonial-text">"Meu FiveM rodava a 50 FPS instável e travando. Após aplicar a
-                                otimização Advanced da Redline, travou em 90 FPS estável! Recomendo demais!"</p>
-                            <span class="flip-hint">💡 Passe o mouse para ver mais</span>
-                        </div>
-
-                        <!-- Verso -->
-                        <div class="testimonial-card-back">
-                            <div class="testimonial-header">
-                                <div class="user-avatar" style="background-color: #ef4444;">G</div>
-                                <div class="user-meta">
-                                    <div class="username-row">
-                                        <span class="user-tag">@guilherme_vt</span>
-                                        <span class="verified-badge">✓ Suporte</span>
-                                    </div>
-                                    <span class="review-time">Hoje às 14:35</span>
-                                </div>
-                            </div>
-
-                            <div class="feedback-meta-row">
-                                <span class="plan-badge advanced">Advanced</span>
-                                <span class="rating-badge">⭐ 10/10</span>
-                                <span class="gain-badge">Remoto OK</span>
-                            </div>
-
-                            <p class="testimonial-text">"O suporte por acesso remoto foi excelente. O técnico configurou
-                                tudo na minha frente pelo AnyDesk com total segurança. Nota 10 em atendimento!"</p>
-                            <span class="flip-hint">🛡️ REDLINE Performance</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Feedback 2 -->
-                <div class="testimonial-card-wrapper">
-                    <div class="testimonial-card-inner">
-                        <!-- Frente -->
-                        <div class="testimonial-card-front">
-                            <div class="testimonial-header">
-                                <div class="user-avatar" style="background-color: #f59e0b;">B</div>
-                                <div class="user-meta">
-                                    <div class="username-row">
-                                        <span class="user-tag">@biel_fps</span>
-                                        <span class="verified-badge">✓ Verificado</span>
-                                    </div>
-                                    <span class="review-time">Ontem às 18:05</span>
-                                </div>
-                            </div>
-
-                            <div class="feedback-meta-row">
-                                <span class="plan-badge medium">Medium</span>
-                                <span class="rating-badge">⭐ 5/5 (Nota 10)</span>
-                                <span class="gain-badge">+30 FPS</span>
-                            </div>
-
-                            <p class="testimonial-text">"O delay de input no Valorant sumiu completamente. Sinto o mouse
-                                muito mais leve e as miras registram na hora. O Game Booster é absurdo!"</p>
-                            <span class="flip-hint">💡 Passe o mouse para ver mais</span>
-                        </div>
-
-                        <!-- Verso -->
-                        <div class="testimonial-card-back">
-                            <div class="testimonial-header">
-                                <div class="user-avatar" style="background-color: #f59e0b;">B</div>
-                                <div class="user-meta">
-                                    <div class="username-row">
-                                        <span class="user-tag">@biel_fps</span>
-                                        <span class="verified-badge">✓ Warzone</span>
-                                    </div>
-                                    <span class="review-time">Ontem às 18:10</span>
-                                </div>
-                            </div>
-
-                            <div class="feedback-meta-row">
-                                <span class="plan-badge medium">Medium</span>
-                                <span class="rating-badge">⭐ 9.5/10</span>
-                                <span class="gain-badge">+25 FPS</span>
-                            </div>
-
-                            <p class="testimonial-text">"Também testei no Warzone e o ganho foi de uns 25 FPS, mas o
-                                melhor foi que parou totalmente os micro-travamentos de disco que eu tinha."</p>
-                            <span class="flip-hint">🛡️ REDLINE Performance</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Feedback 3 -->
-                <div class="testimonial-card-wrapper">
-                    <div class="testimonial-card-inner">
-                        <!-- Frente -->
-                        <div class="testimonial-card-front">
-                            <div class="testimonial-header">
-                                <div class="user-avatar" style="background-color: #3b82f6;">L</div>
-                                <div class="user-meta">
-                                    <div class="username-row">
-                                        <span class="user-tag">@lucas_gta</span>
-                                        <span class="verified-badge">✓ Verificado</span>
-                                    </div>
-                                    <span class="review-time">Há 2 dias</span>
-                                </div>
-                            </div>
-
-                            <div class="feedback-meta-row">
-                                <span class="plan-badge light">Light</span>
-                                <span class="rating-badge">⭐ 5/5 (Nota 9)</span>
-                                <span class="gain-badge">+20 FPS</span>
-                            </div>
-
-                            <p class="testimonial-text">"Processo de compra muito rápido pelo bot do Discord. O suporte
-                                tirou todas as dúvidas e o launcher de jogos é muito fácil de usar. Nota 10!"</p>
-                            <span class="flip-hint">💡 Passe o mouse para ver mais</span>
-                        </div>
-
-                        <!-- Verso -->
-                        <div class="testimonial-card-back">
-                            <div class="testimonial-header">
-                                <div class="user-avatar" style="background-color: #3b82f6;">L</div>
-                                <div class="user-meta">
-                                    <div class="username-row">
-                                        <span class="user-tag">@lucas_gta</span>
-                                        <span class="verified-badge">✓ Segurança</span>
-                                    </div>
-                                    <span class="review-time">Há 2 dias</span>
-                                </div>
-                            </div>
-
-                            <div class="feedback-meta-row">
-                                <span class="plan-badge light">Light</span>
-                                <span class="rating-badge">⭐ 9/10</span>
-                                <span class="gain-badge">Reversível</span>
-                            </div>
-
-                            <p class="testimonial-text">"O fato de criar um ponto de restauração automático me deixou
-                                muito seguro. Testei, reverti e depois apliquei de novo sem problemas."</p>
-                            <span class="flip-hint">🛡️ REDLINE Performance</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção FAQ -->
-        <section id="faq" class="section reveal">
-            <div class="section-header">
-                <span class="section-badge">FAQ</span>
-                <h2 class="section-title">Perguntas Frequentes</h2>
-            </div>
-
-            <div class="faq-container">
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Como recebo a minha otimização?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Tudo é feito via Discord! Ao abrir um ticket e concluir o pagamento, você receberá a entrega
-                            no canal privado do seu atendimento. Para os planos Light/Medium, enviamos um arquivo .zip
-                            com scripts .bat personalizados. Para o plano Advanced, entregamos uma Chave de Acesso
-                            (Token) para você colar e ativar diretamente dentro da interface do nosso aplicativo.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Existe risco de banimento em jogos?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Nenhum risco! Nossos métodos modificam apenas registros de sistema, planos de energia e
-                            propriedades de hardware nativas do Windows. Não injetamos códigos, DLLs ou manipulamos os
-                            arquivos de jogos, garantindo que o programa seja 100% seguro contra anticheats como
-                            Vanguard, EAC e BattlEye.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Posso reverter as otimizações caso queira?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Com certeza! Nosso otimizador cria automaticamente um Ponto de Restauração no Windows antes
-                            de realizar as alterações. Além disso, todos os arquivos entregues contêm scripts reversores
-                            dedicados para redefinir as configurações padrões do Windows com um clique.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>O Windows Defender mostrou um aviso na instalação, é normal?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>Sim, é 100% normal e seguro! Por ser um otimizador de sistema recém-atualizado que solicita permissão de Administrador para ajustar os registros de alto desempenho do Windows, o Windows SmartScreen pode exibir um aviso azul preventivo na primeira execução. Basta clicar em <b>"Mais informações"</b> e depois em <b>"Executar assim mesmo"</b>. O nosso software possui assinatura digital e é auditado contra qualquer arquivo malicioso.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <div class="faq-question">
-                        <h3>Quanto tempo dura o meu acesso no Advanced?</h3>
-                        <span class="faq-icon">+</span>
-                    </div>
-                    <div class="faq-answer">
-                        <p>O seu acesso é vitalício! As chaves (Tokens) geradas expiram apenas no primeiro uso em até 24
-                            horas por questões de segurança no ticket. Mas uma vez ativado o painel no seu computador,
-                            ele é seu permanentemente para re-otimizar o seu PC sempre que desejar.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Rodapé -->
-        <footer>
-            <p>&copy; 2026 REDLINE Performance. Todos os direitos reservados. Este software não possui afiliação com a
-                Microsoft Corporation.</p>
-        </footer>
-
+  <!-- ==========================================
+       MENU LATERAL MOBILE (Mobile Drawer)
+       ========================================== -->
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+  <div id="mobile-drawer" class="mobile-drawer">
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+      <a href="#inicio" data-tab="inicio" class="brand-logo">
+        <img src="assets/images/logo.webp" alt="REDLINE Logo" style="height: 32px;" onerror="this.src='assets/images/favicon.png'">
+        <span class="brand-name">REDLINE</span>
+      </a>
+      <button id="btn-close-drawer" class="btn-close-drawer">✕</button>
     </div>
 
-    <script src="assets/js/script.js" defer></script>
+    <div class="mobile-drawer-links">
+      <a href="#inicio" data-tab="inicio" class="mobile-nav-link tab-active">Início</a>
+      <a href="#loja" data-tab="loja" class="mobile-nav-link">Loja</a>
+      <a href="#recursos" data-tab="recursos" class="mobile-nav-link">Recursos</a>
+      <a href="#avaliacoes" data-tab="avaliacoes" class="mobile-nav-link">Avaliações</a>
+      <a href="#faq" data-tab="faq" class="mobile-nav-link">FAQ</a>
+      <a href="login.html" class="mobile-nav-link">Minha Conta</a>
+      <a href="https://discord.gg/7J686mR6" target="_blank" rel="noopener" class="mobile-nav-link" style="color: #5865F2;">Discord Oficial</a>
+    </div>
 
+    <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+      <p style="font-size: 0.75rem; color: var(--text-dim); text-align: center;">© 2026 REDLINE Performance</p>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       GAVETA DO CARRINHO (Cart Drawer)
+       ========================================== -->
+  <div id="cart-backdrop" class="drawer-backdrop"></div>
+  <div id="cart-drawer" class="cart-drawer">
+    <div class="cart-header">
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        Meu Carrinho
+      </h3>
+      <button class="btn-close-drawer" onclick="Cart.closeDrawer()">✕</button>
+    </div>
+
+    <div id="cart-items-body" class="cart-body">
+      <!-- Injetado dinamicamente pelo cart.js -->
+    </div>
+
+    <div class="cart-footer">
+      <div class="cart-total-row highlight">
+        <span>Valor Total:</span>
+        <span id="cart-total-value" class="cart-total-val">R$ 0,00</span>
+      </div>
+      <a href="checkout.html" class="btn-checkout">
+        <span>Ir para o Pagamento (Pix)</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       CONTEÚDO PRINCIPAL (ESTRUTURA DE ABAS SEM SCROLL)
+       ========================================== -->
+  <main>
+
+    <!-- ==========================================
+         ABA 1: INÍCIO (HERO + BENCHMARK REALTIME)
+         ========================================== -->
+    <div id="view-inicio" class="app-view active">
+      <div class="container">
+        
+        <div class="hero-split">
+          <!-- Coluna Esquerda: Texto Hero & Chamada -->
+          <div>
+            <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(255,51,68,0.1);border:1px solid rgba(255,51,68,0.3);border-radius:20px;font-size:12px;font-weight:800;color:var(--primary);margin-bottom:20px;letter-spacing:0.8px;">
+              <span style="width:7px;height:7px;background:#10b981;border-radius:50%;box-shadow:0 0 8px #10b981;display:inline-block;"></span>
+              REDLINE PRO // PERFORMANCE GAMER DEFINITIVA
+            </div>
+
+            <h1 style="font-size: 3.2rem; font-weight: 900; line-height: 1.15; letter-spacing: -1px; margin-bottom: 20px;">
+              Mais FPS. Zero Delay.<br>
+              <span style="background: linear-gradient(135deg, #ff3344 0%, #ff7755 50%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Seu PC no Limite Competitivo.
+              </span>
+            </h1>
+
+            <p style="font-size: 1.1rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; max-width: 600px;">
+              Otimização de ponta para Valorant, CS2, FiveM e Warzone. Reduza o input lag para 0.5ms, elimine quedas bruscas e desbloqueie a potência máxima do seu hardware em 1 clique.
+            </p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; align-items: center;">
+              <button onclick="switchTab('loja')" class="btn-primary-hero" style="font-size: 15px; padding: 15px 30px; cursor: pointer; border: none;">
+                VER PLANOS &amp; OTIMIZAÇÕES
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+              <a href="https://discord.gg/7J686mR6" target="_blank" rel="noopener" class="btn-secondary-hero" style="font-size: 15px; padding: 15px 24px; text-decoration: none;">
+                Discord Oficial
+              </a>
+            </div>
+
+            <div style="margin-top: 2rem; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: var(--radius-sm); padding: 0.8rem 1.2rem; display: inline-flex; align-items: center; gap: 0.8rem;">
+              <span style="font-size: 1.2rem;">🛡️</span>
+              <span style="font-size: 0.85rem; color: #e2e8f0;">
+                <strong style="color: #10b981;">100% Seguro &amp; Reversível:</strong> Ponto de restauração oficial criado antes de qualquer tweak.
+              </span>
+            </div>
+          </div>
+
+          <!-- Coluna Direita: Card de Benchmark em Tempo Real -->
+          <div>
+            <div class="benchmark-card">
+              <div class="benchmark-header">
+                <span>⚡ PERFORMANCE EM TEMPO REAL</span>
+                <span style="color: #10b981; display: inline-flex; align-items: center; gap: 4px;">
+                  <span style="width: 7px; height: 7px; background: #10b981; border-radius: 50%; box-shadow: 0 0 6px #10b981;"></span>
+                  SISTEMA ONLINE
+                </span>
+              </div>
+
+              <div class="benchmark-row">
+                <div>
+                  <div style="font-size: 0.82rem; color: var(--text-dim); font-weight: 600;">Ganho Médio de Quadros</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">FiveM, Valorant, CS2 e Warzone</div>
+                </div>
+                <div class="benchmark-val-accent">+60 a +120 FPS</div>
+              </div>
+
+              <div class="benchmark-row">
+                <div>
+                  <div style="font-size: 0.82rem; color: var(--text-dim); font-weight: 600;">Latência de Timer do Windows</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Calibração Win32 precisa</div>
+                </div>
+                <div class="benchmark-val-timer">0.5 ms (-62%)</div>
+              </div>
+
+              <div class="benchmark-row">
+                <div>
+                  <div style="font-size: 0.82rem; color: var(--text-dim); font-weight: 600;">Otimização no Painel</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Execução simplificada</div>
+                </div>
+                <div style="font-size: 0.95rem; font-weight: 800; color: #00d2ff;">1 Clique no App</div>
+              </div>
+
+              <div class="benchmark-row">
+                <div>
+                  <div style="font-size: 0.82rem; color: var(--text-dim); font-weight: 600;">Entrega do Acesso</div>
+                  <div style="font-size: 0.75rem; color: var(--text-muted);">Aprovação Pix em tempo real</div>
+                </div>
+                <div style="font-size: 0.95rem; font-weight: 800; color: #10b981;">⚡ Instantânea (&lt; 1 min)</div>
+              </div>
+
+              <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.78rem; color: var(--text-dim);">+15.000 jogadores acelerados</span>
+                <button onclick="switchTab('loja')" style="background: none; border: none; color: var(--primary); font-size: 0.82rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                  Ver Planos →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         ABA 2: LOJA & PLANOS (CATÁLOGO DIRETO)
+         ========================================== -->
+    <div id="view-loja" class="app-view">
+      <div class="container">
+        
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <h2 style="font-size: 2.2rem; font-weight: 900; margin-bottom: 0.4rem;">
+              <span style="color: var(--primary);">📦</span> Catálogo de Planos &amp; Otimizações
+            </h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+              Escolha seu plano e receba seu acesso instantaneamente via Pix com ativação no Painel Desktop.
+            </p>
+          </div>
+        </div>
+
+        <!-- Filtros Rápidos de Categoria -->
+        <div class="store-filters">
+          <button class="filter-pill active" onclick="filterProducts('todos', this)">Todos os Itens (5)</button>
+          <button class="filter-pill" onclick="filterProducts('planos', this)">👑 Planos &amp; Assinaturas</button>
+          <button class="filter-pill" onclick="filterProducts('competitivo', this)">🎯 CS2 &amp; Valorant</button>
+          <button class="filter-pill" onclick="filterProducts('fivem', this)">🚗 FiveM &amp; GTA</button>
+          <button class="filter-pill" onclick="filterProducts('tweaks', this)">⚡ Tweaks Windows</button>
+        </div>
+
+        <!-- Grid de Produtos -->
+        <div class="product-grid">
+
+          <!-- PRODUTO 1: PLANO PREMIUM (MAIS VENDIDO) -->
+          <div class="product-card featured" data-category="planos">
+            <div class="product-badge-top">
+              <span class="badge-tag badge-popular">🔥 Mais Vendido</span>
+              <span class="badge-tag badge-discount">-25% OFF</span>
+            </div>
+
+            <div class="product-img-wrap">
+              <img src="assets/images/cat_planos.jpg" alt="REDLINE Plano Premium" onerror="this.src='assets/images/banner.png'">
+            </div>
+
+            <div class="product-content">
+              <h3 class="product-title">REDLINE Plano Premium (IA + Otimizador)</h3>
+              
+              <div class="product-stars">
+                ⭐⭐⭐⭐⭐ <span>5.0 (428 avaliações)</span>
+              </div>
+
+              <ul class="product-features">
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Acesso Completo ao Painel Desktop 2026
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> REDLINE Intelligence (IA Especialista Gamer)
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Timer Resolution 0.5ms &amp; Flush Standby RAM
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Booster com 1 Clique para Todos os Jogos
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> 3 Resets de HWID Inclusos
+                </li>
+              </ul>
+
+              <div class="product-footer-price">
+                <div class="price-box">
+                  <div class="price-from">De R$ 40,00 por</div>
+                  <div class="price-val">R$ 30,00 <span class="price-period">/mês</span></div>
+                </div>
+
+                <div class="card-buttons">
+                  <button class="btn-add-cart" onclick="Cart.addItem({ id: 1, title: 'REDLINE Plano Premium (IA + Otimizador)', price: 30.00, plan: 'PREMIUM', image: 'assets/images/cat_planos.jpg' })">
+                    🛒 Carrinho
+                  </button>
+                  <button class="btn-buy-now" onclick="buyInstant(1, 'REDLINE Plano Premium (IA + Otimizador)', 30.00, 'assets/images/cat_planos.jpg')">
+                    ⚡ Comprar Pix
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRODUTO 2: PLANO BÁSICO -->
+          <div class="product-card" data-category="planos">
+            <div class="product-badge-top">
+              <span class="badge-tag">Essencial</span>
+            </div>
+
+            <div class="product-img-wrap">
+              <img src="assets/images/cat_tweaks.jpg" alt="REDLINE Plano Básico" onerror="this.src='assets/images/banner.png'">
+            </div>
+
+            <div class="product-content">
+              <h3 class="product-title">REDLINE Plano Básico (Sem IA)</h3>
+              
+              <div class="product-stars">
+                ⭐⭐⭐⭐⭐ <span>4.9 (185 avaliações)</span>
+              </div>
+
+              <ul class="product-features">
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Acesso ao Painel Desktop
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Timer Resolution 0.5ms calibrado
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Otimizações de Registro e Desativação de Bloatware
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> DNS Gamer Cloudflare / Google
+                </li>
+              </ul>
+
+              <div class="product-footer-price">
+                <div class="price-box">
+                  <div class="price-from">Valor regular</div>
+                  <div class="price-val">R$ 20,00 <span class="price-period">/mês</span></div>
+                </div>
+
+                <div class="card-buttons">
+                  <button class="btn-add-cart" onclick="Cart.addItem({ id: 2, title: 'REDLINE Plano Básico (Sem IA)', price: 20.00, plan: 'BASIC', image: 'assets/images/cat_tweaks.jpg' })">
+                    🛒 Carrinho
+                  </button>
+                  <button class="btn-buy-now" onclick="buyInstant(2, 'REDLINE Plano Básico (Sem IA)', 20.00, 'assets/images/cat_tweaks.jpg')">
+                    ⚡ Comprar Pix
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRODUTO 3: FIVE M & GTA -->
+          <div class="product-card" data-category="fivem">
+            <div class="product-badge-top">
+              <span class="badge-tag" style="background: rgba(255, 184, 0, 0.2); color: #ffb800; border-color: rgba(255, 184, 0, 0.4);">Zero Stutter</span>
+            </div>
+
+            <div class="product-img-wrap">
+              <img src="assets/images/cat_fivem.jpg" alt="Pacote Otimização FiveM" onerror="this.src='assets/images/banner.png'">
+            </div>
+
+            <div class="product-content">
+              <h3 class="product-title">Booster Definitivo FiveM &amp; GTA V</h3>
+              
+              <div class="product-stars">
+                ⭐⭐⭐⭐⭐ <span>4.9 (310 avaliações)</span>
+              </div>
+
+              <ul class="product-features">
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Limpeza de Cache Automática do FiveM
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Eliminação de quedas em cidades pesadas
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Standby List Cleaner a cada 5 minutos
+                </li>
+              </ul>
+
+              <div class="product-footer-price">
+                <div class="price-box">
+                  <div class="price-from">Pacote Permanente</div>
+                  <div class="price-val">R$ 25,00</div>
+                </div>
+
+                <div class="card-buttons">
+                  <button class="btn-add-cart" onclick="Cart.addItem({ id: 3, title: 'Booster Definitivo FiveM & GTA V', price: 25.00, plan: 'PREMIUM', image: 'assets/images/cat_fivem.jpg' })">
+                    🛒 Carrinho
+                  </button>
+                  <button class="btn-buy-now" onclick="buyInstant(3, 'Booster Definitivo FiveM & GTA V', 25.00, 'assets/images/cat_fivem.jpg')">
+                    ⚡ Comprar Pix
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRODUTO 4: COMPETITIVO CS2 & VALORANT -->
+          <div class="product-card" data-category="competitivo">
+            <div class="product-badge-top">
+              <span class="badge-tag" style="background: rgba(0, 210, 255, 0.2); color: #00d2ff; border-color: rgba(0, 210, 255, 0.4);">Hitreg &amp; Delay</span>
+            </div>
+
+            <div class="product-img-wrap">
+              <img src="assets/images/cat_competitivo.jpg" alt="Competitivo CS2 e Valorant" onerror="this.src='assets/images/banner.png'">
+            </div>
+
+            <div class="product-content">
+              <h3 class="product-title">Preset Competitivo CS2 &amp; Valorant</h3>
+              
+              <div class="product-stars">
+                ⭐⭐⭐⭐⭐ <span>5.0 (270 avaliações)</span>
+              </div>
+
+              <ul class="product-features">
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Prioridade máxima de mouse &amp; tickrate
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Desativação de Nagle/TCP Delay
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> 100% Compatível com Vanguard e VAC
+                </li>
+              </ul>
+
+              <div class="product-footer-price">
+                <div class="price-box">
+                  <div class="price-from">Pacote Permanente</div>
+                  <div class="price-val">R$ 25,00</div>
+                </div>
+
+                <div class="card-buttons">
+                  <button class="btn-add-cart" onclick="Cart.addItem({ id: 4, title: 'Preset Competitivo CS2 & Valorant', price: 25.00, plan: 'PREMIUM', image: 'assets/images/cat_competitivo.jpg' })">
+                    🛒 Carrinho
+                  </button>
+                  <button class="btn-buy-now" onclick="buyInstant(4, 'Preset Competitivo CS2 & Valorant', 25.00, 'assets/images/cat_competitivo.jpg')">
+                    ⚡ Comprar Pix
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PRODUTO 5: TWEAKS WINDOWS -->
+          <div class="product-card" data-category="tweaks">
+            <div class="product-badge-top">
+              <span class="badge-tag">Sistema</span>
+            </div>
+
+            <div class="product-img-wrap">
+              <img src="assets/images/cat_tweaks.jpg" alt="Tweaks RAW Windows" onerror="this.src='assets/images/banner.png'">
+            </div>
+
+            <div class="product-content">
+              <h3 class="product-title">Pacote de Tweaks RAW do Windows</h3>
+              
+              <div class="product-stars">
+                ⭐⭐⭐⭐⭐ <span>4.8 (115 avaliações)</span>
+              </div>
+
+              <ul class="product-features">
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Desativação de Telemetria e Diagnósticos
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Modo Ultimate Performance do Windows
+                </li>
+                <li class="product-feature-item">
+                  <span style="color: #10b981;">✓</span> Redução de processos em segundo plano
+                </li>
+              </ul>
+
+              <div class="product-footer-price">
+                <div class="price-box">
+                  <div class="price-from">Acesso Imediato</div>
+                  <div class="price-val">R$ 15,00</div>
+                </div>
+
+                <div class="card-buttons">
+                  <button class="btn-add-cart" onclick="Cart.addItem({ id: 5, title: 'Pacote de Tweaks RAW do Windows', price: 15.00, plan: 'BASIC', image: 'assets/images/cat_tweaks.jpg' })">
+                    🛒 Carrinho
+                  </button>
+                  <button class="btn-buy-now" onclick="buyInstant(5, 'Pacote de Tweaks RAW do Windows', 15.00, 'assets/images/cat_tweaks.jpg')">
+                    ⚡ Comprar Pix
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================
+         ABA 3: RECURSOS (DIFERENCIAIS TÉCNICOS)
+         ========================================== -->
+    <div id="view-recursos" class="app-view">
+      <div class="container">
+        
+        <div style="text-align: center; max-width: 750px; margin: 0 auto 3rem auto;">
+          <h2 style="font-size: 2.3rem; font-weight: 900; margin-bottom: 0.5rem;">
+            Tecnologia &amp; Recursos
+          </h2>
+          <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">
+            Engenharia de calibração do Windows para extrair a máxima estabilidade e FPS competitivo do seu computador.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+          
+          <div class="testimonial-card">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">⏱️</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Timer Resolution 0.5ms</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+              O padrão do Windows é 15.6ms. O REDLINE calibra o clock do sistema em 0.5ms exatos via Win32 API, reduzindo a latência do mouse e do teclado em mais de 60%.
+            </p>
+          </div>
+
+          <div class="testimonial-card">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">⚡</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Zero Bloatware &amp; Processos</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+              Desativação cirúrgica de telemetria da Microsoft e tarefas em segundo plano que drenam sua CPU durante partidas ranqueadas.
+            </p>
+          </div>
+
+          <div class="testimonial-card">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">🧹</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Standby List &amp; RAM Flush</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+              Limpa caches acumulados da memória RAM que causam micro-travamentos (stutters) durante a jogatina, liberando até 4GB de RAM em 1 clique.
+            </p>
+          </div>
+
+          <div class="testimonial-card">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">🛡️</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">100% Anti-Cheat Safe</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+              Zero risco de banimento. O otimizador ajusta apenas registros legítimos do Windows e drivers. Totalmente seguro no Vanguard, EAC, VAC e BattlEye.
+            </p>
+          </div>
+
+          <div class="testimonial-card">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">🌐</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">TCP NoDelay &amp; DNS Gamer</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+              Desativa o algoritmo de Nagle para enviar pacotes de rede sem enfileiramento, reduzindo jitter e perda de pacotes em servidores de jogos.
+            </p>
+          </div>
+
+          <div class="testimonial-card">
+            <div style="font-size: 2rem; margin-bottom: 0.8rem;">🔄</div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem;">Reversão Segura em 1 Clique</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.6;">
+              Deseja voltar o Windows para o estado de fábrica a qualquer momento? Basta um único clique no botão de restauração do painel desktop.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         ABA 4: AVALIAÇÕES & DEPOIMENTOS REAIS
+         ========================================== -->
+    <div id="view-avaliacoes" class="app-view">
+      <div class="container">
+        
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
+          <h2 style="font-size: 2.3rem; font-weight: 900; margin-bottom: 0.5rem;">
+            <span style="color: #ffb800;">⭐</span> Depoimentos da Comunidade
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Centenas de avaliações verificadas enviadas por membros no canal de feedback do nosso Discord Oficial.
+          </p>
+        </div>
+
+        <div class="testimonials-grid">
+          
+          <!-- DEPOIMENTO 1: JILÓ -->
+          <div class="testimonial-card">
+            <div class="testimonial-user">
+              <img src="assets/images/jilo.png" alt="Avatar Jiló" class="testimonial-avatar" onerror="this.src='assets/images/logo.webp'">
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem;">Jiló</strong>
+                <div style="font-size: 0.75rem; color: #10b981; font-weight: 700;">✓ Cliente Verificado Discord</div>
+              </div>
+            </div>
+            <div style="color: #ffb800; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6;">
+              "Cinco estrelas fácil! Meu FiveM dava umas travadas absurdas perto da praça. Depois de rodar o painel da Redline, o FPS subiu de 65 pra 110 cravado e parou de engasgar."
+            </p>
+            <img src="assets/images/avaliacoes/11f24251d69720525b0f1f9fec7b51d9.webp" alt="Print de feedback" class="testimonial-img-proof" onerror="this.style.display='none'">
+          </div>
+
+          <!-- DEPOIMENTO 2: LETTY -->
+          <div class="testimonial-card">
+            <div class="testimonial-user">
+              <img src="assets/images/letty.png" alt="Avatar Letty" class="testimonial-avatar" onerror="this.src='assets/images/logo.webp'">
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem;">Letty</strong>
+                <div style="font-size: 0.75rem; color: #10b981; font-weight: 700;">✓ Cliente Verificado Discord</div>
+              </div>
+            </div>
+            <div style="color: #ffb800; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6;">
+              "O CS2 ficou infinitamente mais liso. O input lag do mouse sumiu na hora depois que ativei o timer 0.5ms. Vale cada centavo!"
+            </p>
+            <img src="assets/images/avaliacoes/1918314de7ff1e4b36abeeaf16a1e8d8.webp" alt="Print de feedback" class="testimonial-img-proof" onerror="this.style.display='none'">
+          </div>
+
+          <!-- DEPOIMENTO 3: TRNNZIN -->
+          <div class="testimonial-card">
+            <div class="testimonial-user">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: #5865F2; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff;">T</div>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem;">trnnzin_</strong>
+                <div style="font-size: 0.75rem; color: #10b981; font-weight: 700;">✓ Cliente Verificado Discord</div>
+              </div>
+            </div>
+            <div style="color: #ffb800; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6;">
+              "Ativação foi em menos de 2 minutos no Pix. Abri o painel, dei 1 clique na otimização e meu Valorant pulou de 140 pra mais de 240 FPS estáveis."
+            </p>
+            <img src="assets/images/avaliacoes/6aca5bbf21bdd1e8bb8951154f80e81e.webp" alt="Print de feedback" class="testimonial-img-proof" onerror="this.style.display='none'">
+          </div>
+
+          <!-- DEPOIMENTO 4: FEEDBACK COMUNIDADE -->
+          <div class="testimonial-card">
+            <div class="testimonial-user">
+              <div style="width: 44px; height: 44px; border-radius: 50%; background: #10b981; display: flex; align-items: center; justify-content: center; font-weight: 900; color: #fff;">G</div>
+              <div>
+                <strong style="color: #fff; font-size: 0.95rem;">Gabriel FPS</strong>
+                <div style="font-size: 0.75rem; color: #10b981; font-weight: 700;">✓ Cliente Verificado Discord</div>
+              </div>
+            </div>
+            <div style="color: #ffb800; margin-bottom: 0.5rem;">⭐⭐⭐⭐⭐</div>
+            <p style="color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6;">
+              "Melhor compra do ano! Suporte dos caras é rápido demais no Discord e o painel é super leve, não consome nada em segundo plano."
+            </p>
+            <img src="assets/images/avaliacoes/93829b8643109eb936b3d0085d4752a2.webp" alt="Print de feedback" class="testimonial-img-proof" onerror="this.style.display='none'">
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         ABA 5: FAQ & DÚVIDAS FREQUENTES
+         ========================================== -->
+    <div id="view-faq" class="app-view">
+      <div class="container" style="max-width: 800px;">
+        
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+          <h2 style="font-size: 2.3rem; font-weight: 900; margin-bottom: 0.5rem;">
+            <span style="color: var(--primary);">❓</span> Perguntas Frequentes
+          </h2>
+          <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Tire todas as suas dúvidas sobre o funcionamento, segurança e entrega do REDLINE Performance.
+          </p>
+        </div>
+
+        <div class="faq-list">
+          
+          <div class="faq-item active">
+            <button class="faq-question">
+              <span>Como recebo meu acesso após pagar no Pix?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>A aprovação é 100% automatizada! Assim que você pagar o QR Code no seu aplicativo bancário, a própria tela do site se atualiza e entrega seu Token (<code>FPS-XXXX-XXXX</code>), seu usuário/senha e o link para baixar o instalador imediatamente. Você também recebe no Discord caso informe seu ID.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>O otimizador pode causar ban em jogos (Valorant, CS2, etc.)?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Não! O REDLINE modifica exclusivamente parâmetros oficiais do sistema operacional Windows, prioridade de interrupções de hardware e resolução de timers do kernel. Ele não altera nenhum arquivo de jogo ou memória de processos protegidos por anticheats (como Riot Vanguard, VAC ou EAC).</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>E se eu não gostar ou quiser desfazer as alterações?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>O aplicativo cria um Ponto de Restauração oficial do Windows antes de aplicar qualquer modificação. Além disso, há uma aba dedicada chamada "Reverter" dentro do painel que restaura todos os valores do Registro para o padrão original de fábrica com apenas 1 clique.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>É compatível com Windows 10 e Windows 11?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>Sim, o REDLINE Performance é 100% otimizado e compatível com Windows 10 e Windows 11 (edições Home, Pro e Enterprise de 64 bits).</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Posso usar minha licença em outro computador?</span>
+              <span class="faq-icon">+</span>
+            </button>
+            <div class="faq-answer">
+              <p>A licença é vinculada ao hardware do seu PC (HWID). Se você formatar seu computador ou trocar peças, cada usuário possui direito a 3 resets de HWID automáticos na Área do Cliente ou via comando no Discord.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================================
+       FOOTER GLOBAL
+       ========================================== -->
+  <footer class="footer-global" style="margin-top: 4rem;">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#inicio" data-tab="inicio" class="brand-logo">
+            <img src="assets/images/logo.webp" alt="REDLINE Logo" style="height: 32px;" onerror="this.src='assets/images/favicon.png'">
+            <span class="brand-name">REDLINE<span class="brand-badge">PRO</span></span>
+          </a>
+          <p>
+            A tecnologia definitiva de calibração do Windows para jogadores profissionais e criadores de conteúdo que buscam extrair o máximo FPS do seu computador.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h4>NAVEGAÇÃO RÁPIDA</h4>
+          <ul class="footer-links">
+            <li><a href="#inicio" data-tab="inicio">⚡ Início</a></li>
+            <li><a href="#loja" data-tab="loja">🛒 Catálogo de Planos</a></li>
+            <li><a href="#recursos" data-tab="recursos">🚀 Recursos &amp; IA</a></li>
+            <li><a href="#avaliacoes" data-tab="avaliacoes">⭐ Depoimentos Reais</a></li>
+            <li><a href="#faq" data-tab="faq">❓ Dúvidas Frequentes</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>SUPORTE &amp; COMUNIDADE</h4>
+          <ul class="footer-links">
+            <li><a href="https://discord.gg/7J686mR6" target="_blank" rel="noopener" style="color: #5865F2;">💬 Discord Oficial</a></li>
+            <li><a href="login.html">🔑 Painel do Cliente</a></li>
+            <li><a href="termos.html">Termos de Uso</a></li>
+            <li><a href="privacidade.html">Política de Privacidade</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>PAGAMENTO SEGURO</h4>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
+            <span style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.3); color: #10b981; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.3rem;">
+              <span>❖</span> Pix Instantâneo
+            </span>
+            <span style="background: rgba(0, 210, 255, 0.15); border: 1px solid rgba(0, 210, 255, 0.3); color: #00d2ff; padding: 0.4rem 0.8rem; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 800;">
+              Mercado Pago
+            </span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--text-dim); line-height: 1.5;">
+            🔒 Todas as transações são criptografadas e processadas com segurança de ponta a ponta.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 REDLINE Performance. Todos os direitos reservados.</div>
+        <div style="display: flex; gap: 1rem;">
+          <a href="termos.html" style="color: var(--text-dim); text-decoration: none;">Termos</a>
+          <a href="privacidade.html" style="color: var(--text-dim); text-decoration: none;">Privacidade</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/search.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/particles.js"></script>
+  <script src="assets/js/main.js"></script>
 </body>
-
 </html>
