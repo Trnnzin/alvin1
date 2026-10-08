@@ -8,8 +8,8 @@
   <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
 
   <!-- Estilos do Design System -->
-  <link rel="stylesheet" href="assets/css/design-system.css?v=2026_rev9">
-  <link rel="stylesheet" href="assets/css/components.css?v=2026_rev9">
+  <link rel="stylesheet" href="assets/css/design-system.css?v=2026_rev10">
+  <link rel="stylesheet" href="assets/css/components.css?v=2026_rev10">
 
   <!-- Toastify Notifications -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -23,20 +23,6 @@
        HEADER FLUTUANTE (Pill Glass) COM NAVEGAÇÃO EM ABAS
        ========================================== -->
   <header class="header-floating">
-    <!-- Top Announcement Bar (Cupom & Oferta Limitada) -->
-    <div id="top-announcement-bar" class="announcement-bar">
-      <div class="announcement-content">
-        <span class="announcement-badge">🔥 OFERTA DE HOJE</span>
-        <span class="announcement-text">
-          Use o cupom <code class="coupon-tag" onclick="copyCouponCode('REDLINE10')">REDLINE10</code> para <strong>10% OFF no Pix</strong>! Ativação automática no App.
-        </span>
-        <button class="btn-copy-coupon" onclick="copyCouponCode('REDLINE10')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          <span>Copiar Cupom</span>
-        </button>
-      </div>
-    </div>
-
     <div class="container">
       <nav class="nav-glass">
         <!-- Esquerda: Menu Mobile + Logo -->
@@ -148,7 +134,7 @@
     <!-- ==========================================
          ABA 1: INÍCIO (HERO + BENCHMARK REALTIME)
          ========================================== -->
-    <section id="inicio" class="app-section">
+    <div id="view-inicio" class="app-view active">
       <div class="container">
         
         <div class="hero-split">
@@ -242,12 +228,12 @@
         </div>
 
       </div>
-    </section>
+    </div>
 
     <!-- ==========================================
-         SEÇÃO 2: LOJA & PLANOS (CATÁLOGO DIRETO)
+         ABA 2: LOJA & PLANOS (CATÁLOGO DIRETO)
          ========================================== -->
-    <section id="loja" class="app-section">
+    <div id="view-loja" class="app-view">
       <div class="container">
         
         <div class="store-catalog-header">
@@ -743,12 +729,12 @@
           </div>
         </div>
       </div>
-    </section>
+    </div>
 
     <!-- ==========================================
-         SEÇÃO 3: RECURSOS (DIFERENCIAIS TÉCNICOS)
+         ABA 3: RECURSOS (DIFERENCIAIS TÉCNICOS)
          ========================================== -->
-    <section id="recursos" class="app-section">
+    <div id="view-recursos" class="app-view">
       <div class="container">
         
         <div style="text-align: center; max-width: 750px; margin: 0 auto 3rem auto;">
@@ -812,86 +798,13 @@
 
         </div>
 
-        <!-- Comparador Interativo: Antes x Depois -->
-        <div class="benchmark-interactive-box">
-          <div style="text-align: center; max-width: 650px; margin: 0 auto 2rem auto;">
-            <div class="store-badge-pill" style="margin-bottom: 0.5rem;">
-              <span class="store-badge-dot"></span>
-              TESTE DE ESTABILIDADE REALTIME
-            </div>
-            <h3 style="font-size: 1.85rem; font-weight: 900; margin-bottom: 0.4rem;">
-              Comparativo de Frametime: <span class="text-gradient-red">Antes vs. Depois</span>
-            </h3>
-            <p style="color: var(--text-muted); font-size: 0.88rem;">
-              Alterne entre os modos abaixo para ver a diferença imediata na taxa de quadros, latência de comando e estabilidade de hardware.
-            </p>
-          </div>
-
-          <!-- Controles de Alternância -->
-          <div class="benchmark-switch-row">
-            <button id="btn-benchmark-before" class="btn-toggle-benchmark" onclick="toggleBenchmarkMode('before')">
-              <span>❌</span> Sem REDLINE (Padrão Windows)
-            </button>
-            <button id="btn-benchmark-after" class="btn-toggle-benchmark active-green" onclick="toggleBenchmarkMode('after')">
-              <span>⚡</span> Com REDLINE Ativado (Otimizado)
-            </button>
-          </div>
-
-          <!-- Estatísticas Dinâmicas -->
-          <div class="benchmark-display-grid">
-            <div class="benchmark-stat-card">
-              <div class="benchmark-stat-label">Taxa Média de Quadros</div>
-              <div id="benchmark-fps-val" class="benchmark-stat-number" style="color: #10b981;">165 FPS</div>
-              <div class="benchmark-stat-sub">Fluidez máxima em tiroteios</div>
-            </div>
-            <div class="benchmark-stat-card">
-              <div class="benchmark-stat-label">Latência de Input (Delay)</div>
-              <div id="benchmark-delay-val" class="benchmark-stat-number" style="color: #00d2ff;">0.5 ms</div>
-              <div class="benchmark-stat-sub">Resposta instantânea no mouse</div>
-            </div>
-            <div class="benchmark-stat-card">
-              <div class="benchmark-stat-label">Processos em 2º Plano</div>
-              <div id="benchmark-proc-val" class="benchmark-stat-number" style="color: #10b981;">62 Proc.</div>
-              <div class="benchmark-stat-sub">Zero consumo inútil de CPU</div>
-            </div>
-            <div class="benchmark-stat-card">
-              <div class="benchmark-stat-label">Micro-Stuttering (Quedas)</div>
-              <div id="benchmark-stutter-val" class="benchmark-stat-number" style="color: #10b981;">0% (Nenhum)</div>
-              <div class="benchmark-stat-sub">Frametime linear e travado</div>
-            </div>
-          </div>
-
-          <!-- Gráfico Visual de Linha de Frametime (SVG) -->
-          <div class="frametime-visual-container">
-            <div class="frametime-header">
-              <span style="font-weight: 700; color: #fff;">📊 Monitor de Frametime (Oscilação de Tempo por Quadro)</span>
-              <span id="frametime-status-badge" style="font-weight: 700; color: #10b981;">
-                <span>●</span> Frametime 100% Estabilizado &amp; Sem Quedas
-              </span>
-            </div>
-            <svg class="frametime-svg-line" viewBox="0 0 800 90" preserveAspectRatio="none">
-              <!-- Linhas de grade de fundo -->
-              <line x1="0" y1="20" x2="800" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
-              <line x1="0" y1="50" x2="800" y2="50" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
-              <line x1="0" y1="80" x2="800" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
-              <!-- Curva dinâmica de frametime -->
-              <path id="frametime-svg-path" d="M 0 35 L 80 35 L 160 35 L 240 35 L 320 35 L 400 35 L 480 35 L 560 35 L 640 35 L 720 35 L 800 35" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
-              <span style="font-size: 0.78rem; color: var(--text-dim);">Simulação técnica baseada em testes com FiveM, CS2 e Valorant.</span>
-              <button onclick="scrollToSection('loja')" class="btn-primary-hero" style="font-size: 0.82rem; padding: 0.6rem 1.4rem; border: none; cursor: pointer;">
-                QUERO ESSE RESULTADO NO MEU PC →
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-    </section>
+    </div>
 
     <!-- ==========================================
-         SEÇÃO 4: AVALIAÇÕES & DEPOIMENTOS REAIS
+         ABA 4: AVALIAÇÕES & DEPOIMENTOS REAIS
          ========================================== -->
-    <section id="avaliacoes" class="app-section">
+    <div id="view-avaliacoes" class="app-view">
       <div class="container">
         
         <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
@@ -972,12 +885,12 @@
         </div>
 
       </div>
-    </section>
+    </div>
 
     <!-- ==========================================
-         SEÇÃO 5: FAQ & DÚVIDAS FREQUENTES
+         ABA 5: FAQ & DÚVIDAS FREQUENTES
          ========================================== -->
-    <section id="faq" class="app-section">
+    <div id="view-faq" class="app-view">
       <div class="container" style="max-width: 800px;">
         
         <div style="text-align: center; margin-bottom: 2.5rem;">
@@ -1044,7 +957,7 @@
         </div>
 
       </div>
-    </section>
+    </div>
 
   </main>
 
@@ -1117,8 +1030,8 @@
   <script src="assets/js/cart.js?v=2026_rev6"></script>
   <script src="assets/js/search.js?v=2026_rev6"></script>
   <script src="assets/js/auth.js?v=2026_rev6"></script>
-  <script src="assets/js/particles.js?v=2026_rev9"></script>
-  <script src="assets/js/main.js?v=2026_rev9"></script>
+  <script src="assets/js/particles.js?v=2026_rev10"></script>
+  <script src="assets/js/main.js?v=2026_rev10"></script>
   <!-- Container de Notificações de Vendas Recentes (Prova Social) -->
   <div id="recent-sales-container"></div>
 

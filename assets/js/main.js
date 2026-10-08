@@ -1,30 +1,47 @@
 /**
- * REDLINE Performance - Fluid One-Page Interactions & Smooth Scroll
- * 144 FPS Engine - Zero Lag, Passive Event Listeners & IntersectionObserver ScrollSpy
+ * REDLINE Performance - SPA Tab-View Engine (Sem Scroll / Navegação Instantânea)
+ * 144 FPS Engine - Zero Lag, Visualização Isolada de Abas, Carrinho & Prova Social
  */
 
-// Navegação fluida para qualquer seção da página
-function scrollToSection(sectionId) {
-  if (!sectionId) sectionId = 'inicio';
-  sectionId = sectionId.replace('#', '').toLowerCase();
+// Navegação instantânea em abas estilo software SPA (Sem Scroll entre seções)
+function switchTab(tabName) {
+  if (!tabName) tabName = 'inicio';
+  tabName = tabName.replace('#', '').toLowerCase();
 
-  const target = document.getElementById(sectionId);
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth' });
+  const validTabs = ['inicio', 'loja', 'recursos', 'avaliacoes', 'faq'];
+  if (!validTabs.includes(tabName)) {
+    tabName = 'inicio';
+  }
 
-    // Atualiza destaque ativo nas abas
-    updateActiveTab(sectionId);
+  // 1. Oculta todas as abas e ativa apenas a selecionada
+  const views = document.querySelectorAll('.app-view');
+  views.forEach(view => {
+    view.classList.remove('active');
+  });
 
-    // Atualiza hash sem causar pulo brusco
-    if (window.history && window.history.replaceState) {
-      window.history.replaceState(null, null, '#' + sectionId);
-    }
+  const targetView = document.getElementById('view-' + tabName);
+  if (targetView) {
+    targetView.classList.add('active');
+  } else {
+    const fallback = document.getElementById('view-inicio');
+    if (fallback) fallback.classList.add('active');
+  }
+
+  // 2. Reseta o scroll para o topo absoluto da página instantaneamente
+  window.scrollTo({ top: 0, behavior: 'instant' });
+
+  // 3. Atualiza os links destacados no header e gaveta mobile
+  updateActiveTab(tabName);
+
+  // 4. Atualiza a URL sem causar recarregamento ou saltos
+  if (window.history && window.history.replaceState) {
+    window.history.replaceState(null, null, '#' + tabName);
   }
 }
 
-// Compatibilidade com botões que chamam switchTab('loja')
-function switchTab(tabName) {
-  scrollToSection(tabName);
+// Mantém retrocompatibilidade caso algo chame scrollToSection
+function scrollToSection(tabName) {
+  switchTab(tabName);
 }
 
 function updateActiveTab(tabName) {
@@ -65,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
         if (header) {
-          header.classList.toggle('scrolled', window.scrollY > 25);
+          header.classList.toggle('scrolled', window.scrollY > 20);
         }
         ticking = false;
       });
@@ -73,29 +90,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, { passive: true });
 
-  // 2. Scroll Spy: ativa a aba correta conforme o usuário rola a página
-  const sections = document.querySelectorAll('.app-section');
-  if ('IntersectionObserver' in window && sections.length > 0) {
-    const spyObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          updateActiveTab(entry.target.id);
-        }
-      });
-    }, {
-      rootMargin: '-20% 0px -65% 0px',
-      threshold: 0
-    });
-
-    sections.forEach(sec => spyObserver.observe(sec));
-  }
-
-  // 3. Inicializar Módulos de Loja e Auth
+  // 2. Inicializar Módulos de Loja e Auth
   if (typeof Cart !== 'undefined') Cart.updateUI();
   if (typeof initSearch === 'function') initSearch();
   if (typeof initAuth === 'function') initAuth();
 
-  // 4. Mobile Drawer
+  // 3. Mobile Drawer
   const openDrawerBtn = document.getElementById('btn-open-drawer');
   const closeDrawerBtn = document.getElementById('btn-close-drawer');
   const mobileDrawer = document.getElementById('mobile-drawer');
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => toggleMobileDrawer(false));
   if (drawerBackdrop) drawerBackdrop.addEventListener('click', () => toggleMobileDrawer(false));
 
-  // 5. Cart Drawer events
+  // 4. Cart Drawer events
   const cartBackdrop = document.getElementById('cart-backdrop');
   if (cartBackdrop && typeof Cart !== 'undefined') {
     cartBackdrop.addEventListener('click', () => Cart.closeDrawer());
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 6. FAQ Accordion
+  // 5. FAQ Accordion
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
@@ -144,29 +144,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 7. Configurar cliques nos links da navbar e gaveta
+  // 6. Configurar cliques nos links da navbar, gaveta mobile e rodapé
   document.querySelectorAll('[data-tab]').forEach(el => {
     el.addEventListener('click', (e) => {
       const tab = el.getAttribute('data-tab');
       if (tab) {
         e.preventDefault();
-        scrollToSection(tab);
+        switchTab(tab);
         toggleMobileDrawer(false);
       }
     });
   });
 
-  // 8. Rola suavemente para a seção se houver hash na URL inicial (#loja, #recursos, etc.)
+  // 7. Navegação por abas inicial (caso acesse com #loja, #recursos, etc.)
   const initialHash = window.location.hash.replace('#', '');
   if (initialHash && ['inicio', 'loja', 'recursos', 'avaliacoes', 'faq'].includes(initialHash)) {
-    setTimeout(() => scrollToSection(initialHash), 100);
+    switchTab(initialHash);
+  } else {
+    switchTab('inicio');
   }
+
+  // 8. Suporte aos botões voltar/avançar do navegador
+  window.addEventListener('hashchange', () => {
+    const currentHash = window.location.hash.replace('#', '');
+    if (currentHash && ['inicio', 'loja', 'recursos', 'avaliacoes', 'faq'].includes(currentHash)) {
+      switchTab(currentHash);
+    }
+  });
 
   // 9. Inicializa Popups de Prova Social (Compras Recentes)
   initRecentSales();
 });
 
-// 1. Helper para copiar código de cupom com Toastify
+// Helper para copiar código de cupom com Toastify
 function copyCouponCode(code) {
   if (!code) code = 'REDLINE10';
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -184,51 +194,7 @@ function copyCouponCode(code) {
   }
 }
 
-// 2. Alternador de visualização no Comparador Interativo Antes x Depois
-function toggleBenchmarkMode(mode) {
-  const btnBefore = document.getElementById('btn-benchmark-before');
-  const btnAfter = document.getElementById('btn-benchmark-after');
-  const statFps = document.getElementById('benchmark-fps-val');
-  const statDelay = document.getElementById('benchmark-delay-val');
-  const statProc = document.getElementById('benchmark-proc-val');
-  const statStutter = document.getElementById('benchmark-stutter-val');
-  const lineSvg = document.getElementById('frametime-svg-path');
-  const statusBadge = document.getElementById('frametime-status-badge');
-
-  if (mode === 'after') {
-    if (btnBefore) btnBefore.className = 'btn-toggle-benchmark';
-    if (btnAfter) btnAfter.className = 'btn-toggle-benchmark active-green';
-    if (statFps) { statFps.textContent = '165 FPS'; statFps.style.color = '#10b981'; }
-    if (statDelay) { statDelay.textContent = '0.5 ms'; statDelay.style.color = '#00d2ff'; }
-    if (statProc) { statProc.textContent = '62 Proc.'; statProc.style.color = '#10b981'; }
-    if (statStutter) { statStutter.textContent = '0% (Nenhum)'; statStutter.style.color = '#10b981'; }
-    if (statusBadge) {
-      statusBadge.innerHTML = '<span style="color: #10b981;">●</span> Frametime 100% Estabilizado &amp; Sem Quedas';
-      statusBadge.style.color = '#10b981';
-    }
-    if (lineSvg) {
-      lineSvg.setAttribute('d', 'M 0 35 L 80 35 L 160 35 L 240 35 L 320 35 L 400 35 L 480 35 L 560 35 L 640 35 L 720 35 L 800 35');
-      lineSvg.setAttribute('stroke', '#10b981');
-    }
-  } else {
-    if (btnBefore) btnBefore.className = 'btn-toggle-benchmark active-red';
-    if (btnAfter) btnAfter.className = 'btn-toggle-benchmark';
-    if (statFps) { statFps.textContent = '78 FPS'; statFps.style.color = '#ef4444'; }
-    if (statDelay) { statDelay.textContent = '5.8 ms'; statDelay.style.color = '#ef4444'; }
-    if (statProc) { statProc.textContent = '194 Proc.'; statProc.style.color = '#ef4444'; }
-    if (statStutter) { statStutter.textContent = 'Quedas Constantes'; statStutter.style.color = '#ef4444'; }
-    if (statusBadge) {
-      statusBadge.innerHTML = '<span style="color: #ef4444;">●</span> Picos Críticos de Input Lag &amp; Micro-Stutter';
-      statusBadge.style.color = '#ef4444';
-    }
-    if (lineSvg) {
-      lineSvg.setAttribute('d', 'M 0 50 L 70 20 L 140 75 L 210 30 L 280 85 L 350 40 L 420 80 L 490 25 L 560 70 L 630 35 L 700 80 L 800 45');
-      lineSvg.setAttribute('stroke', '#ef4444');
-    }
-  }
-}
-
-// 3. Sistema de Notificações de Vendas Recentes (Prova Social)
+// Sistema de Notificações de Vendas Recentes (Prova Social)
 function initRecentSales() {
   const container = document.getElementById('recent-sales-container');
   if (!container) return;
