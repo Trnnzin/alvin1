@@ -8,8 +8,8 @@
   <link rel="icon" href="assets/images/favicon.webp" type="image/webp">
 
   <!-- Estilos do Design System -->
-  <link rel="stylesheet" href="assets/css/design-system.css?v=2026_rev8">
-  <link rel="stylesheet" href="assets/css/components.css?v=2026_rev8">
+  <link rel="stylesheet" href="assets/css/design-system.css?v=2026_rev9">
+  <link rel="stylesheet" href="assets/css/components.css?v=2026_rev9">
 
   <!-- Toastify Notifications -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
@@ -23,6 +23,20 @@
        HEADER FLUTUANTE (Pill Glass) COM NAVEGAÇÃO EM ABAS
        ========================================== -->
   <header class="header-floating">
+    <!-- Top Announcement Bar (Cupom & Oferta Limitada) -->
+    <div id="top-announcement-bar" class="announcement-bar">
+      <div class="announcement-content">
+        <span class="announcement-badge">🔥 OFERTA DE HOJE</span>
+        <span class="announcement-text">
+          Use o cupom <code class="coupon-tag" onclick="copyCouponCode('REDLINE10')">REDLINE10</code> para <strong>10% OFF no Pix</strong>! Ativação automática no App.
+        </span>
+        <button class="btn-copy-coupon" onclick="copyCouponCode('REDLINE10')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copiar Cupom</span>
+        </button>
+      </div>
+    </div>
+
     <div class="container">
       <nav class="nav-glass">
         <!-- Esquerda: Menu Mobile + Logo -->
@@ -247,6 +261,52 @@
           <p class="store-catalog-subtitle">
             Escolha seu plano ou otimização e receba sua chave instantaneamente via Pix com ativação no Painel Desktop.
           </p>
+        </div>
+
+        <!-- Radar de Integridade & Status Anti-Cheat Oficial -->
+        <div class="anticheat-radar">
+          <div class="anticheat-header">
+            <div class="anticheat-title-wrap">
+              <h4>
+                <span>🛡️</span> Status Oficial de Integridade &amp; Anti-Cheats
+              </h4>
+              <p>Auditoria de segurança em tempo real: o REDLINE atua 100% no Kernel e Registro do Windows, sem injeção de DLLs ou arquivos em jogos.</p>
+            </div>
+            <div style="font-size: 0.78rem; color: #10b981; font-weight: 800; background: rgba(16,185,129,0.12); padding: 0.35rem 0.85rem; border-radius: var(--radius-pill); border: 1px solid rgba(16,185,129,0.3); display: inline-flex; align-items: center; gap: 0.4rem;">
+              <span class="status-dot"></span> SISTEMAS 100% OPERACIONAIS
+            </div>
+          </div>
+
+          <div class="anticheat-grid">
+            <div class="anticheat-card">
+              <span class="status-dot"></span>
+              <div class="anticheat-card-info">
+                <h5>Riot Vanguard</h5>
+                <span>100% Seguro (Valorant)</span>
+              </div>
+            </div>
+            <div class="anticheat-card">
+              <span class="status-dot"></span>
+              <div class="anticheat-card-info">
+                <h5>Valve Anti-Cheat (VAC)</h5>
+                <span>100% Seguro (CS2)</span>
+              </div>
+            </div>
+            <div class="anticheat-card">
+              <span class="status-dot"></span>
+              <div class="anticheat-card-info">
+                <h5>FiveM &amp; BattlEye</h5>
+                <span>100% Seguro &amp; Testado</span>
+              </div>
+            </div>
+            <div class="anticheat-card">
+              <span class="status-dot"></span>
+              <div class="anticheat-card-info">
+                <h5>Sistema Pix &amp; App</h5>
+                <span>Ativação Instantânea</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Filtros Rápidos de Categoria -->
@@ -588,6 +648,100 @@
           </div>
 
         </div>
+
+        <!-- Tabela Comparativa: Básico vs Premium -->
+        <div class="comparison-section">
+          <div style="text-align: center; max-width: 700px; margin: 0 auto 2.5rem auto;">
+            <div class="store-badge-pill" style="margin-bottom: 0.75rem;">
+              <span class="store-badge-dot"></span>
+              COMPARE E ESCOLHA O PLANO IDEAL
+            </div>
+            <h3 style="font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem;">
+              Tabela Comparativa: <span class="text-gradient-red">Básico vs. Premium</span>
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem;">
+              Veja exatamente o que cada plano oferece e por que o Plano Premium é a escolha favorita de 85% dos jogadores.
+            </p>
+          </div>
+
+          <div class="comparison-table-wrap">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th style="width: 45%;">Funcionalidade &amp; Benefício</th>
+                  <th style="width: 25%; text-align: center;">Plano Básico<br><span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 400;">R$ 20,00/mês</span></th>
+                  <th class="col-premium" style="width: 30%; text-align: center; color: var(--primary);">
+                    👑 Plano Premium (IA)<br><span style="font-size: 0.8rem; color: #ff8899; font-weight: 700;">R$ 30,00/mês (Mais Vendido)</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Acesso Completo ao Painel Desktop 2026</strong></td>
+                  <td style="text-align: center;"><span class="check-yes">✓ Incluso</span></td>
+                  <td class="col-premium" style="text-align: center;"><span class="check-yes">✓ Incluso</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Timer Resolution 0.5ms Win32</strong><br><small style="color: var(--text-dim); font-size: 0.78rem;">Elimina input lag do teclado e mouse</small></td>
+                  <td style="text-align: center;"><span class="check-yes">✓ 0.5ms</span></td>
+                  <td class="col-premium" style="text-align: center;"><span class="check-yes">✓ 0.5ms Ultra Estável</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Limpeza de Bloatware &amp; Telemetria Windows</strong></td>
+                  <td style="text-align: center;"><span class="check-yes">✓ Incluso</span></td>
+                  <td class="col-premium" style="text-align: center;"><span class="check-yes">✓ Incluso</span></td>
+                </tr>
+                <tr>
+                  <td><strong>DNS Gamer Otimizado (Cloudflare / Google)</strong></td>
+                  <td style="text-align: center;"><span class="check-yes">✓ Incluso</span></td>
+                  <td class="col-premium" style="text-align: center;"><span class="check-yes">✓ Incluso</span></td>
+                </tr>
+                <tr>
+                  <td><strong>REDLINE Intelligence (IA Especialista Gamer)</strong><br><small style="color: var(--text-dim); font-size: 0.78rem;">Análise automatizada de gargalos por jogo</small></td>
+                  <td style="text-align: center;"><span class="check-no">✕ Não incluso</span></td>
+                  <td class="col-premium" style="text-align: center;">
+                    <span class="check-yes">✓ Ilimitado</span><span class="tag-exclusive">IA EXCLUSIVA</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Flush Automático de Standby RAM (a cada 5 min)</strong><br><small style="color: var(--text-dim); font-size: 0.78rem;">Evita quedas de FPS em cidades do FiveM</small></td>
+                  <td style="text-align: center;"><span class="check-no">✕ Manual</span></td>
+                  <td class="col-premium" style="text-align: center;">
+                    <span class="check-yes">✓ Automático</span><span class="tag-exclusive">ZERO STUTTER</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Resets de Máquina (HWID) Inclusos</strong></td>
+                  <td style="text-align: center;">1 Reset / mês</td>
+                  <td class="col-premium" style="text-align: center; color: #10b981; font-weight: 800;">3 Resets com Auto-Atendimento</td>
+                </tr>
+                <tr>
+                  <td><strong>Booster com 1 Clique para Todos os Jogos</strong></td>
+                  <td style="text-align: center;">Básico</td>
+                  <td class="col-premium" style="text-align: center; color: var(--primary); font-weight: 800;">Avançado + Prioridade CPU</td>
+                </tr>
+                <tr>
+                  <td><strong>Suporte Técnico no Discord Oficial</strong></td>
+                  <td style="text-align: center;">Canal Comum</td>
+                  <td class="col-premium" style="text-align: center;"><span class="check-yes">⭐ Canal VIP Prioritário</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Ação Direta de Assinatura</strong></td>
+                  <td style="text-align: center;">
+                    <button type="button" class="btn-buy-now" style="font-size: 0.8rem; padding: 0.5rem 1rem;" onclick="buyInstant(2, 'REDLINE Plano Básico (Sem IA)', 20.00, 'assets/images/cat_basico.jpg?v=2026_pro2')">
+                      Assinar Básico
+                    </button>
+                  </td>
+                  <td class="col-premium" style="text-align: center;">
+                    <button type="button" class="btn-buy-now" style="font-size: 0.82rem; padding: 0.6rem 1.2rem; background: var(--primary-gradient);" onclick="buyInstant(1, 'REDLINE Plano Premium (IA + Otimizador)', 30.00, 'assets/images/cat_planos.jpg?v=2026_pro2')">
+                      👑 Assinar Premium Pix
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -658,6 +812,79 @@
 
         </div>
 
+        <!-- Comparador Interativo: Antes x Depois -->
+        <div class="benchmark-interactive-box">
+          <div style="text-align: center; max-width: 650px; margin: 0 auto 2rem auto;">
+            <div class="store-badge-pill" style="margin-bottom: 0.5rem;">
+              <span class="store-badge-dot"></span>
+              TESTE DE ESTABILIDADE REALTIME
+            </div>
+            <h3 style="font-size: 1.85rem; font-weight: 900; margin-bottom: 0.4rem;">
+              Comparativo de Frametime: <span class="text-gradient-red">Antes vs. Depois</span>
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.88rem;">
+              Alterne entre os modos abaixo para ver a diferença imediata na taxa de quadros, latência de comando e estabilidade de hardware.
+            </p>
+          </div>
+
+          <!-- Controles de Alternância -->
+          <div class="benchmark-switch-row">
+            <button id="btn-benchmark-before" class="btn-toggle-benchmark" onclick="toggleBenchmarkMode('before')">
+              <span>❌</span> Sem REDLINE (Padrão Windows)
+            </button>
+            <button id="btn-benchmark-after" class="btn-toggle-benchmark active-green" onclick="toggleBenchmarkMode('after')">
+              <span>⚡</span> Com REDLINE Ativado (Otimizado)
+            </button>
+          </div>
+
+          <!-- Estatísticas Dinâmicas -->
+          <div class="benchmark-display-grid">
+            <div class="benchmark-stat-card">
+              <div class="benchmark-stat-label">Taxa Média de Quadros</div>
+              <div id="benchmark-fps-val" class="benchmark-stat-number" style="color: #10b981;">165 FPS</div>
+              <div class="benchmark-stat-sub">Fluidez máxima em tiroteios</div>
+            </div>
+            <div class="benchmark-stat-card">
+              <div class="benchmark-stat-label">Latência de Input (Delay)</div>
+              <div id="benchmark-delay-val" class="benchmark-stat-number" style="color: #00d2ff;">0.5 ms</div>
+              <div class="benchmark-stat-sub">Resposta instantânea no mouse</div>
+            </div>
+            <div class="benchmark-stat-card">
+              <div class="benchmark-stat-label">Processos em 2º Plano</div>
+              <div id="benchmark-proc-val" class="benchmark-stat-number" style="color: #10b981;">62 Proc.</div>
+              <div class="benchmark-stat-sub">Zero consumo inútil de CPU</div>
+            </div>
+            <div class="benchmark-stat-card">
+              <div class="benchmark-stat-label">Micro-Stuttering (Quedas)</div>
+              <div id="benchmark-stutter-val" class="benchmark-stat-number" style="color: #10b981;">0% (Nenhum)</div>
+              <div class="benchmark-stat-sub">Frametime linear e travado</div>
+            </div>
+          </div>
+
+          <!-- Gráfico Visual de Linha de Frametime (SVG) -->
+          <div class="frametime-visual-container">
+            <div class="frametime-header">
+              <span style="font-weight: 700; color: #fff;">📊 Monitor de Frametime (Oscilação de Tempo por Quadro)</span>
+              <span id="frametime-status-badge" style="font-weight: 700; color: #10b981;">
+                <span>●</span> Frametime 100% Estabilizado &amp; Sem Quedas
+              </span>
+            </div>
+            <svg class="frametime-svg-line" viewBox="0 0 800 90" preserveAspectRatio="none">
+              <!-- Linhas de grade de fundo -->
+              <line x1="0" y1="20" x2="800" y2="20" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
+              <line x1="0" y1="50" x2="800" y2="50" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
+              <line x1="0" y1="80" x2="800" y2="80" stroke="rgba(255,255,255,0.05)" stroke-dasharray="4" />
+              <!-- Curva dinâmica de frametime -->
+              <path id="frametime-svg-path" d="M 0 35 L 80 35 L 160 35 L 240 35 L 320 35 L 400 35 L 480 35 L 560 35 L 640 35 L 720 35 L 800 35" fill="none" stroke="#10b981" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+              <span style="font-size: 0.78rem; color: var(--text-dim);">Simulação técnica baseada em testes com FiveM, CS2 e Valorant.</span>
+              <button onclick="scrollToSection('loja')" class="btn-primary-hero" style="font-size: 0.82rem; padding: 0.6rem 1.4rem; border: none; cursor: pointer;">
+                QUERO ESSE RESULTADO NO MEU PC →
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -890,7 +1117,10 @@
   <script src="assets/js/cart.js?v=2026_rev6"></script>
   <script src="assets/js/search.js?v=2026_rev6"></script>
   <script src="assets/js/auth.js?v=2026_rev6"></script>
-  <script src="assets/js/particles.js?v=2026_rev8"></script>
-  <script src="assets/js/main.js?v=2026_rev8"></script>
+  <script src="assets/js/particles.js?v=2026_rev9"></script>
+  <script src="assets/js/main.js?v=2026_rev9"></script>
+  <!-- Container de Notificações de Vendas Recentes (Prova Social) -->
+  <div id="recent-sales-container"></div>
+
 </body>
 </html>
